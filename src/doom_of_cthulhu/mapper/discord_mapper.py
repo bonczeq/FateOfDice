@@ -1,4 +1,4 @@
-from doom_from_cthulhu.test import TestResult
+from doom_of_cthulhu.test import TestResult
 from discord.embeds import Embed
 
 

@@ -1,24 +1,24 @@
 import os
 import traceback
 
-from doom_from_cthulhu.test import TestResult
-from doom_from_cthulhu.mapper import *
-from doom_from_cthulhu.common import LazyDeveloperException
+from doom_of_cthulhu.test import TestResult
+from doom_of_cthulhu.mapper import *
+from doom_of_cthulhu.common import LazyDeveloperException
 
 from discord.ext import commands
 
-DOOM_FROM_CTHULHU_TOKEN: str = 'DOOM_FROM_CTHULHU_TOKEN'
-DOOM_FROM_CTHULHU_PREFIX: str = 'DOOM_FROM_CTHULHU_PREFIX'
+DOOM_OF_CTHULHU_TOKEN: str = 'DOOM_OF_CTHULHU_TOKEN'
+DOOM_OF_CTHULHU_PREFIX: str = 'DOOM_OF_CTHULHU_PREFIX'
 
-bot_token: str = os.getenv(DOOM_FROM_CTHULHU_TOKEN)
-command_prefix: str = os.getenv(DOOM_FROM_CTHULHU_PREFIX, '/')
+bot_token: str = os.getenv(DOOM_OF_CTHULHU_TOKEN)
+command_prefix: str = os.getenv(DOOM_OF_CTHULHU_PREFIX, '/')
 
 client = commands.Bot(case_insensitive=True, command_prefix=command_prefix)
 
 
 @client.event
 async def on_ready():
-    print("Doom from Cthulhu ready")
+    print("Doom of Cthulhu ready")
     print(f'Bot token: {bot_token}')
 
 

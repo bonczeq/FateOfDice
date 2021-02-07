@@ -1,7 +1,7 @@
 import re
 from .test_dice import TensDice, DiceType
-from doom_from_cthulhu.common.dice import Dice
-from doom_from_cthulhu.common.lazy_developer_exception import LazyDeveloperException
+from doom_of_cthulhu.common.dice import Dice
+from doom_of_cthulhu.common.lazy_developer_exception import LazyDeveloperException
 
 
 class ExtraTestDices:

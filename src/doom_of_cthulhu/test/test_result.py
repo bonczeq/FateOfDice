@@ -1,5 +1,5 @@
 from enum import Enum
-from doom_from_cthulhu.common import Dice
+from doom_of_cthulhu.common import Dice
 from .test_dice import OnesDice, TensDice
 from .extra_test_dices import ExtraTestDices
 

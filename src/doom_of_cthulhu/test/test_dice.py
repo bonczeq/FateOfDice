@@ -1,5 +1,5 @@
 from enum import Enum
-from doom_from_cthulhu.common import Dice
+from doom_of_cthulhu.common import Dice
 
 
 class DiceType(Enum):
