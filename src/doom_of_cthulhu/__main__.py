@@ -1,6 +1,7 @@
 import os
 import traceback
 
+from doom_of_cthulhu.roll import RollResult
 from doom_of_cthulhu.test import TestResult
 from doom_of_cthulhu.mapper import *
 from doom_of_cthulhu.common import LazyDeveloperException
@@ -27,6 +28,19 @@ async def status(ctx: commands.Context) -> None:
     status_message: str = "Doom of Cthulhu ready"
     print(status_message)
     await ctx.send(status_message)
+
+
+@client.command(aliases=['r', '!', '/'])
+async def roll(ctx: commands.Context, dice: str = None) -> None:
+    try:
+        author: str = ctx.author.name
+        result = RollResult(dice, author)
+        await ctx.send("No implementation")
+    except LazyDeveloperException as exp:
+        await ctx.send(exp.message)
+    except BaseException as exp:
+        traceback.print_exc()
+        await ctx.send(f'Exception: {exp}')
 
 
 @client.command(aliases=['t', '?', 'check'])
