@@ -18,8 +18,15 @@ client = commands.Bot(case_insensitive=True, command_prefix=command_prefix)
 
 @client.event
 async def on_ready():
-    print("Doom of Cthulhu ready")
+    print("Doom of Cthulhu started")
     print(f'Bot token: {bot_token}')
+
+
+@client.command(aliases=['s'])
+async def status(ctx: commands.Context) -> None:
+    status_message: str = "Doom of Cthulhu ready"
+    print(status_message)
+    await ctx.send(status_message)
 
 
 @client.command(aliases=['t', '?', 'check'])
