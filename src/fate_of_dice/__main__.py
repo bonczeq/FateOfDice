@@ -1,31 +1,31 @@
 import os
 import traceback
 
-from doom_of_cthulhu.roll import RollResult
-from doom_of_cthulhu.test import TestResult
-from doom_of_cthulhu.mapper import *
-from doom_of_cthulhu.common import LazyDeveloperException
+from fate_of_dice.roll import RollResult
+from fate_of_dice.test import TestResult
+from fate_of_dice.mapper import *
+from fate_of_dice.common import LazyDeveloperException
 
 from discord.ext import commands
 
-DOOM_OF_CTHULHU_TOKEN: str = 'DOOM_OF_CTHULHU_TOKEN'
-DOOM_OF_CTHULHU_PREFIX: str = 'DOOM_OF_CTHULHU_PREFIX'
+FATE_OF_DICE_TOKEN: str = 'FATE_OF_DICE_TOKEN'
+FATE_OF_DICE_PREFIX: str = 'FATE_OF_DICE_PREFIX'
 
-bot_token: str = os.getenv(DOOM_OF_CTHULHU_TOKEN)
-command_prefix: str = os.getenv(DOOM_OF_CTHULHU_PREFIX, '/')
+bot_token: str = os.getenv(FATE_OF_DICE_TOKEN)
+command_prefix: str = os.getenv(FATE_OF_DICE_PREFIX, '/')
 
 client = commands.Bot(case_insensitive=True, command_prefix=command_prefix)
 
 
 @client.event
 async def on_ready():
-    print("Doom of Cthulhu started")
+    print("Fate of Dice started")
     print(f'Bot token: {bot_token}')
 
 
 @client.command(aliases=['s'])
 async def status(ctx: commands.Context) -> None:
-    status_message: str = "Doom of Cthulhu ready"
+    status_message: str = "Bot ready"
     print(status_message)
     await ctx.send(status_message)
 
