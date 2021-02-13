@@ -1,11 +1,16 @@
-from random import randint
+from random import randrange
 import operator
-import copy
 
 
 class Dice:
-    def __init__(self, min_value: int, max_value: int):
-        self.value: int = randint(min_value, max_value)
+
+    @classmethod
+    def roll(cls, min_value: int, max_value: int, step: int = 1):
+        dice_value = randrange(min_value, max_value + 1, step)
+        return cls(dice_value)
+
+    def __init__(self, value: int):
+        self.value: int = value
 
     def __str__(self):
         return str(self.value)
@@ -14,14 +19,12 @@ class Dice:
         return self.value
 
     def __add__(self, other):
-        new_dice = copy.copy(self)
-        new_dice.value = self.value + other.value
-        return new_dice
+        new_value = self.value + int(other)
+        return Dice(new_value)
 
     def __sub__(self, other):
-        new_dice = copy.copy(self)
-        new_dice.value = self.value - other.value
-        return new_dice
+        new_value = self.value - int(other)
+        return Dice(new_value)
 
     def __lt__(self, other):
         return operator.lt(self.value, other)
