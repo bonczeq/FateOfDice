@@ -1,11 +1,6 @@
 import os
 import setuptools
 
-from bonczeq.fate_of_dice.__main__ import main
-
-if __name__ == '__main__':
-    main()
-
 
 def read(file_name):
     return open(os.path.join(os.path.dirname(__file__), file_name)).read()

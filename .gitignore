@@ -1,7 +1,7 @@
 # Distribution / packaging
-out/
-build/
-dist/
+**out/
+**build/
+**dist/
 
 # IDEA files
 .idea/

@@ -1,4 +1,4 @@
-from bonczeq.fate_of_dice.common import ArgumentParser
+from fate_of_dice.common import ArgumentParser
 
 parser = ArgumentParser(description='Call of Cthulhu skill check.')
 

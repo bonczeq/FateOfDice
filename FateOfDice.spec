@@ -1,10 +1,12 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import shutil
+shutil.copyfile('config.ini', '{0}/config.ini'.format(DISTPATH))
+
 block_cipher = None
 
 
-a = Analysis(['src\\bonczeq\\fate_of_dice\\__main__.py'],
-             pathex=['C:\\Users\\kamil\\IdeaProjects\\FateOfDice'],
+a = Analysis(['src\\fate_of_dice\\__main__.py'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -19,19 +21,15 @@ pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
+          a.binaries,
+          a.zipfiles,
+          a.datas,
           [],
-          exclude_binaries=True,
-          name='__main__',
+          name='FateOfDice',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
+          upx_exclude=[],
+          runtime_tmpdir=None,
           console=True )
-coll = COLLECT(exe,
-               a.binaries,
-               a.zipfiles,
-               a.datas,
-               strip=False,
-               upx=True,
-               upx_exclude=[],
-               name='__main__')

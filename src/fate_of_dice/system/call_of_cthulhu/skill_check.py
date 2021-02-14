@@ -2,7 +2,7 @@ from enum import Enum
 from typing import Final
 from pathlib import Path
 
-from bonczeq.fate_of_dice.common import get_resources_path, Dice
+from fate_of_dice.common import get_resources_path, Dice
 
 from .argument_parser import parse, SkillCheckArguments
 from .skill_dice import OnesDice, TensDice, DiceType

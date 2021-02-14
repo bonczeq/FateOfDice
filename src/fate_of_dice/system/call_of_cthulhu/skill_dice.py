@@ -1,5 +1,5 @@
 from enum import Enum
-from bonczeq.fate_of_dice.common import Dice
+from fate_of_dice.common import Dice
 
 
 class DiceType(Enum):

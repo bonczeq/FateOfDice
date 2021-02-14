@@ -1,7 +1,7 @@
-from bonczeq.fate_of_dice.common.util import get_property
-from bonczeq.fate_of_dice.system.call_of_cthulhu import check_skill
-from bonczeq.fate_of_dice.mapper import crate_embed
-from bonczeq.fate_of_dice.common import log, DiceException
+from fate_of_dice.common.util import get_property
+from fate_of_dice.system.call_of_cthulhu import check_skill
+from fate_of_dice.mapper import crate_embed
+from fate_of_dice.common import log, DiceException
 
 from typing import Final
 
@@ -46,6 +46,5 @@ async def on_command_error(ctx, error):
 
     if not isinstance(original, DiceException):
         raise error
-
 
 client.run(bot_token)

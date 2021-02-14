@@ -6,8 +6,8 @@ from discord import Message
 from discord.embeds import Embed
 from multipledispatch import dispatch
 
-from bonczeq.fate_of_dice.common import DiceException, get_resources_path
-from bonczeq.fate_of_dice.system.call_of_cthulhu import SkillCheckResult
+from fate_of_dice.common import DiceException, get_resources_path
+from fate_of_dice.system.call_of_cthulhu import SkillCheckResult
 
 __PYTHON_IMAGE: Final = get_resources_path('icons/python.png')
 __DISCORD_IMAGE: Final = get_resources_path('icons/discord.png')
