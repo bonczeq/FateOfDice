@@ -3,5 +3,5 @@ from .dice import Dice
 
 from .argument_parse import ArgumentParser
 
-from .util import get_property
+from .util import get_property, get_resources_path
 from .logger import log

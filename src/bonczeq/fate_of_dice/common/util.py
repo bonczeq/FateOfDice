@@ -1,8 +1,15 @@
 import sys
 import os
 import configparser
+from typing import Final
+from pathlib import Path
 
-__config_file: str = 'config.properties'
+__CONFIG_FILE: Final = 'config.properties'
+__RESOURCES_PATH: Final = Path(__file__).parent.parent.parent.parent.parent / 'resources/'
+
+
+def get_resources_path(sub_path: str) -> Path:
+    return __RESOURCES_PATH.joinpath(sub_path)
 
 
 def get_property(property_name: str, default, sys_argv_number: int):
@@ -15,7 +22,7 @@ def get_property(property_name: str, default, sys_argv_number: int):
 
     config = configparser.ConfigParser()
     config.optionxform = str
-    config.read(__config_file)
+    config.read(__CONFIG_FILE)
     properties_token: str = config.defaults().get(property_name)
     if properties_token:
         return properties_token

@@ -1,6 +1,8 @@
 from enum import Enum
+from typing import Final
+from pathlib import Path
 
-from bonczeq.fate_of_dice.common import Dice
+from bonczeq.fate_of_dice.common import get_resources_path, Dice
 
 from .argument_parser import parse, SkillCheckArguments
 from .skill_dice import OnesDice, TensDice, DiceType
@@ -11,50 +13,53 @@ def check_skill(user: str, arguments: (str, ...)) -> 'SkillCheckResult':
     return skill_check.roll()
 
 
-class SkillCHeckResultColor(Enum):
-    CRITICAL_SUCCESS: int = 0xf5e042
-    EXTREMAL_SUCCESS: int = 0xb342f5
-    HARD_SUCCESS: int = 0x264fad
-    NORMAL_SUCCESS: int = 0x288f34
-    NORMAL_FAILURE: int = 0xa81d1d
-    CRITICAL_FAILURE: int = 0x45342d
+class SkillCheckResultType(Enum):
+    __CRITICAL_SUCCESS_IMAGE: Final = get_resources_path('icons/critical_success.png')
+    __EXTREMAL_SUCCESS_IMAGE: Final = get_resources_path('icons/extremal_success.png')
+    __HARD_SUCCESS_IMAGE: Final = get_resources_path('icons/hard_success.png')
+    __NORMAL_FAILURE_IMAGE: Final = get_resources_path('icons/failed.png')
+    __CRITICAL_FAILURE_IMAGE: Final = get_resources_path('icons/critical_failed.png')
 
-    def __int__(self):
-        return self.value
+    CRITICAL_SUCCESS: {str, int, Path} = "CRITICAL SUCCESS!", 0xf5e042, __CRITICAL_SUCCESS_IMAGE
+    EXTREMAL_SUCCESS: {str, int, Path} = "Extremal success!", 0xb342f5, __EXTREMAL_SUCCESS_IMAGE
+    HARD_SUCCESS: {str, int, Path} = "Hard success!", 0x264fad, __HARD_SUCCESS_IMAGE
+    NORMAL_SUCCESS: {str, int, Path} = "Normal success.", 0x288f34, None
+    NORMAL_FAILURE: {str, int, Path} = "Normal failure.", 0xff0000, __NORMAL_FAILURE_IMAGE
+    CRITICAL_FAILURE: {str, int, Path} = "CRITICAL FAILURE!", 0x45342d, __CRITICAL_FAILURE_IMAGE
+
+    def __init__(self, title: str, colour: int = None, icon_path: Path = None):
+        self.title = title
+        self.colour = colour
+        self.icon_path = icon_path
 
 
 class SkillCheckResult:
-    def __init__(self, result_dice: (TensDice, OnesDice), all_dices: ([TensDice], [OnesDice]), threshold: int, user: str):
+    def __init__(self, result_dice: (TensDice, OnesDice), all_dices: ([TensDice], [OnesDice]), threshold: int,
+                 user: str):
         (result_tens_dice, result_ones_dice) = result_dice
         result_dice = result_tens_dice + result_ones_dice
 
         self.user = user
         self.value = 100 if result_dice == 0 else result_dice
-        (self.title, self.colour) = self.__skill_result_type(self.value, threshold)
+        self.type = self.__skill_result_type(self.value, threshold)
         self.description = self.__describe_roll(result_dice, result_tens_dice, result_ones_dice, all_dices)
 
     @staticmethod
-    def __skill_result_type(value: int, threshold: int) -> (str, SkillCHeckResultColor):
+    def __skill_result_type(value: int, threshold: int) -> SkillCheckResultType:
         if value == 100 or (value >= 96 and threshold < 50):
-            title = "CRITICAL FAILURE!"
-            colour = SkillCHeckResultColor.CRITICAL_FAILURE
+            result_type = SkillCheckResultType.CRITICAL_FAILURE
         elif value == 1:
-            title = "CRITICAL SUCCESS!"
-            colour = SkillCHeckResultColor.CRITICAL_SUCCESS
+            result_type = SkillCheckResultType.CRITICAL_SUCCESS
         elif value <= threshold / 5:
-            title = "Extremal success!"
-            colour = SkillCHeckResultColor.EXTREMAL_SUCCESS
+            result_type = SkillCheckResultType.EXTREMAL_SUCCESS
         elif value <= threshold / 2:
-            title = "Hard success!"
-            colour = SkillCHeckResultColor.HARD_SUCCESS
+            result_type = SkillCheckResultType.HARD_SUCCESS
         elif value <= threshold:
-            title = "Normal success."
-            colour = SkillCHeckResultColor.NORMAL_SUCCESS
+            result_type = SkillCheckResultType.NORMAL_SUCCESS
         else:
-            title = "Normal failure."
-            colour = SkillCHeckResultColor.NORMAL_FAILURE
+            result_type = SkillCheckResultType.NORMAL_FAILURE
 
-        return title, colour
+        return result_type
 
     @staticmethod
     def __describe_roll(result_dice: Dice, result_tens_dice: Dice, result_ones_dice: Dice,
@@ -106,10 +111,10 @@ class SkillCheck:
     def __min_dice(ones_dice: OnesDice, main_tens_dice: TensDice, extra_dices: [TensDice]) -> Dice:
         tens_dices: [TensDice] = [main_tens_dice] + extra_dices
 
-        if ones_dice != 0 and any(it == 0 for it in tens_dices):
-            return Dice(0)
-        else:
+        if ones_dice != 0:
             return min(tens_dices)
+        else:
+            return min(filter(lambda it: it != 0, tens_dices))
 
     @staticmethod
     def __roll_extra_dices(arguments: SkillCheckArguments) -> (DiceType, [TensDice]):
