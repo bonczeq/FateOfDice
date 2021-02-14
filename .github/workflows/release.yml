@@ -15,10 +15,13 @@ jobs:
       uses: JackMcKew/pyinstaller-action-windows@main
       with:
         path: .
-    - uses: actions/upload-artifact@v2
+    - uses: svenstaro/upload-release-action@v2
       with:
-        name: FateOfDice
-        path: dist/windows
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/windows/FateOfDice.exe
+        asset_name: FateOfDice.exe
+        tag: ${{ github.ref }}
+        overwrite: true
 
   generate-linux:
     name: Build linux executables with PyInstaller
