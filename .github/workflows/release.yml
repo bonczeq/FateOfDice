@@ -1,0 +1,36 @@
+name: FateOfDice release
+
+on:
+    release:
+        types: [created]
+
+jobs:
+  generate-windows:
+    name: Build windows executables with PyInstaller
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Package Application
+      uses: JackMcKew/pyinstaller-action-windows@main
+      with:
+        path: src/bonczeq/fate_of_dice
+    - uses: actions/upload-artifact@v2
+      with:
+        name: FateOfDice_windows
+        path: src/dist/windows
+    
+  generate-linux:
+    name: Build linux executables with PyInstaller
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Package Application
+      uses: JackMcKew/pyinstaller-action-linux@main
+      with:
+        path: src/bonczeq/fate_of_dice
+    - uses: actions/upload-artifact@v2
+      with:
+        name: FateOfDice_linux
+        path: src/dist/linux    
