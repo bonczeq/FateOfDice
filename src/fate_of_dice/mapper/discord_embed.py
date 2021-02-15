@@ -48,18 +48,22 @@ def crate_embed(description: str) -> Embed:
     return Embed(description=description)
 
 
-@dispatch(Message, SkillCheckResult)
-def crate_embed(message: Message, skill_check: SkillCheckResult) -> {File, Embed}:
-    (thumbnail_file_name, thumbnail_file) = __create_discord_file(skill_check.type.icon_path)
-
+@dispatch(Message, SkillCheckResult, bool)
+def crate_embed(message: Message, skill_check: SkillCheckResult, simple: bool) -> {Embed, File or None}:
     embed = Embed()
     embed.title = skill_check.type.title
     embed.colour = skill_check.type.colour
-    embed.set_author(name=message.author.name, icon_url=str(message.author.avatar_url))
-    embed.set_thumbnail(url=f"attachment://{thumbnail_file_name}")
-    embed.add_field(name="Skill check result:", value=skill_check.description, inline=True)
 
-    return {'file': thumbnail_file, 'embed': embed}
+    if not simple:
+        (thumbnail_file_name, thumbnail_file) = __create_discord_file(skill_check.type.icon_path)
+        embed.set_author(name=message.author.name, icon_url=str(message.author.avatar_url))
+        embed.set_image(url=f"attachment://{thumbnail_file_name}")
+        embed.description = message.content
+        embed.add_field(name="Skill check result:", value=skill_check.description, inline=True)
+        return {'embed': embed, 'file': thumbnail_file}
+    else:
+        embed.description = skill_check.description
+        return {'embed': embed}
 
 
 def __create_discord_file(file_path: Path or None) -> (str, File):

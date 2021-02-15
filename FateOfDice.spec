@@ -1,7 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 import shutil
-shutil.copyfile('config.ini', '{0}/config.ini'.format(DISTPATH))
+shutil.copyfile('resources/config.ini', '{0}/config.ini'.format(DISTPATH))
 
 block_cipher = None
 

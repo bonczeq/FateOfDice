@@ -1,0 +1,27 @@
+name: FateOfDice release
+
+on:
+    release:
+        types: [created]
+
+jobs:
+  generate-windows:
+    name: Add windows executables to releas
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Package Application
+      uses: JackMcKew/pyinstaller-action-windows@main
+      with:
+        path: .
+    - uses: montudor/action-zip@v0.1.1
+      with:
+        args: zip -qq -r dist/windows/Windows_executables.zip dist/windows/
+    - uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/windows/Windows_executables.zip
+        asset_name: Windows_executables.zip
+        tag: ${{ github.ref }}
+        overwrite: true
