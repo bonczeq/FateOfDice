@@ -1,6 +1,6 @@
 import argparse
 
-from .exception import DiceException
+from fate_of_dice.common.exception import DiceException
 
 
 class ArgumentParserException(DiceException):

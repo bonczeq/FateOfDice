@@ -2,23 +2,23 @@ from enum import Enum
 from typing import Final
 from pathlib import Path
 
-from fate_of_dice.common import get_resources_path, Dice
+from fate_of_dice.common import ResourcesHandler, Dice
 
 from .argument_parser import parse, SkillCheckArguments
+from .skill_check_exception import UnsupportedExtraDiceAmountException
 from .skill_dice import OnesDice, TensDice, DiceType
 
 
 def check_skill(user: str, arguments: (str, ...)) -> 'SkillCheckResult':
-    skill_check = SkillCheck(user, arguments)
-    return skill_check.roll()
+    return SkillCheck(user, arguments).roll()
 
 
 class SkillCheckResultType(Enum):
-    __CRITICAL_SUCCESS_IMAGE: Final = get_resources_path('icons/critical_success.png')
-    __EXTREMAL_SUCCESS_IMAGE: Final = get_resources_path('icons/extremal_success.png')
-    __HARD_SUCCESS_IMAGE: Final = get_resources_path('icons/hard_success.png')
-    __NORMAL_FAILURE_IMAGE: Final = get_resources_path('icons/failed.png')
-    __CRITICAL_FAILURE_IMAGE: Final = get_resources_path('icons/critical_failed.png')
+    __CRITICAL_SUCCESS_IMAGE: Final = ResourcesHandler.get_resources_path('icons/critical_success.png')
+    __EXTREMAL_SUCCESS_IMAGE: Final = ResourcesHandler.get_resources_path('icons/extremal_success.png')
+    __HARD_SUCCESS_IMAGE: Final = ResourcesHandler.get_resources_path('icons/hard_success.png')
+    __NORMAL_FAILURE_IMAGE: Final = ResourcesHandler.get_resources_path('icons/failed.png')
+    __CRITICAL_FAILURE_IMAGE: Final = ResourcesHandler.get_resources_path('icons/critical_failed.png')
 
     CRITICAL_SUCCESS: {str, int, Path} = "CRITICAL SUCCESS!", 0xf5e042, __CRITICAL_SUCCESS_IMAGE
     EXTREMAL_SUCCESS: {str, int, Path} = "Extremal success!", 0xb342f5, __EXTREMAL_SUCCESS_IMAGE
@@ -111,15 +111,17 @@ class SkillCheck:
     def __min_dice(ones_dice: OnesDice, main_tens_dice: TensDice, extra_dices: [TensDice]) -> Dice:
         tens_dices: [TensDice] = [main_tens_dice] + extra_dices
 
-        if ones_dice != 0:
-            return min(tens_dices)
-        else:
+        if ones_dice == 0:
             return min(filter(lambda it: it != 0, tens_dices))
+        else:
+            return min(tens_dices)
 
     @staticmethod
     def __roll_extra_dices(arguments: SkillCheckArguments) -> (DiceType, [TensDice]):
         amount = arguments.bonus_dice_amount - arguments.penalty_dice_amount
 
+        if abs(amount) > 2:
+            raise UnsupportedExtraDiceAmountException()
         if amount == 0:
             dice_type = None
         elif amount > 0:

@@ -1,8 +1,6 @@
-from .exception import DiceException
 from .dice import Dice
-
-from .argument_parse import ArgumentParser
-
-from .util import get_property, get_resources_path
+from .exception import DiceException
 from .logger import log
+from .resources_handler import ResourcesHandler
 
+from .third_party_wrapper.argument_parse import ArgumentParser
