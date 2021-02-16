@@ -2,6 +2,11 @@
 **out/
 **build/
 **dist/
+.eggs/
+*.egg-info/
+
+# Test
+.pytest_cache/
 
 # IDEA files
 .idea/
