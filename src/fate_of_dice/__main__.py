@@ -1,4 +1,4 @@
-from fate_of_dice.common.util import get_property
+from fate_of_dice.common.resources_handler import get_property
 from fate_of_dice.system.call_of_cthulhu import check_skill
 from fate_of_dice.mapper import crate_embed
 from fate_of_dice.common import log, DiceException
@@ -7,13 +7,13 @@ from typing import Final
 
 from discord.ext import commands
 
-FATE_OF_DICE_TOKEN: Final = 'FATE_OF_DICE_TOKEN'
-FATE_OF_DICE_PREFIX: Final = 'FATE_OF_DICE_PREFIX'
-FATE_OF_DICE_SIMPLE_RESULTS: Final = 'FATE_OF_DICE_SIMPLE_PRESENTATION'
+FATE_OF_DICE_TOKEN: Final[str] = 'FATE_OF_DICE_TOKEN'
+FATE_OF_DICE_PREFIX: Final[str] = 'FATE_OF_DICE_PREFIX'
+FATE_OF_DICE_SIMPLE_RESULTS: Final[str] = 'FATE_OF_DICE_SIMPLE_PRESENTATION'
 
-__bot_token: Final = get_property(FATE_OF_DICE_TOKEN, None, 1)
-__command_prefixes: [str] or str = get_property(FATE_OF_DICE_PREFIX, ['/', '\\', 'fateOfDice'], 2)
-__simple_presentation: bool = get_property(FATE_OF_DICE_SIMPLE_RESULTS, False, 3) in [True, 'True']
+__bot_token: Final[str] = get_property(FATE_OF_DICE_TOKEN, None, 1)
+__command_prefixes: [str] or str = get_property(FATE_OF_DICE_PREFIX, ['/', '\\', 'fateOfDice'])
+__simple_presentation: bool = get_property(FATE_OF_DICE_SIMPLE_RESULTS, False) in [True, 'True']
 
 if not __bot_token:
     raise Exception('Bot token has not be defined')
