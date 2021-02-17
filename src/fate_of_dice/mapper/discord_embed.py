@@ -1,4 +1,4 @@
-# pylint: function-redefined
+# pylint: disable=function-redefined
 
 from pathlib import Path
 from typing import Final, Optional
@@ -63,14 +63,14 @@ def crate_embed(message: Message, skill_check: SkillCheckResult, simple: bool) -
         embed.description = message.content
         embed.add_field(name="Skill check result:", value=skill_check.description, inline=True)
         return {'embed': embed, 'file': thumbnail_file}
-
-    embed.description = skill_check.description
-    return {'embed': embed}
+    else:
+        embed.description = skill_check.description
+        return {'embed': embed}
 
 
 def __create_discord_file(file_path: Optional[Path]) -> Optional[(str, File)]:
     if file_path:
         file_name = file_path.name
         return file_name, File(str(file_path), filename=file_name)
-
-    return None
+    else:
+        return None

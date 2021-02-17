@@ -32,4 +32,4 @@ class SkillCheckArguments:
 
 
 def parse(arguments: (str, ...)) -> SkillCheckArguments:
-    return PARSER.parse_args(arguments, SkillCheckArguments())
+    return PARSER.parse_args(list(arguments), SkillCheckArguments())
