@@ -6,7 +6,7 @@ class Dice:
 
     @classmethod
     def roll(cls, min_value: int, max_value: int, step: int = 1):
-        dice_value = randrange(min_value, max_value + 1, step)
+        dice_value = cls.__rand_value__(min_value, max_value, step)
         return cls(dice_value)
 
     def __init__(self, value: int):
@@ -43,3 +43,7 @@ class Dice:
 
     def __ne__(self, other):
         return operator.ne(self.value, other)
+
+    @staticmethod
+    def __rand_value__(min_value: int, max_value: int, step: int):
+        return randrange(min_value, max_value + 1, step)

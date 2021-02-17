@@ -1,11 +1,11 @@
 from enum import Enum
 from typing import Final
 from pathlib import Path
+from dataclasses import dataclass
 
 from fate_of_dice.common import ResourcesHandler, Dice
 
 from .argument_parser import parse, SkillCheckArguments
-from .skill_check_exception import UnsupportedExtraDiceAmountException
 from .skill_dice import OnesDice, TensDice, DiceType
 
 
@@ -20,12 +20,12 @@ class SkillCheckResultType(Enum):
     __NORMAL_FAILURE_IMAGE: Final = ResourcesHandler.get_resources_path('icons/failed.png')
     __CRITICAL_FAILURE_IMAGE: Final = ResourcesHandler.get_resources_path('icons/critical_failed.png')
 
-    CRITICAL_SUCCESS: {str, int, Path} = "CRITICAL SUCCESS!", 0xf5e042, __CRITICAL_SUCCESS_IMAGE
-    EXTREMAL_SUCCESS: {str, int, Path} = "Extremal success!", 0xb342f5, __EXTREMAL_SUCCESS_IMAGE
-    HARD_SUCCESS: {str, int, Path} = "Hard success!", 0x264fad, __HARD_SUCCESS_IMAGE
-    NORMAL_SUCCESS: {str, int, Path} = "Normal success.", 0x288f34, None
-    NORMAL_FAILURE: {str, int, Path} = "Normal failure.", 0xff0000, __NORMAL_FAILURE_IMAGE
-    CRITICAL_FAILURE: {str, int, Path} = "CRITICAL FAILURE!", 0x45342d, __CRITICAL_FAILURE_IMAGE
+    CRITICAL_SUCCESS = "CRITICAL SUCCESS!", 0xf5e042, __CRITICAL_SUCCESS_IMAGE
+    EXTREMAL_SUCCESS = "Extremal success!", 0xb342f5, __EXTREMAL_SUCCESS_IMAGE
+    HARD_SUCCESS = "Hard success!", 0x264fad, __HARD_SUCCESS_IMAGE
+    NORMAL_SUCCESS = "Normal success.", 0x288f34, None
+    NORMAL_FAILURE = "Normal failure.", 0xff0000, __NORMAL_FAILURE_IMAGE
+    CRITICAL_FAILURE = "CRITICAL FAILURE!", 0x45342d, __CRITICAL_FAILURE_IMAGE
 
     def __init__(self, title: str, colour: int = None, icon_path: Path = None):
         self.title = title
@@ -33,6 +33,7 @@ class SkillCheckResultType(Enum):
         self.icon_path = icon_path
 
 
+@dataclass
 class SkillCheckResult:
     def __init__(self, result_dice: (TensDice, OnesDice), all_dices: ([TensDice], [OnesDice]), threshold: int,
                  user: str):
@@ -68,9 +69,9 @@ class SkillCheckResult:
 
         tens_dice_str = None
         if len(tens_dices) > 1:
-            tens_dice_str = f'[{"/".join([str(dice) for dice in tens_dices])}]'
+            tens_dice_str = f'[{"/".join([str(dice) for dice in tens_dices])}] '
 
-        return f'{result_tens_dice} {tens_dice_str or ""} + {result_ones_dice} = {result_dice}'
+        return f'{result_tens_dice} {tens_dice_str or ""}+ {result_ones_dice} = {result_dice}'
 
 
 class SkillCheck:
@@ -120,8 +121,6 @@ class SkillCheck:
     def __roll_extra_dices(arguments: SkillCheckArguments) -> (DiceType, [TensDice]):
         amount = arguments.bonus_dice_amount - arguments.penalty_dice_amount
 
-        if abs(amount) > 2:
-            raise UnsupportedExtraDiceAmountException()
         if amount == 0:
             dice_type = None
         elif amount > 0:

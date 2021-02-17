@@ -1,22 +1,24 @@
+# pylint: function-redefined
+
 from pathlib import Path
-from typing import Final
+from typing import Final, Optional
 
 from discord import File
 from discord import Message
 from discord.embeds import Embed
 from multipledispatch import dispatch
 
-from fate_of_dice.common import DiceException, get_resources_path
+from fate_of_dice.common import DiceException, ResourcesHandler
 from fate_of_dice.system.call_of_cthulhu import SkillCheckResult
 
-__PYTHON_IMAGE: Final = get_resources_path('icons/python.png')
-__DISCORD_IMAGE: Final = get_resources_path('icons/discord.png')
-__INNOVATION_IMAGE: Final = get_resources_path('icons/innovation.png')
-__PROCESS_IMAGE: Final = get_resources_path('icons/process.png')
+__PYTHON_IMAGE: Final[Path] = ResourcesHandler.get_resources_path('icons/python.png')
+__DISCORD_IMAGE: Final[Path] = ResourcesHandler.get_resources_path('icons/discord.png')
+__INNOVATION_IMAGE: Final[Path] = ResourcesHandler.get_resources_path('icons/innovation.png')
+__PROCESS_IMAGE: Final[Path] = ResourcesHandler.get_resources_path('icons/process.png')
 
 
 @dispatch(DiceException)
-def crate_embed(error: DiceException) -> {list[File], Embed}:
+def crate_embed(error: DiceException) -> {[File], Embed}:
     (user_file_name, user_file) = __create_discord_file(__DISCORD_IMAGE)
     (thumbnail_file_name, thumbnail_file) = __create_discord_file(__INNOVATION_IMAGE)
 
@@ -30,7 +32,7 @@ def crate_embed(error: DiceException) -> {list[File], Embed}:
 
 
 @dispatch(BaseException)
-def crate_embed(error: BaseException) -> {list[File], Embed}:
+def crate_embed(error: BaseException) -> {[File], Embed}:
     (user_file_name, user_file) = __create_discord_file(__PYTHON_IMAGE)
     (thumbnail_file_name, thumbnail_file) = __create_discord_file(__PROCESS_IMAGE)
 
@@ -49,7 +51,7 @@ def crate_embed(description: str) -> Embed:
 
 
 @dispatch(Message, SkillCheckResult, bool)
-def crate_embed(message: Message, skill_check: SkillCheckResult, simple: bool) -> {Embed, File or None}:
+def crate_embed(message: Message, skill_check: SkillCheckResult, simple: bool) -> {Embed, Optional[File]}:
     embed = Embed()
     embed.title = skill_check.type.title
     embed.colour = skill_check.type.colour
@@ -61,14 +63,14 @@ def crate_embed(message: Message, skill_check: SkillCheckResult, simple: bool) -
         embed.description = message.content
         embed.add_field(name="Skill check result:", value=skill_check.description, inline=True)
         return {'embed': embed, 'file': thumbnail_file}
-    else:
-        embed.description = skill_check.description
-        return {'embed': embed}
+
+    embed.description = skill_check.description
+    return {'embed': embed}
 
 
-def __create_discord_file(file_path: Path or None) -> (str, File):
+def __create_discord_file(file_path: Optional[Path]) -> Optional[(str, File)]:
     if file_path:
         file_name = file_path.name
         return file_name, File(str(file_path), filename=file_name)
-    else:
-        return None, None
+
+    return None
