@@ -1,6 +1,9 @@
 [FORMAT]
 max-line-length=240
 
+[REFACTORING]
+no-else-return=no
+
 [MESSAGES CONTROL]
 disable=
     missing-docstring,

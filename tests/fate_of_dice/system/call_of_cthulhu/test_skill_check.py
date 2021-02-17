@@ -8,7 +8,7 @@ class TestSkillCheck(unittest.TestCase):
 
     @mock.patch('fate_of_dice.common.dice.randrange')
     def test_critical_failure(self, randrange_mock):
-        (user, arguments) = ('userTest', ['50'])
+        (user, arguments) = ('userTest', tuple(['50']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 0, (0, 90 + 1, 10): 0
@@ -23,7 +23,7 @@ class TestSkillCheck(unittest.TestCase):
 
     @mock.patch('fate_of_dice.common.dice.randrange')
     def test_critical_failure_when_98(self, randrange_mock):
-        (user, arguments) = ('userTest', ['49'])
+        (user, arguments) = ('userTest', tuple(['49']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 8, (0, 90 + 1, 10): 90
@@ -38,7 +38,7 @@ class TestSkillCheck(unittest.TestCase):
 
     @mock.patch('fate_of_dice.common.dice.randrange')
     def test_normal_failure(self, randrange_mock):
-        (user, arguments) = ('userTest', ['50'])
+        (user, arguments) = ('userTest', tuple(['50']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 0, (0, 90 + 1, 10): 60
@@ -53,7 +53,7 @@ class TestSkillCheck(unittest.TestCase):
 
     @mock.patch('fate_of_dice.common.dice.randrange')
     def test_normal_failure_with_when_98(self, randrange_mock):
-        (user, arguments) = ('userTest', ['50'])
+        (user, arguments) = ('userTest', tuple(['50']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 8, (0, 90 + 1, 10): 90
@@ -68,7 +68,7 @@ class TestSkillCheck(unittest.TestCase):
 
     @mock.patch('fate_of_dice.common.dice.randrange')
     def test_normal_success(self, randrange_mock):
-        (user, arguments) = ('userTest', ['50'])
+        (user, arguments) = ('userTest', tuple(['50']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 1, (0, 90 + 1, 10): 30
@@ -83,7 +83,7 @@ class TestSkillCheck(unittest.TestCase):
 
     @mock.patch('fate_of_dice.common.dice.randrange')
     def test_hard_success(self, randrange_mock):
-        (user, arguments) = ('userTest', ['50'])
+        (user, arguments) = ('userTest', tuple(['50']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 5, (0, 90 + 1, 10): 20
@@ -98,7 +98,7 @@ class TestSkillCheck(unittest.TestCase):
 
     @mock.patch('fate_of_dice.common.dice.randrange')
     def test_extremal_success(self, randrange_mock):
-        (user, arguments) = ('userTest', ['50'])
+        (user, arguments) = ('userTest', tuple(['50']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 4, (0, 90 + 1, 10): 0
@@ -113,7 +113,7 @@ class TestSkillCheck(unittest.TestCase):
 
     @mock.patch('fate_of_dice.common.dice.randrange')
     def test_critical_success(self, randrange_mock):
-        (user, arguments) = ('userTest', ['50'])
+        (user, arguments) = ('userTest', tuple(['50']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 1, (0, 90 + 1, 10): 0
@@ -128,7 +128,7 @@ class TestSkillCheck(unittest.TestCase):
 
     @mock.patch('fate_of_dice.common.dice.randrange')
     def test_bonus_dices(self, randrange_mock):
-        (user, arguments) = ('userTest', '10 -b 2'.split())
+        (user, arguments) = ('userTest', tuple('10 -b 2'.split()))
 
         randrange_mock.side_effect = [0, 0, 10, 90]
 
@@ -148,7 +148,7 @@ class TestSkillCheck(unittest.TestCase):
 
     @mock.patch('fate_of_dice.common.dice.randrange')
     def test_penalty_dices(self, randrange_mock):
-        (user, arguments) = ('userTest', '10 -p'.split())
+        (user, arguments) = ('userTest', tuple('10 -p'.split()))
 
         randrange_mock.side_effect = [0, 0, 90]
 
@@ -167,7 +167,7 @@ class TestSkillCheck(unittest.TestCase):
 
     @mock.patch('fate_of_dice.common.dice.randrange')
     def test_bonus_and_penalty_dices(self, randrange_mock):
-        (user, arguments) = ('userTest', '10 --bonus --penalty 2'.split())
+        (user, arguments) = ('userTest', tuple('10 --bonus --penalty 2'.split()))
 
         randrange_mock.side_effect = [5, 10, 90]
 
