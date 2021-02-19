@@ -6,7 +6,6 @@ from typing import Final, Optional
 from discord import File
 from discord import Message
 from discord.embeds import Embed
-from multipledispatch import dispatch
 
 from fate_of_dice.common import DiceException, ResourcesHandler
 from fate_of_dice.system.call_of_cthulhu import SkillCheckResult
@@ -17,41 +16,36 @@ __INNOVATION_IMAGE: Final[Path] = ResourcesHandler.get_resources_path('icons/inn
 __PROCESS_IMAGE: Final[Path] = ResourcesHandler.get_resources_path('icons/process.png')
 
 
-@dispatch(DiceException)
-def crate_embed(error: DiceException) -> {[File], Embed}:
-    (user_file_name, user_file) = __create_discord_file(__DISCORD_IMAGE)
-    (thumbnail_file_name, thumbnail_file) = __create_discord_file(__INNOVATION_IMAGE)
+def from_exception(error: BaseException) -> {Embed, list[File]}:
+    if isinstance(error, DiceException):
+        (user_file_name, user_file) = __create_discord_file(__DISCORD_IMAGE)
+        (thumbnail_file_name, thumbnail_file) = __create_discord_file(__INNOVATION_IMAGE)
 
-    embed = Embed()
-    embed.colour = 0xff00a2
-    embed.set_author(name='FateOfDice', icon_url=f"attachment://{user_file_name}")
-    embed.set_thumbnail(url=f"attachment://{thumbnail_file_name}")
-    embed.add_field(name="Unhandled message:", value=str(error), inline=False)
+        embed = Embed()
+        embed.colour = 0xff00a2
+        embed.set_author(name='FateOfDice', icon_url=f"attachment://{user_file_name}")
+        embed.set_thumbnail(url=f"attachment://{thumbnail_file_name}")
+        embed.add_field(name="Unhandled message:", value=str(error), inline=False)
 
-    return {'files': [user_file, thumbnail_file], 'embed': embed}
+        return {'files': [user_file, thumbnail_file], 'embed': embed}
+    else:
+        (user_file_name, user_file) = __create_discord_file(__PYTHON_IMAGE)
+        (thumbnail_file_name, thumbnail_file) = __create_discord_file(__PROCESS_IMAGE)
 
+        embed = Embed()
+        embed.colour = 0x712828
+        embed.set_author(name='FateOfDice', icon_url=f"attachment://{user_file_name}")
+        embed.set_thumbnail(url=f"attachment://{thumbnail_file_name}")
+        embed.add_field(name="Exception:", value=str(error), inline=False)
 
-@dispatch(BaseException)
-def crate_embed(error: BaseException) -> {[File], Embed}:
-    (user_file_name, user_file) = __create_discord_file(__PYTHON_IMAGE)
-    (thumbnail_file_name, thumbnail_file) = __create_discord_file(__PROCESS_IMAGE)
-
-    embed = Embed()
-    embed.colour = 0x712828
-    embed.set_author(name='FateOfDice', icon_url=f"attachment://{user_file_name}")
-    embed.set_thumbnail(url=f"attachment://{thumbnail_file_name}")
-    embed.add_field(name="Exception:", value=str(error), inline=False)
-
-    return {'files': [user_file, thumbnail_file], 'embed': embed}
+        return {'files': [user_file, thumbnail_file], 'embed': embed}
 
 
-@dispatch(str)
-def crate_embed(description: str) -> Embed:
+def from_str(description: str) -> Embed:
     return Embed(description=description)
 
 
-@dispatch(Message, SkillCheckResult, bool)
-def crate_embed(message: Message, skill_check: SkillCheckResult, simple: bool) -> {Embed, Optional[File]}:
+def from_skill_check_result(message: Message, skill_check: SkillCheckResult, simple: bool) -> {Embed, Optional[File]}:
     embed = Embed()
     embed.title = skill_check.type.title
     embed.colour = skill_check.type.colour
@@ -68,7 +62,7 @@ def crate_embed(message: Message, skill_check: SkillCheckResult, simple: bool) -
         return {'embed': embed}
 
 
-def __create_discord_file(file_path: Optional[Path]) -> Optional[(str, File)]:
+def __create_discord_file(file_path: Optional[Path]) -> (str, File):
     if file_path:
         file_name = file_path.name
         return file_name, File(str(file_path), filename=file_name)

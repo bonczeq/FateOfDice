@@ -10,7 +10,7 @@ class TestDice(unittest.TestCase):
         with self.assertRaises(ArgumentParserException) as context:
             parse("unsupported value")
 
-        self.assertRegexpMatches(str(context.exception), '.*usage:.*')
+        self.assertRegex(str(context.exception), '.*usage:.*')
 
     def test_parse_unsupported(self):
         with self.assertRaises(ArgumentParserException):

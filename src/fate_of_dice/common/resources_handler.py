@@ -20,7 +20,10 @@ class ResourcesHandler:
 
     @classmethod
     def get_resources_path(cls, sub_path: Optional[str] = None) -> Path:
-        return cls.__RESOURCES_PATH.joinpath(sub_path)
+        if sub_path:
+            return cls.__RESOURCES_PATH.joinpath(sub_path)
+        else:
+            return cls.__RESOURCES_PATH
 
     @classmethod
     def get_property(cls, property_name: str, default, section_name: str = __DEFAULT_CONFIG_SECTION):
