@@ -2,9 +2,11 @@
 max-line-length=240
 
 [REFACTORING]
-no-else-return=no
+disable=C0103
 
 [MESSAGES CONTROL]
 disable=
+    too-few-public-methods,
+    no-else-return,
     missing-docstring,
     empty-docstring

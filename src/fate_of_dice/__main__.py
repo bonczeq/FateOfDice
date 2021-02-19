@@ -4,8 +4,11 @@ from discord.ext import commands
 
 from fate_of_dice.common.resources_handler import ResourcesHandler
 from fate_of_dice.system.call_of_cthulhu import check_skill
-from fate_of_dice.mapper import crate_embed
 from fate_of_dice.common import log, DiceException
+
+from fate_of_dice.mapper import from_exception
+from fate_of_dice.mapper import from_str
+from fate_of_dice.mapper import from_skill_check_result
 
 FATE_OF_DICE_TOKEN: Final[str] = 'FATE_OF_DICE_TOKEN'
 FATE_OF_DICE_PREFIX: Final[str] = 'FATE_OF_DICE_PREFIX'
@@ -35,25 +38,26 @@ async def on_ready():
 async def status(ctx: commands.Context) -> None:
     status_message: str = "Bot ready"
     log(status_message)
-    await ctx.send(embed=crate_embed(status_message))
+    await ctx.send(embed=from_str(status_message))
 
 
 @client.command(aliases=['roll', 'r', '!'])
 async def common_roll(ctx: commands.Context) -> None:
-    await ctx.send(embed=crate_embed("No implementation"))
+    await ctx.send(embed=from_str("No implementation"))
 
 
 @client.command(aliases=['CallOfCthulhu', 'c', '?', 't', 'test'])
 async def call_of_cthulhu_test(ctx: commands.Context, *arguments: str) -> None:
     skill_result = check_skill(ctx.author.name, arguments)
-    discord_result = crate_embed(ctx.message, skill_result, __SIMPLE_PRESENTATION)
+    discord_result = from_skill_check_result(message=ctx.message, skill_check=skill_result,
+                                             simple=__SIMPLE_PRESENTATION)
     await ctx.send(**discord_result)
 
 
 @client.event
 async def on_command_error(ctx, error):
     original = error.original
-    await ctx.send(**crate_embed(original))
+    await ctx.send(**from_exception(original))
 
     if not isinstance(original, DiceException):
         raise error
