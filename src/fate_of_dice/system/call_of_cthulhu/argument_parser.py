@@ -6,7 +6,9 @@ PARSER = ArgumentParser(description='Call of Cthulhu skill check.')
 
 PARSER.add_argument('skill_value',
                     type=int,
-                    help='keeper current skill value')
+                    nargs='?',
+                    default=None,
+                    help='keeper skill value')
 PARSER.add_argument('-b', '--bonus',
                     type=int,
                     nargs='?',

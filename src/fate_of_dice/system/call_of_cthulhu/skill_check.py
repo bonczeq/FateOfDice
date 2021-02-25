@@ -39,9 +39,10 @@ class SkillCheckResult:
                  user: str):
         (result_tens_dice, result_ones_dice) = result_dice
         result_dice = result_tens_dice + result_ones_dice
+        result_dice = Dice(100) if result_dice == 0 else result_dice
 
         self.user = user
-        self.value = 100 if result_dice == 0 else result_dice
+        self.value = result_dice
         self.type = self.__skill_result_type(self.value, threshold)
         self.description = self.__describe_roll(result_dice, result_tens_dice, result_ones_dice, all_dices)
 
