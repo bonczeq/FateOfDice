@@ -2,6 +2,7 @@ import unittest
 from unittest import mock
 
 from fate_of_dice.system.call_of_cthulhu.skill_check import check_skill, SkillCheckResultType
+from fate_of_dice.common.third_party_wrapper.argument_parse import ArgumentParserException
 
 
 class TestSkillCheck(unittest.TestCase):
@@ -19,7 +20,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(result.user, user)
         self.assertEqual(result.type, SkillCheckResultType.CRITICAL_FAILURE)
         self.assertEqual(result.value, 100)
-        self.assertEqual(result.description, '0 + 0 = 0')
+        self.assertEqual(result.description, '0 + 0 = 100')
 
     @mock.patch('fate_of_dice.common.dice.randrange')
     def test_critical_failure_when_98(self, randrange_mock):
@@ -163,7 +164,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(result.user, user)
         self.assertEqual(result.type, SkillCheckResultType.CRITICAL_FAILURE)
         self.assertEqual(result.value, 100)
-        self.assertEqual(result.description, '0 [0/90] + 0 = 0')
+        self.assertEqual(result.description, '0 [0/90] + 0 = 100')
 
     @mock.patch('fate_of_dice.common.dice.randrange')
     def test_bonus_and_penalty_dices(self, randrange_mock):
@@ -183,6 +184,19 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(result.type, SkillCheckResultType.NORMAL_FAILURE)
         self.assertEqual(result.value, 95)
         self.assertEqual(result.description, '90 [10/90] + 5 = 95')
+
+    def test_help(self):
+        (user, arguments) = ('userTest', tuple(['-h']))
+        with self.assertRaises(ArgumentParserException) as context:
+            check_skill(user, arguments)
+
+        self.assertRegex(str(context.exception), '.*usage:.*')
+
+    def test_unsupported_arguments(self):
+        (user, arguments) = ('userTest', tuple(['Unsupported']))
+
+        with self.assertRaises(ArgumentParserException):
+            check_skill(user, arguments)
 
 
 if __name__ == '__main__':
