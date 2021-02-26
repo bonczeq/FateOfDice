@@ -8,6 +8,21 @@ from fate_of_dice.common.third_party_wrapper.argument_parse import ArgumentParse
 class TestSkillCheck(unittest.TestCase):
 
     @mock.patch('fate_of_dice.common.dice.randrange')
+    def test_default(self, randrange_mock):
+        (user, arguments) = ('userTest', tuple([]))
+
+        randrange_mock.side_effect = lambda *it: {
+            (0, 9 + 1, 1): 9, (0, 90 + 1, 10): 90
+        }[it]
+
+        result = check_skill(user, arguments)
+
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, SkillCheckResultType.NONE)
+        self.assertEqual(result.value, 99)
+        self.assertEqual(result.description, '90 + 9 = 99')
+
+    @mock.patch('fate_of_dice.common.dice.randrange')
     def test_critical_failure(self, randrange_mock):
         (user, arguments) = ('userTest', tuple(['50']))
 

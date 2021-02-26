@@ -4,11 +4,12 @@ from fate_of_dice.common import Dice
 
 
 class RollResultModifier(Enum):
-    NONE = 'None'
+    NONE = None
     MIN = 'Minimum'
     MAX = 'Maximum'
     SORTED = 'Sorted'
     REVERSE_SORTED = 'Reverse sorted'
+    SUM = 'Sum'
 
     def modify_dices(self, dices: [Dice]) -> [Dice]:
         if self == self.MIN:
@@ -19,6 +20,8 @@ class RollResultModifier(Enum):
             result = sorted(dices)
         elif self == self.REVERSE_SORTED:
             result = sorted(dices, reverse=True)
+        elif self == self.SUM:
+            result = [sum(dices)]
         else:
             result = dices
         return result

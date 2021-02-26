@@ -10,11 +10,7 @@ class DiceType(Enum):
 
 class OnesDice(Dice):
     @classmethod
-    def roll(cls, **kwargs) -> 'OnesDice':
-        min_value = kwargs.get('min_value') or 0
-        max_value = kwargs.get('max_value') or 9
-        step = kwargs.get('step') or 1
-
+    def roll(cls, min_value: int = 0, max_value: int = 9, step: int = 1) -> 'OnesDice':
         dice_value = cls.__rand_value__(min_value=min_value, max_value=max_value, step=step)
         return OnesDice(dice_value)
 
@@ -25,10 +21,7 @@ class TensDice(Dice):
         self.dice_type = dice_type
 
     @classmethod
-    def roll(cls, dice_type: DiceType = DiceType.MAIN, **kwargs) -> 'TensDice':
-        min_value = kwargs.get('min_value') or 0
-        max_value = kwargs.get('max_value') or 90
-        step = kwargs.get('step') or 10
-
+    def roll(cls, dice_type: DiceType = DiceType.MAIN,
+             min_value: int = 0, max_value: int = 90, step: int = 10) -> 'TensDice':
         dice_value = cls.__rand_value__(min_value=min_value, max_value=max_value, step=step)
         return TensDice(dice_value, dice_type)

@@ -22,9 +22,15 @@ class Dice:
         new_value = self.value + int(other)
         return Dice(new_value)
 
+    def __radd__(self, other):
+        return self.__add__(other)
+
     def __sub__(self, other):
         new_value = self.value - int(other)
         return Dice(new_value)
+
+    def __rsub__(self, other):
+        return self.__sub__(other)
 
     def __lt__(self, other):
         return operator.lt(self.value, other)

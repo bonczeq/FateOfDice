@@ -20,6 +20,7 @@ class SkillCheckResultType(Enum):
     __NORMAL_FAILURE_IMAGE: Final = ResourcesHandler.get_resources_path('icons/failed.png')
     __CRITICAL_FAILURE_IMAGE: Final = ResourcesHandler.get_resources_path('icons/critical_failed.png')
 
+    NONE = None, 0x288f34, None
     CRITICAL_SUCCESS = "CRITICAL SUCCESS!", 0xf5e042, __CRITICAL_SUCCESS_IMAGE
     EXTREMAL_SUCCESS = "Extremal success!", 0xb342f5, __EXTREMAL_SUCCESS_IMAGE
     HARD_SUCCESS = "Hard success!", 0x264fad, __HARD_SUCCESS_IMAGE
@@ -48,7 +49,9 @@ class SkillCheckResult:
 
     @staticmethod
     def __skill_result_type(value: int, threshold: int) -> SkillCheckResultType:
-        if value == 100 or (value >= 96 and threshold < 50):
+        if not threshold:
+            result_type = SkillCheckResultType.NONE
+        elif value == 100 or (value >= 96 and threshold < 50):
             result_type = SkillCheckResultType.CRITICAL_FAILURE
         elif value == 1:
             result_type = SkillCheckResultType.CRITICAL_SUCCESS

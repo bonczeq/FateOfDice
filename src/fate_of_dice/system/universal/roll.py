@@ -28,19 +28,20 @@ class Roller:
         self.__arguments: RollArguments = parse(arguments)
 
     def roll(self) -> [RollResult]:
-        results: [RollResult] = []
+        return [self.__calculate_result(dices_pattern) for dices_pattern in self.__arguments.dices]
 
-        for dices_pattern in self.__arguments.dices:
-            modifier = self.__arguments.modifier
-            all_dices = self.__resolve_dices(dices_pattern)
-            modified_dices = modifier.modify_dices(all_dices)
-            description = self.__resolve_description(modified_dices, all_dices)
+    def __calculate_result(self, dices_pattern: str) -> RollResult:
+        all_dices = self.__resolve_dices(dices_pattern)
+        modifier = self.__arguments.modifier
+        modified_dices = modifier.modify_dices(all_dices)
+        description = self.__resolve_description(modified_dices, all_dices)
 
-            roll_result = RollResult(result=modified_dices, description=description,
-                                     modifier=modifier, all_results=all_dices, user=self.__user)
-            results.append(roll_result)
-
-        return results
+        result = RollResult(result=modified_dices,
+                            description=description,
+                            modifier=modifier,
+                            all_results=all_dices,
+                            user=self.__user)
+        return result
 
     @classmethod
     def __resolve_dices(cls, dices_pattern: str) -> [Dice]:
@@ -49,17 +50,19 @@ class Roller:
             raise RollException(f'Unsupported dice type: {dices_pattern}')
 
         groups: [str] = matches.groups()
-        dice_amount: int = int(groups[0]) if groups[0] else 1
-        dice_range: int = int(groups[1])
+        dice_amount: int = int(groups[0]) if (groups[0] and groups[1]) else 1
+        dice_range: int = int(groups[1]) if groups[1] else int(groups[0])
 
         if dice_amount < 1:
             raise RollException(f'Dice amount must be positive, but is: {dice_amount}')
 
         return [Dice.roll(1, dice_range) for _ in range(0, dice_amount)]
 
-    @classmethod
-    def __resolve_description(cls, modified_dices: [Dice], all_dices: [Dice]) -> str:
-        if len(modified_dices) > 1:
-            return f'[{", ".join([str(dice) for dice in modified_dices])}]'
-        else:
+    @staticmethod
+    def __resolve_description(modified_dices: [Dice], all_dices: [Dice]) -> str:
+        if len(all_dices) == 1:
+            return str(modified_dices[0])
+        elif len(modified_dices) == 1:
             return f'[{", ".join([str(dice) for dice in all_dices])}] => {str(modified_dices[0])}'
+        else:
+            return f'[{", ".join([str(dice) for dice in modified_dices])}]'
