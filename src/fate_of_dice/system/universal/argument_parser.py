@@ -39,7 +39,7 @@ GROUP.add_argument('-c', '--comment',
 
 @dataclass
 class RollArguments:
-    dices: [str] = list["1d100"]
+    dices: [str] = "1d100"
     minimum: bool = False
     maximum: bool = False
     sort: bool = False
