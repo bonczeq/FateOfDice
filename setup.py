@@ -22,7 +22,7 @@ setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
     ],
-    python_requires='>=3.9',
+    python_requires='>=3.8',
     entry_points={
         'console_scripts': ['fate_of_dice = fate_of_dice.__main__'],
     }
