@@ -28,7 +28,7 @@ PARSER.add_argument('-c', '--comment',
 
 @dataclass
 class SkillCheckArguments:
-    skill_value: int = 0
+    skill_value: int = None
     bonus_dice_amount: int = 0
     penalty_dice_amount: int = 0
 

@@ -9,7 +9,7 @@ class ArgumentParserException(DiceException):
 
 class ArgumentParser(argparse.ArgumentParser):
 
-    def print_help(self, *_) -> None:
+    def print_help(self, file=None) -> None:
         raise ArgumentParserException(self.format_help())
 
     def error(self, message):

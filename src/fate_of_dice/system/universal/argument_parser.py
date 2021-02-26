@@ -8,7 +8,7 @@ PARSER = ArgumentParser(description='Universal dice roll.')
 PARSER.add_argument('dices',
                     type=str,
                     nargs='*',
-                    default='1d100',
+                    default=['1d100'],
                     help='dices to roll')
 
 GROUP = PARSER.add_argument_group('modifiers')
@@ -28,6 +28,10 @@ GROUP.add_argument('-r', '--reverse-sort',
                    action='store_true',
                    dest='reverse_sort',
                    help='show reverse sorted dices')
+GROUP.add_argument('-u', '--sum',
+                   action='store_true',
+                   dest='sum',
+                   help='show added dices')
 GROUP.add_argument('-c', '--comment',
                    nargs='+',
                    help='ignored comment')
@@ -35,29 +39,41 @@ GROUP.add_argument('-c', '--comment',
 
 @dataclass
 class RollArguments:
-    dices: str = '1d100'
+    dices: [str] = list["1d100"]
     minimum: bool = False
     maximum: bool = False
     sort: bool = False
     reverse_sort: bool = False
-    modifier: RollResultModifier = RollResultModifier.NONE
+    sum: bool = False
 
-    def resolve_modifier(self) -> None:
-        modifier_list: [bool] = [self.minimum, self.maximum, self.sort, self.reverse_sort]
+    __modifier: RollResultModifier = None
+
+    @property
+    def modifier(self):
+        if not self.__modifier:
+            self.__modifier = self.__resolve_modifier()
+        return self.__modifier
+
+    def __resolve_modifier(self):
+        modifier_list: [bool] = [self.minimum, self.maximum, self.sort, self.reverse_sort, self.sum]
         if sum(modifier_list) > 1:
             raise Exception('Unsupported modifiers')
 
         if self.minimum:
-            self.modifier = RollResultModifier.MIN
+            result = RollResultModifier.MIN
         elif self.maximum:
-            self.modifier = RollResultModifier.MAX
+            result = RollResultModifier.MAX
         elif self.sort:
-            self.modifier = RollResultModifier.SORTED
+            result = RollResultModifier.SORTED
         elif self.reverse_sort:
-            self.modifier = RollResultModifier.REVERSE_SORTED
+            result = RollResultModifier.REVERSE_SORTED
+        elif self.sum:
+            result = RollResultModifier.SUM
+        else:
+            result = RollResultModifier.NONE
+        return result
 
 
 def parse(arguments: (str, ...)) -> RollArguments:
     arguments = PARSER.parse_args(list(arguments), RollArguments())
-    arguments.resolve_modifier()
     return arguments
