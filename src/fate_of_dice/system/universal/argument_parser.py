@@ -9,9 +9,9 @@ PARSER.add_argument('dices',
                     type=str,
                     nargs='*',
                     default=['1d100'],
-                    help='dices to roll')
+                    help='rolls description (default: 1d100)')
 
-GROUP = PARSER.add_argument_group('modifiers')
+GROUP = PARSER.add_argument_group('optional result presentation arguments')
 GROUP.add_argument('-m', '--min',
                    action='store_true',
                    dest='minimum',
@@ -31,7 +31,7 @@ GROUP.add_argument('-r', '--reverse-sort',
 GROUP.add_argument('-u', '--sum',
                    action='store_true',
                    dest='sum',
-                   help='show added dices')
+                   help='show sum of dices')
 GROUP.add_argument('-c', '--comment',
                    nargs='+',
                    help='ignored comment')

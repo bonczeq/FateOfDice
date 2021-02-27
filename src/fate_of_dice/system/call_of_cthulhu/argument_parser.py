@@ -8,7 +8,7 @@ PARSER.add_argument('skill_value',
                     type=int,
                     nargs='?',
                     default=None,
-                    help='keeper skill value')
+                    help='keeper skill value (default: no result verification) ')
 PARSER.add_argument('-b', '--bonus',
                     type=int,
                     nargs='?',
