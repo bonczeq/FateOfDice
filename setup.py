@@ -16,7 +16,7 @@ setup(
     long_description=read('README.md'),
     long_description_content_type="text/markdown",
     url="https://github.com/bonczeq/FateOfDice",
-    packages=find_packages(include=['fate_of_dice', 'fate_of_dice.*']),
+    packages=find_packages(where='src'),
     package_dir={'': 'src'},
     classifiers=[
         "Programming Language :: Python :: 3",
