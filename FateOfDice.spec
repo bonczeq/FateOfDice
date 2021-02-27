@@ -6,7 +6,7 @@ shutil.copyfile('resources/config.ini', '{0}/config.ini'.format(DISTPATH))
 block_cipher = None
 
 
-a = Analysis(['src\\fate_of_dice\\__main__.py'],
+a = Analysis(['src/fate_of_dice/__main__.py'],
              binaries=[],
              datas=[],
              hiddenimports=[],
