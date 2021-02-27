@@ -1,5 +1,5 @@
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def read(file_name):
@@ -16,14 +16,14 @@ setup(
     long_description=read('README.md'),
     long_description_content_type="text/markdown",
     url="https://github.com/bonczeq/FateOfDice",
+    packages=find_packages(include=['fate_of_dice', 'fate_of_dice.*']),
     package_dir={'': 'src'},
-    packages=['fate_of_dice'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
     ],
     python_requires='>=3.8',
     entry_points={
-        'console_scripts': ['fate_of_dice = fate_of_dice.__main__'],
+        'console_scripts': ['fate_of_dice = fate_of_dice.__main__:main'],
     }
 )
