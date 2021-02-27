@@ -26,12 +26,12 @@ jobs:
     - name: Zip build
       uses: montudor/action-zip@v0.1.1
       with:
-        args: zip -qq -j -D dist/Windows_executables.zip dist/ -i *
+        args: zip -qq -j -D dist/FateOfDice/Windows_executables.zip dist/FateOfDice/ -i *
     - name: Upload build
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: dist/Windows_executables.zip
+        file: dist/FateOfDice/Windows_executables.zip
         asset_name: Windows_executables.zip
         tag: ${{ github.ref }}
         overwrite: true
