@@ -7,148 +7,148 @@ from fate_of_dice.common.third_party_wrapper.argument_parse import ArgumentParse
 
 class TestSkillCheck(unittest.TestCase):
 
-    @mock.patch('fate_of_dice.common.dice.randrange')
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_default(self, randrange_mock):
-        (user, arguments) = ('userTest', tuple([]))
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple([]))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 9, (0, 90 + 1, 10): 90
         }[it]
 
-        result = check_skill(user, arguments)
+        result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(result.user, user)
-        self.assertEqual(result.type, SkillCheckResultType.NONE)
-        self.assertEqual(result.value, 99)
-        self.assertEqual(result.description, '90 + 9 = 99')
+        self.assertEqual(user, result.user)
+        self.assertEqual(SkillCheckResultType.NONE, result.type)
+        self.assertEqual(99, result.value)
+        self.assertEqual('90 + 9 = 99', result.description)
 
-    @mock.patch('fate_of_dice.common.dice.randrange')
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_critical_failure(self, randrange_mock):
-        (user, arguments) = ('userTest', tuple(['50']))
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple(['50']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 0, (0, 90 + 1, 10): 0
         }[it]
 
-        result = check_skill(user, arguments)
+        result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(result.user, user)
-        self.assertEqual(result.type, SkillCheckResultType.CRITICAL_FAILURE)
-        self.assertEqual(result.value, 100)
-        self.assertEqual(result.description, '0 + 0 = 100')
+        self.assertEqual(user, result.user)
+        self.assertEqual(SkillCheckResultType.CRITICAL_FAILURE, result.type)
+        self.assertEqual(100, result.value)
+        self.assertEqual('0 + 0 = 100', result.description)
 
-    @mock.patch('fate_of_dice.common.dice.randrange')
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_critical_failure_when_98(self, randrange_mock):
-        (user, arguments) = ('userTest', tuple(['49']))
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple(['49']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 8, (0, 90 + 1, 10): 90
         }[it]
 
-        result = check_skill(user, arguments)
+        result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(result.user, user)
-        self.assertEqual(result.type, SkillCheckResultType.CRITICAL_FAILURE)
-        self.assertEqual(result.value, 98)
-        self.assertEqual(result.description, '90 + 8 = 98')
+        self.assertEqual(user, result.user)
+        self.assertEqual(SkillCheckResultType.CRITICAL_FAILURE, result.type)
+        self.assertEqual(98, result.value)
+        self.assertEqual('90 + 8 = 98', result.description)
 
-    @mock.patch('fate_of_dice.common.dice.randrange')
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_normal_failure(self, randrange_mock):
-        (user, arguments) = ('userTest', tuple(['50']))
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple(['50']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 0, (0, 90 + 1, 10): 60
         }[it]
 
-        result = check_skill(user, arguments)
+        result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(result.user, user)
-        self.assertEqual(result.type, SkillCheckResultType.NORMAL_FAILURE)
-        self.assertEqual(result.value, 60)
-        self.assertEqual(result.description, '60 + 0 = 60')
+        self.assertEqual(user, result.user)
+        self.assertEqual(SkillCheckResultType.NORMAL_FAILURE, result.type)
+        self.assertEqual(60, result.value)
+        self.assertEqual('60 + 0 = 60', result.description)
 
-    @mock.patch('fate_of_dice.common.dice.randrange')
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_normal_failure_with_when_98(self, randrange_mock):
-        (user, arguments) = ('userTest', tuple(['50']))
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple(['50']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 8, (0, 90 + 1, 10): 90
         }[it]
 
-        result = check_skill(user, arguments)
+        result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(result.user, user)
-        self.assertEqual(result.type, SkillCheckResultType.NORMAL_FAILURE)
-        self.assertEqual(result.value, 98)
-        self.assertEqual(result.description, '90 + 8 = 98')
+        self.assertEqual(user, result.user)
+        self.assertEqual(SkillCheckResultType.NORMAL_FAILURE, result.type)
+        self.assertEqual(98, result.value)
+        self.assertEqual('90 + 8 = 98', result.description)
 
-    @mock.patch('fate_of_dice.common.dice.randrange')
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_normal_success(self, randrange_mock):
-        (user, arguments) = ('userTest', tuple(['50']))
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple(['50']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 1, (0, 90 + 1, 10): 30
         }[it]
 
-        result = check_skill(user, arguments)
+        result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(result.user, user)
-        self.assertEqual(result.type, SkillCheckResultType.NORMAL_SUCCESS)
-        self.assertEqual(result.value, 31)
-        self.assertEqual(result.description, '30 + 1 = 31')
+        self.assertEqual(user, result.user)
+        self.assertEqual(SkillCheckResultType.NORMAL_SUCCESS, result.type)
+        self.assertEqual(31, result.value)
+        self.assertEqual('30 + 1 = 31', result.description)
 
-    @mock.patch('fate_of_dice.common.dice.randrange')
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_hard_success(self, randrange_mock):
-        (user, arguments) = ('userTest', tuple(['50']))
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple(['50']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 5, (0, 90 + 1, 10): 20
         }[it]
 
-        result = check_skill(user, arguments)
+        result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(result.user, user)
-        self.assertEqual(result.type, SkillCheckResultType.HARD_SUCCESS)
-        self.assertEqual(result.value, 25)
-        self.assertEqual(result.description, '20 + 5 = 25')
+        self.assertEqual(user, result.user)
+        self.assertEqual(SkillCheckResultType.HARD_SUCCESS, result.type)
+        self.assertEqual(25, result.value)
+        self.assertEqual('20 + 5 = 25', result.description)
 
-    @mock.patch('fate_of_dice.common.dice.randrange')
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_extremal_success(self, randrange_mock):
-        (user, arguments) = ('userTest', tuple(['50']))
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple(['50']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 4, (0, 90 + 1, 10): 0
         }[it]
 
-        result = check_skill(user, arguments)
+        result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(result.user, user)
-        self.assertEqual(result.type, SkillCheckResultType.EXTREMAL_SUCCESS)
-        self.assertEqual(result.value, 4)
-        self.assertEqual(result.description, '0 + 4 = 4')
+        self.assertEqual(user, result.user)
+        self.assertEqual(SkillCheckResultType.EXTREMAL_SUCCESS, result.type)
+        self.assertEqual(4, result.value)
+        self.assertEqual('0 + 4 = 4', result.description)
 
-    @mock.patch('fate_of_dice.common.dice.randrange')
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_critical_success(self, randrange_mock):
-        (user, arguments) = ('userTest', tuple(['50']))
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple(['50']))
 
         randrange_mock.side_effect = lambda *it: {
             (0, 9 + 1, 1): 1, (0, 90 + 1, 10): 0
         }[it]
 
-        result = check_skill(user, arguments)
+        result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(result.user, user)
-        self.assertEqual(result.type, SkillCheckResultType.CRITICAL_SUCCESS)
-        self.assertEqual(result.value, 1)
-        self.assertEqual(result.description, '0 + 1 = 1')
+        self.assertEqual(user, result.user)
+        self.assertEqual(SkillCheckResultType.CRITICAL_SUCCESS, result.type)
+        self.assertEqual(1, result.value)
+        self.assertEqual('0 + 1 = 1', result.description)
 
-    @mock.patch('fate_of_dice.common.dice.randrange')
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_bonus_dices(self, randrange_mock):
-        (user, arguments) = ('userTest', tuple('10 -b 2'.split()))
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple('10 -b 2'.split()))
 
         randrange_mock.side_effect = [0, 0, 10, 90]
 
-        result = check_skill(user, tuple(arguments))
+        result = check_skill(user, prefix, tuple(arguments))
 
         randrange_mock.assert_has_calls([
             mock.call(0, 9 + 1, 1),
@@ -157,18 +157,18 @@ class TestSkillCheck(unittest.TestCase):
             mock.call(0, 90 + 1, 10)
         ])
 
-        self.assertEqual(result.user, user)
-        self.assertEqual(result.type, SkillCheckResultType.NORMAL_SUCCESS)
-        self.assertEqual(result.value, 10)
-        self.assertEqual(result.description, '10 [0/10/90] + 0 = 10')
+        self.assertEqual(user, result.user)
+        self.assertEqual(SkillCheckResultType.NORMAL_SUCCESS, result.type)
+        self.assertEqual(10, result.value)
+        self.assertEqual('10 [0/10/90] + 0 = 10', result.description)
 
-    @mock.patch('fate_of_dice.common.dice.randrange')
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_penalty_dices(self, randrange_mock):
-        (user, arguments) = ('userTest', tuple('10 -p'.split()))
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple('10 -p'.split()))
 
         randrange_mock.side_effect = [0, 0, 90]
 
-        result = check_skill(user, tuple(arguments))
+        result = check_skill(user, prefix, tuple(arguments))
 
         randrange_mock.assert_has_calls([
             mock.call(0, 9 + 1, 1),
@@ -176,18 +176,18 @@ class TestSkillCheck(unittest.TestCase):
             mock.call(0, 90 + 1, 10)
         ])
 
-        self.assertEqual(result.user, user)
-        self.assertEqual(result.type, SkillCheckResultType.CRITICAL_FAILURE)
-        self.assertEqual(result.value, 100)
-        self.assertEqual(result.description, '0 [0/90] + 0 = 100')
+        self.assertEqual(user, result.user)
+        self.assertEqual(SkillCheckResultType.CRITICAL_FAILURE, result.type)
+        self.assertEqual(100, result.value)
+        self.assertEqual('0 [0/90] + 0 = 100', result.description)
 
-    @mock.patch('fate_of_dice.common.dice.randrange')
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_bonus_and_penalty_dices(self, randrange_mock):
-        (user, arguments) = ('userTest', tuple('10 --bonus --penalty 2'.split()))
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple('10 --bonus --penalty 2'.split()))
 
         randrange_mock.side_effect = [5, 10, 90]
 
-        result = check_skill(user, tuple(arguments))
+        result = check_skill(user, prefix, tuple(arguments))
 
         randrange_mock.assert_has_calls([
             mock.call(0, 9 + 1, 1),
@@ -195,23 +195,23 @@ class TestSkillCheck(unittest.TestCase):
             mock.call(0, 90 + 1, 10)
         ])
 
-        self.assertEqual(result.user, user)
-        self.assertEqual(result.type, SkillCheckResultType.NORMAL_FAILURE)
-        self.assertEqual(result.value, 95)
-        self.assertEqual(result.description, '90 [10/90] + 5 = 95')
+        self.assertEqual(user, result.user)
+        self.assertEqual(SkillCheckResultType.NORMAL_FAILURE, result.type)
+        self.assertEqual(95, result.value)
+        self.assertEqual('90 [10/90] + 5 = 95', result.description)
 
     def test_help(self):
-        (user, arguments) = ('userTest', tuple(['-h']))
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple(['-h']))
         with self.assertRaises(ArgumentParserException) as context:
-            check_skill(user, arguments)
+            check_skill(user, prefix, arguments)
 
         self.assertRegex(str(context.exception), '.*usage:.*')
 
     def test_unsupported_arguments(self):
-        (user, arguments) = ('userTest', tuple(['Unsupported']))
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple(['Unsupported']))
 
         with self.assertRaises(ArgumentParserException):
-            check_skill(user, arguments)
+            check_skill(user, prefix, arguments)
 
 
 if __name__ == '__main__':

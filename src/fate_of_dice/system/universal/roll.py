@@ -1,47 +1,47 @@
 import re
 from dataclasses import dataclass
 
-from fate_of_dice.common import Dice
+from fate_of_dice.common.dice import Dice, DicesPresentation
 from .exception import RollException
 from .argument_parser import RollArguments, parse
-from .roll_modifier import RollResultModifier
 
 
-def roll(user: str, arguments: (str, ...)) -> ['RollResult']:
-    return Roller(user, arguments).roll()
+def roll(user: str, command_prefix: str, arguments: (str, ...)) -> ['RollResult']:
+    return Roller(user, command_prefix, arguments).roll()
 
 
 @dataclass
 class RollResult:
-    user: str
     description: str
-    result: [Dice]
-    all_results: [Dice]
-    modifier: RollResultModifier
+    result_dices: [Dice]
+    all_dices: [Dice]
+
+
+@dataclass
+class RollResults:
+    user: str
+    presentation: DicesPresentation
+    results: [RollResult]
 
 
 class Roller:
     __DICE_TYPE_PATTERN: re.Pattern = re.compile(r'^(\d+)?[dk]?(\d*)$')
 
-    def __init__(self, user: str, arguments: (str, ...)):
+    def __init__(self, user: str, command_prefix: str, arguments: (str, ...)):
         self.__user: str = user
-        self.__arguments: RollArguments = parse(arguments)
+        self.__command_prefix: str = command_prefix
+        self.__arguments: RollArguments = parse(command_prefix, arguments)
 
-    def roll(self) -> [RollResult]:
-        return [self.__calculate_result(dices_pattern) for dices_pattern in self.__arguments.dices]
+    def roll(self) -> RollResults:
+        results = [self.__calculate_result(dices_pattern) for dices_pattern in self.__arguments.dices]
+        return RollResults(user=self.__user, presentation=self.__arguments.presentation, results=results)
 
     def __calculate_result(self, dices_pattern: str) -> RollResult:
         all_dices = self.__resolve_dices(dices_pattern)
-        modifier = self.__arguments.modifier
-        modified_dices = modifier.modify_dices(all_dices)
-        description = self.__resolve_description(modified_dices, all_dices)
+        result_dices = self.__arguments.presentation.modify_dices(all_dices)
+        description = self.__resolve_description(result_dices, all_dices)
 
-        result = RollResult(result=modified_dices,
-                            description=description,
-                            modifier=modifier,
-                            all_results=all_dices,
-                            user=self.__user)
-        return result
+        return RollResult(result_dices=result_dices, all_dices=all_dices, description=description)
 
     @classmethod
     def __resolve_dices(cls, dices_pattern: str) -> [Dice]:
@@ -59,10 +59,10 @@ class Roller:
         return [Dice.roll(1, dice_range) for _ in range(0, dice_amount)]
 
     @staticmethod
-    def __resolve_description(modified_dices: [Dice], all_dices: [Dice]) -> str:
+    def __resolve_description(result_dices: [Dice], all_dices: [Dice]) -> str:
         if len(all_dices) == 1:
-            return str(modified_dices[0])
-        elif len(modified_dices) == 1:
-            return f'[{", ".join([str(dice) for dice in all_dices])}] => {str(modified_dices[0])}'
+            return str(result_dices[0])
+        elif len(result_dices) == 1:
+            return f'[{", ".join([str(dice) for dice in all_dices])}] 🠖 {str(result_dices[0])}'
         else:
-            return f'[{", ".join([str(dice) for dice in modified_dices])}]'
+            return f'[{", ".join([str(dice) for dice in result_dices])}]'

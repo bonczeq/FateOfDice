@@ -1,2 +1,1 @@
-from .roll import RollResult, roll
-from .roll_modifier import RollResultModifier
+from .roll import RollResult, RollResults, roll

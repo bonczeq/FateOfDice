@@ -1,5 +1,5 @@
 from enum import Enum
-from fate_of_dice.common import Dice
+from fate_of_dice.common.dice import Dice
 
 
 class DiceType(Enum):

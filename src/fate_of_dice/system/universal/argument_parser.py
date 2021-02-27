@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from fate_of_dice.common.third_party_wrapper import ArgumentParser
-from .roll_modifier import RollResultModifier
+from fate_of_dice.common.dice.dices_presentation import DiceArguments
 
 PARSER = ArgumentParser(description='Universal dice roll.')
 
@@ -38,42 +38,10 @@ GROUP.add_argument('-c', '--comment',
 
 
 @dataclass
-class RollArguments:
+class RollArguments(DiceArguments):
     dices: [str] = "1d100"
-    minimum: bool = False
-    maximum: bool = False
-    sort: bool = False
-    reverse_sort: bool = False
-    sum: bool = False
-
-    __modifier: RollResultModifier = None
-
-    @property
-    def modifier(self):
-        if not self.__modifier:
-            self.__modifier = self.__resolve_modifier()
-        return self.__modifier
-
-    def __resolve_modifier(self):
-        modifier_list: [bool] = [self.minimum, self.maximum, self.sort, self.reverse_sort, self.sum]
-        if sum(modifier_list) > 1:
-            raise Exception('Unsupported modifiers')
-
-        if self.minimum:
-            result = RollResultModifier.MIN
-        elif self.maximum:
-            result = RollResultModifier.MAX
-        elif self.sort:
-            result = RollResultModifier.SORTED
-        elif self.reverse_sort:
-            result = RollResultModifier.REVERSE_SORTED
-        elif self.sum:
-            result = RollResultModifier.SUM
-        else:
-            result = RollResultModifier.NONE
-        return result
 
 
-def parse(arguments: (str, ...)) -> RollArguments:
-    arguments = PARSER.parse_args(list(arguments), RollArguments())
-    return arguments
+def parse(command_prefix: str, arguments: (str, ...)) -> RollArguments:
+    PARSER.prog = command_prefix
+    return PARSER.parse_args(list(arguments), RollArguments())

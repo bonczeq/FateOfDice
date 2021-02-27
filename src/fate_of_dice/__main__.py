@@ -4,7 +4,7 @@ from fate_of_dice.system.call_of_cthulhu import check_skill
 from fate_of_dice.system.universal import roll
 from fate_of_dice.mapper import crate_embed
 from fate_of_dice.common import log, DiceException
-from .bot_variable import BOT_TOKEN, COMMAND_PREFIXES, SIMPLE_PRESENTATION
+from fate_of_dice.bot_variable import BOT_TOKEN, COMMAND_PREFIXES, SIMPLE_PRESENTATION
 
 client = Bot(case_insensitive=True, command_prefix=COMMAND_PREFIXES)
 
@@ -26,14 +26,16 @@ async def status(ctx: Context) -> None:
 
 @client.command(aliases=['r', '!', 'roll'])
 async def universal_roll(ctx: Context, *arguments: str) -> None:
-    roll_results = roll(ctx.author.name, arguments)
+    command_prefix: str = ctx.prefix + ctx.invoked_with
+    roll_results = roll(ctx.author.name, command_prefix, arguments)
     discord_result = crate_embed(ctx.message, roll_results, SIMPLE_PRESENTATION)
     await ctx.send(**discord_result)
 
 
 @client.command(aliases=['c', '?', 'CoC', 'CallOfCthulhu'])
 async def call_of_cthulhu_test(ctx: Context, *arguments: str) -> None:
-    skill_result = check_skill(ctx.author.name, arguments)
+    command_prefix: str = ctx.prefix + ctx.invoked_with
+    skill_result = check_skill(ctx.author.name, command_prefix, arguments)
     discord_result = crate_embed(ctx.message, skill_result, SIMPLE_PRESENTATION)
     await ctx.send(**discord_result)
 
