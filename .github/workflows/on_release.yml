@@ -19,7 +19,7 @@ jobs:
     - name: Zip build
       uses: montudor/action-zip@v0.1.1
       with:
-        args: zip -ll -jDT dist/windows/Windows_executables.zip dist/windows/*
+        args: zip -ll -jDT dist/windows/Windows_executables.zip dist/windows/ -i *
     - name: Upload build
       uses: svenstaro/upload-release-action@v2
       with:
