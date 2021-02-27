@@ -12,7 +12,7 @@ Bot supports commands for the following RPG systems:
 
 ### Common rolls
 Supported aliases: `r`, `!`, `roll`
-```Shell
+```
 \r [dices ...] [-h] [-m] [-x] [-s] [-r] [-u] [-c COMMENT [COMMENT ...]]
 
 Universal dice roll.
@@ -34,7 +34,7 @@ optional result presentation arguments:
 
 ### Call of Cthulhu skill check
 Supported aliases: `c`, `?`, `CoC`, `CallOfCthulhu`
-```Shell
+```
 \c [skill_value] [-h] [-b [BONUS_DICE_AMOUNT]] [-p [PENALTY_DICE_AMOUNT]] [-c COMMENT [COMMENT ...]]
 
 Call of Cthulhu skill check.
