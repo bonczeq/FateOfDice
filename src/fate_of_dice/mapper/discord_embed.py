@@ -10,7 +10,7 @@ from multipledispatch import dispatch
 
 from fate_of_dice.common import DiceException, ResourcesHandler
 from fate_of_dice.system.call_of_cthulhu import SkillCheckResult
-from fate_of_dice.system.universal import RollResult
+from fate_of_dice.system.universal import RollResults
 
 __PYTHON_IMAGE: Final[Path] = ResourcesHandler.get_resources_path('icons/python.png')
 __DISCORD_IMAGE: Final[Path] = ResourcesHandler.get_resources_path('icons/discord.png')
@@ -19,7 +19,7 @@ __PROCESS_IMAGE: Final[Path] = ResourcesHandler.get_resources_path('icons/proces
 
 
 @dispatch(DiceException)
-def crate_embed(error: DiceException) -> {[File], Embed}:
+def crate_embed(error: DiceException) -> {list[File], Embed}:
     (user_file_name, user_file) = __create_discord_file(__DISCORD_IMAGE)
     (thumbnail_file_name, thumbnail_file) = __create_discord_file(__INNOVATION_IMAGE)
 
@@ -33,7 +33,7 @@ def crate_embed(error: DiceException) -> {[File], Embed}:
 
 
 @dispatch(BaseException)
-def crate_embed(error: BaseException) -> {[File], Embed}:
+def crate_embed(error: BaseException) -> {list[File], Embed}:
     (user_file_name, user_file) = __create_discord_file(__PYTHON_IMAGE)
     (thumbnail_file_name, thumbnail_file) = __create_discord_file(__PROCESS_IMAGE)
 
@@ -51,19 +51,23 @@ def crate_embed(description: str) -> Embed:
     return Embed(description=description)
 
 
-@dispatch(Message, [RollResult], bool)
-def crate_embed(message: Message, roll_results: [RollResult], simple: bool) -> {Embed}:
+@dispatch(Message, RollResults, bool)
+def crate_embed(message: Message, roll_results: RollResults, simple: bool) -> {Embed}:
     embed = Embed()
     embed.colour = 0x8feb34
 
     if not simple:
+        embed.description = message.content
         embed.set_author(name=message.author.name, icon_url=str(message.author.avatar_url))
-        for result in roll_results:
-            embed.add_field(name="Modifier:", value=str(result.modifier), inline=True)
+
+        if roll_results.presentation.value:
+            embed.add_field(name="Modifier:", value=str(roll_results.presentation.value), inline=False)
+
+        for result in roll_results.results:
             embed.add_field(name="Roll:", value=result.description, inline=False)
         return {'embed': embed}
     else:
-        embed.description = "\n".join([result.description for result in roll_results])
+        embed.description = "\n".join([result.description for result in roll_results.results])
         return {'embed': embed}
 
 
@@ -75,9 +79,10 @@ def crate_embed(message: Message, skill_check: SkillCheckResult, simple: bool) -
 
     if not simple:
         (thumbnail_file_name, thumbnail_file) = __create_discord_file(skill_check.type.icon_path)
-        embed.set_author(name=message.author.name, icon_url=str(message.author.avatar_url))
-        embed.set_image(url=f"attachment://{thumbnail_file_name}")
+
         embed.description = message.content
+        embed.set_author(name=message.author.name, icon_url=str(message.author.avatar_url))
+        embed.set_thumbnail(url=f"attachment://{thumbnail_file_name}")
         embed.add_field(name="Skill check result:", value=skill_check.description, inline=True)
         return {'embed': embed, 'file': thumbnail_file}
     else:
@@ -85,9 +90,9 @@ def crate_embed(message: Message, skill_check: SkillCheckResult, simple: bool) -
         return {'embed': embed}
 
 
-def __create_discord_file(file_path: Optional[Path]) -> Optional[(str, File)]:
+def __create_discord_file(file_path: Optional[Path]) -> (str, File):
     if file_path:
         file_name = file_path.name
         return file_name, File(str(file_path), filename=file_name)
     else:
-        return None
+        return None, None

@@ -33,5 +33,6 @@ class SkillCheckArguments:
     penalty_dice_amount: int = 0
 
 
-def parse(arguments: (str, ...)) -> SkillCheckArguments:
+def parse(command_prefix: str, arguments: (str, ...)) -> SkillCheckArguments:
+    PARSER.prog = command_prefix
     return PARSER.parse_args(list(arguments), SkillCheckArguments())

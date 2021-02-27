@@ -3,14 +3,15 @@ from typing import Final
 from pathlib import Path
 from dataclasses import dataclass
 
-from fate_of_dice.common import ResourcesHandler, Dice
+from fate_of_dice.common.dice import Dice
+from fate_of_dice.common import ResourcesHandler
 
 from .argument_parser import parse, SkillCheckArguments
 from .skill_dice import OnesDice, TensDice, DiceType
 
 
-def check_skill(user: str, arguments: (str, ...)) -> 'SkillCheckResult':
-    return SkillCheck(user, arguments).roll()
+def check_skill(user: str, command_prefix: str, arguments: (str, ...)) -> 'SkillCheckResult':
+    return SkillCheck(user, command_prefix, arguments).roll()
 
 
 class SkillCheckResultType(Enum):
@@ -20,7 +21,7 @@ class SkillCheckResultType(Enum):
     __NORMAL_FAILURE_IMAGE: Final = ResourcesHandler.get_resources_path('icons/failed.png')
     __CRITICAL_FAILURE_IMAGE: Final = ResourcesHandler.get_resources_path('icons/critical_failed.png')
 
-    NONE = None, 0x288f34, None
+    NONE = None, 0xffffff, None
     CRITICAL_SUCCESS = "CRITICAL SUCCESS!", 0xf5e042, __CRITICAL_SUCCESS_IMAGE
     EXTREMAL_SUCCESS = "Extremal success!", 0xb342f5, __EXTREMAL_SUCCESS_IMAGE
     HARD_SUCCESS = "Hard success!", 0x264fad, __HARD_SUCCESS_IMAGE
@@ -36,62 +37,28 @@ class SkillCheckResultType(Enum):
 
 @dataclass
 class SkillCheckResult:
-    def __init__(self, result_dice: (TensDice, OnesDice), all_dices: ([TensDice], [OnesDice]), threshold: int,
-                 user: str):
-        (result_tens_dice, result_ones_dice) = result_dice
-        result_dice = result_tens_dice + result_ones_dice
-        result_dice = Dice(100) if result_dice == 0 else result_dice
-
-        self.user = user
-        self.value = result_dice
-        self.type = self.__skill_result_type(self.value, threshold)
-        self.description = self.__describe_roll(result_dice, result_tens_dice, result_ones_dice, all_dices)
-
-    @staticmethod
-    def __skill_result_type(value: int, threshold: int) -> SkillCheckResultType:
-        if not threshold:
-            result_type = SkillCheckResultType.NONE
-        elif value == 100 or (value >= 96 and threshold < 50):
-            result_type = SkillCheckResultType.CRITICAL_FAILURE
-        elif value == 1:
-            result_type = SkillCheckResultType.CRITICAL_SUCCESS
-        elif value <= threshold / 5:
-            result_type = SkillCheckResultType.EXTREMAL_SUCCESS
-        elif value <= threshold / 2:
-            result_type = SkillCheckResultType.HARD_SUCCESS
-        elif value <= threshold:
-            result_type = SkillCheckResultType.NORMAL_SUCCESS
-        else:
-            result_type = SkillCheckResultType.NORMAL_FAILURE
-
-        return result_type
-
-    @staticmethod
-    def __describe_roll(result_dice: Dice, result_tens_dice: Dice, result_ones_dice: Dice,
-                        all_dices: ([TensDice], [OnesDice])) -> str:
-        (tens_dices, _) = all_dices
-
-        tens_dice_str = None
-        if len(tens_dices) > 1:
-            tens_dice_str = f'[{"/".join([str(dice) for dice in tens_dices])}] '
-
-        return f'{result_tens_dice} {tens_dice_str or ""}+ {result_ones_dice} = {result_dice}'
+    user: str
+    value: Dice
+    type: SkillCheckResultType
+    description: str
 
 
 class SkillCheck:
-    def __init__(self, user: str, arguments: (str, ...)):
+    def __init__(self, user: str, command_prefix: str, arguments: (str, ...)):
         self.__user: str = user
-        self.__arguments: SkillCheckArguments = parse(arguments)
+        self.__command_prefix: str = command_prefix
+        self.__arguments: SkillCheckArguments = parse(command_prefix, arguments)
 
     def roll(self) -> SkillCheckResult:
         ones_dice: OnesDice = OnesDice.roll()
         main_tens_dice: TensDice = TensDice.roll()
+
         (extra_dices_type, extra_dices) = self.__roll_extra_dices(self.__arguments)
+        result_tens_dice = self.__chose_dice(ones_dice, main_tens_dice, extra_dices, extra_dices_type)
 
-        result_dice = self.__chose_dice(ones_dice, main_tens_dice, extra_dices, extra_dices_type)
-
-        return SkillCheckResult((result_dice, ones_dice), ([main_tens_dice] + extra_dices, [ones_dice]),
-                                self.__arguments.skill_value, self.__user)
+        result_dice = (result_tens_dice, ones_dice)
+        all_dices = ([main_tens_dice] + extra_dices, [ones_dice])
+        return self.__create_result(result_dice, all_dices, self.__arguments.skill_value)
 
     @classmethod
     def __chose_dice(cls, ones_dice: OnesDice, main_tens_dice: TensDice,
@@ -133,3 +100,43 @@ class SkillCheck:
             dice_type = DiceType.PENALTY
 
         return dice_type, [TensDice.roll(dice_type) for _ in range(abs(amount))]
+
+    def __create_result(self, result_dice: (TensDice, OnesDice), all_dices: ([TensDice], [OnesDice]), threshold: int,):
+        (result_tens_dice, result_ones_dice) = result_dice
+        result_dice = result_tens_dice + result_ones_dice
+        result_dice = Dice(100) if result_dice == 0 else result_dice
+
+        result_type = self.__skill_result_type(result_dice, threshold)
+        description = self.__describe_roll(result_dice, result_tens_dice, result_ones_dice, all_dices)
+
+        return SkillCheckResult(user=self.__user, value=result_dice, type=result_type, description=description)
+
+    @staticmethod
+    def __skill_result_type(value: int, threshold: int) -> SkillCheckResultType:
+        if not threshold:
+            result_type = SkillCheckResultType.NONE
+        elif value == 100 or (value >= 96 and threshold < 50):
+            result_type = SkillCheckResultType.CRITICAL_FAILURE
+        elif value == 1:
+            result_type = SkillCheckResultType.CRITICAL_SUCCESS
+        elif value <= threshold / 5:
+            result_type = SkillCheckResultType.EXTREMAL_SUCCESS
+        elif value <= threshold / 2:
+            result_type = SkillCheckResultType.HARD_SUCCESS
+        elif value <= threshold:
+            result_type = SkillCheckResultType.NORMAL_SUCCESS
+        else:
+            result_type = SkillCheckResultType.NORMAL_FAILURE
+
+        return result_type
+
+    @staticmethod
+    def __describe_roll(result_dice: Dice, result_tens_dice: Dice, result_ones_dice: Dice,
+                        all_dices: ([TensDice], [OnesDice])) -> str:
+        (tens_dices, _) = all_dices
+
+        tens_dice_str = None
+        if len(tens_dices) > 1:
+            tens_dice_str = f'[{"/".join([str(dice) for dice in tens_dices])}] '
+
+        return f'{result_tens_dice} {tens_dice_str or ""}+ {result_ones_dice} = {result_dice}'
