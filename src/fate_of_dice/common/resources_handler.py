@@ -8,10 +8,11 @@ from pathlib import Path
 class ResourcesHandler:
     __IS_EXE: bool = getattr(sys, 'frozen', False)
 
-    __MAIN_PATH: Final[Path] = Path(__file__).parent.parent.parent.parent
+    __MAIN_PATH: Final[Path] = Path(__file__).parent.parent.parent.parent.absolute()
     __RESOURCES_PATH: Final[Path] = __MAIN_PATH / 'resources/'
 
-    __CONFIG_FILE: Final[Path] = (Path(sys.executable).parent if __IS_EXE else __RESOURCES_PATH).joinpath('config.ini')
+    __CONFIG_FILE: Final[Path] = (Path(sys.executable).parent.absolute()
+                                  if __IS_EXE else __RESOURCES_PATH).joinpath('config.ini')
 
     __DEFAULT_CONFIG_SECTION: Final[str] = 'FATE_OF_DICE'
 

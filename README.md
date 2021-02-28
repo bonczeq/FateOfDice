@@ -1,9 +1,9 @@
-![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white) 
-![Python](https://img.shields.io/badge/Python-yellow?style=for-the-badge&logo=python&logoColor=white) 
-![Git](https://img.shields.io/badge/Git-F1502F?style=for-the-badge&logo=git&logoColor=white)
-
 # FateOfDice
 Discord bot that allows rolling dices and perform tests for supported RPG systems.
+
+## Table of Contents
+* [Command usage](#Command_usage)  
+* [Installation](#Installation)
 
 ## Command usage
 Bot supports commands for the following RPG systems:
@@ -76,9 +76,12 @@ or by editing [`config.ini`](resources/config.ini) file.
 ![GitHub](https://img.shields.io/github/license/bonczeq/FateOfDice?style=flat-square)
 
 ## Status
-![Code with](https://img.shields.io/badge/CODE%20WITH%20%20%20%E2%99%A5-a832a0?style=for-the-badge)
+[![Code with](https://img.shields.io/badge/CODE%20WITH%20%20%20%E2%99%A5-a832a0?style=for-the-badge)](https://github.com/bonczeq)
+[![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discordpy.readthedocs.io/en/latest/#)
+[![Python](https://img.shields.io/badge/Python-yellow?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org)
+[![Git](https://img.shields.io/badge/Git-F1502F?style=for-the-badge&logo=git&logoColor=white)](https://git-scm.com)
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/bonczeq/FateOfDice?style=flat-square)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/bonczeq/FateOfDice?style=flat-square)](https://github.com/bonczeq/FateOfDice/releases)
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bonczeq/FateOfDice/FateOfDice%20push?style=flat-square)
-![GitHub issues](https://img.shields.io/github/issues/bonczeq/FateOfDice?style=flat-square)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bonczeq/FateOfDice/FateOfDice%20push?style=flat-square)](https://github.com/bonczeq/FateOfDice/actions/workflows/on_push.yml?query=branch:master++)
+[![GitHub issues](https://img.shields.io/github/issues/bonczeq/FateOfDice?style=flat-square)](https://github.com/bonczeq/FateOfDice/issues)
