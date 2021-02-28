@@ -24,7 +24,7 @@ jobs:
     - name: Build with pyinstaller
       run: pyinstaller ./FateOfDice.spec
     - name: Zip build
-      run: zip --junk-paths dist/Windows_executables.zip dist/ -i *
+      run: zip --junk-paths dist/Windows_executables.zip dist/*
     - name: Upload build
       uses: svenstaro/upload-release-action@v2
       with:
