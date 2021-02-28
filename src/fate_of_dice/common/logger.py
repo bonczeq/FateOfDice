@@ -1,2 +1,2 @@
-def log(arg: str or BaseException) -> None:
-    print(arg)
+def log(arg) -> None:
+    print(str(arg))
