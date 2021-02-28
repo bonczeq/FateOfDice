@@ -3,7 +3,7 @@ from discord.ext.commands import Bot, Context
 from fate_of_dice.system.call_of_cthulhu import check_skill
 from fate_of_dice.system.universal import roll
 from fate_of_dice.common import log, DiceException
-from .variable import BOT_TOKEN, COMMAND_PREFIXES, SIMPLE_PRESENTATION
+from .environment import BOT_TOKEN, COMMAND_PREFIXES, SIMPLE_PRESENTATION, get_heroku_status
 from .mapper import crate_embed
 
 bot = Bot(case_insensitive=True, command_prefix=COMMAND_PREFIXES)
@@ -20,6 +20,11 @@ async def on_ready():
 @bot.command(aliases=['s'])
 async def status(ctx: Context) -> None:
     status_message: str = "Bot active"
+
+    heroku_status = get_heroku_status()
+    if heroku_status:
+        status_message += f'\nHeroku:\n{heroku_status}'
+
     log(status_message)
     await ctx.send(embed=crate_embed(status_message))
 

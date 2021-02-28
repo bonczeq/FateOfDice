@@ -57,7 +57,7 @@ Bot can be run by execution built exe file (Windows system) or execute python sc
 
 ### Properties
 Properties can be defined by setting an environment variable (it overrides other method of settings) 
-or by editing [`config.ini`](resources/config.ini) file.
+or by editing [`config.ini`](src/fate_of_dice/resources/config.ini) file.
 
 #### Required properties
 `FATE_OF_DICE_TOKEN` discord bot token
@@ -73,7 +73,7 @@ or by editing [`config.ini`](resources/config.ini) file.
 * supported value: `True` or `False`
 
 ## License
-![GitHub](https://img.shields.io/github/license/bonczeq/FateOfDice?style=flat-square)
+[![GitHub](https://img.shields.io/github/license/bonczeq/FateOfDice?style=flat-square)](./README.md)
 
 ## Status
 [![Code with](https://img.shields.io/badge/CODE%20WITH%20%20%20%E2%99%A5-a832a0?style=for-the-badge)](https://github.com/bonczeq)
