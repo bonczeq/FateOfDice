@@ -1,15 +1,16 @@
 import sys
 import os
 import configparser
-import importlib.resources
 from typing import Optional, Final
 from pathlib import Path
+
+import fate_of_dice.resources
 
 
 class ResourcesHandler:
     __IS_EXE: bool = getattr(sys, 'frozen', False)
 
-    __RESOURCES_PATH: Final[Path] = importlib.resources.files('fate_of_dice.resources')
+    __RESOURCES_PATH: Final[Path] = Path(fate_of_dice.resources.__file__).parent.absolute()
 
     __CONFIG_FILE: Final[Path] = (Path(sys.executable).parent.absolute()
                                   if __IS_EXE else __RESOURCES_PATH).joinpath('config.ini')
