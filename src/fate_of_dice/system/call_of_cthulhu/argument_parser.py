@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from fate_of_dice.common.third_party_wrapper import ArgumentParser
+from fate_of_dice.common.dice import DiceArgumentParser, DicesBasicArguments
 
-PARSER = ArgumentParser(description='Call of Cthulhu skill check.')
+PARSER = DiceArgumentParser(description='Call of Cthulhu skill check.')
 
 PARSER.add_argument('skill_value',
                     type=int,
@@ -21,13 +21,12 @@ PARSER.add_argument('-p', '--penalty',
                     const='1',
                     dest='penalty_dice_amount',
                     help='amount of penalty dices')
-PARSER.add_argument('-c', '--comment',
-                    nargs='+',
-                    help='ignored comment')
+PARSER.add_comment_argument()
+PARSER.add_priv_request()
 
 
 @dataclass
-class SkillCheckArguments:
+class SkillCheckArguments(DicesBasicArguments):
     skill_value: int = None
     bonus_dice_amount: int = 0
     penalty_dice_amount: int = 0

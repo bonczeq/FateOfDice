@@ -18,7 +18,7 @@ setup(
     url="https://github.com/bonczeq/FateOfDice",
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
-    package_data={'': ['*.png']},
+    package_data={'icons': ['resource/icons/*.png']},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",

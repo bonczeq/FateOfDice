@@ -1,0 +1,25 @@
+import unittest
+
+from fate_of_dice.common import ResourceImageHandler
+
+
+class TestResourceImageHandler(unittest.TestCase):
+    def test_resource_path(self):
+        result = ResourceImageHandler.get_resources_path()
+        self.assertTrue(result.exists())
+        self.assertRegex(result.name, 'icons')
+
+    def test_variables_exist(self):
+        self.assertTrue(ResourceImageHandler.PYTHON_IMAGE.exists())
+        self.assertTrue(ResourceImageHandler.DISCORD_IMAGE.exists())
+        self.assertTrue(ResourceImageHandler.CRITICAL_FAILURE_IMAGE.exists())
+        self.assertTrue(ResourceImageHandler.NORMAL_FAILURE_IMAGE.exists())
+        self.assertTrue(ResourceImageHandler.HARD_SUCCESS_IMAGE.exists())
+        self.assertTrue(ResourceImageHandler.EXTREMAL_SUCCESS_IMAGE.exists())
+        self.assertTrue(ResourceImageHandler.CRITICAL_SUCCESS_IMAGE.exists())
+        self.assertTrue(ResourceImageHandler.INNOVATION_IMAGE.exists())
+        self.assertTrue(ResourceImageHandler.PROCESS_IMAGE.exists())
+
+
+if __name__ == '__main__':
+    unittest.main()

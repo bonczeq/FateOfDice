@@ -1,44 +1,29 @@
 from dataclasses import dataclass
 
-from fate_of_dice.common.third_party_wrapper import ArgumentParser
-from fate_of_dice.common.dice.dices_presentation import DiceArguments
+from fate_of_dice.common.dice import DiceArgumentParser
+from fate_of_dice.common.dice import DicesModifierArguments, DicesModifier, add_modifier_arguments
+from fate_of_dice.common.dice import DicesFilterArguments, DicesFilterType, add_filter_arguments
 
-PARSER = ArgumentParser(description='Universal dice roll.')
+PARSER = DiceArgumentParser(description='Universal dice roll.')
 
 PARSER.add_argument('dices',
                     type=str,
                     nargs='*',
                     default=['1d100'],
                     help='rolls description (default: 1d100)')
-
-GROUP = PARSER.add_argument_group('optional result presentation arguments')
-GROUP.add_argument('-m', '--min',
-                   action='store_true',
-                   dest='minimum',
-                   help='show min dice')
-GROUP.add_argument('-x', '--max',
-                   action='store_true',
-                   dest='maximum',
-                   help='show max dice')
-GROUP.add_argument('-s', '--sort',
-                   action='store_true',
-                   dest='sort',
-                   help='show sorted dices')
-GROUP.add_argument('-r', '--reverse-sort',
-                   action='store_true',
-                   dest='reverse_sort',
-                   help='show reverse sorted dices')
-GROUP.add_argument('-u', '--sum',
-                   action='store_true',
-                   dest='sum',
-                   help='show sum of dices')
-GROUP.add_argument('-c', '--comment',
-                   nargs='+',
-                   help='ignored comment')
+PARSER.add_arguments_with_function(lambda parser: parser.add_argument_group('optional result filtering arguments'),
+                                   add_filter_arguments, DicesFilterType.UPPER_THAN, DicesFilterType.LOWER_THAN)
+PARSER.add_arguments_with_function(lambda parser: parser.add_argument_group('optional result modifying arguments'),
+                                   add_modifier_arguments,
+                                   DicesModifier.MIN, DicesModifier.MAX, DicesModifier.SORTED,
+                                   DicesModifier.REVERSE_SORTED,
+                                   DicesModifier.SUM, DicesModifier.AVERAGE_FLOOR, DicesModifier.AVERAGE_CEIL)
+PARSER.add_comment_argument()
+PARSER.add_priv_request()
 
 
 @dataclass
-class RollArguments(DiceArguments):
+class RollArguments(DicesModifierArguments, DicesFilterArguments):
     dices: [str] = "1d100"
 
 

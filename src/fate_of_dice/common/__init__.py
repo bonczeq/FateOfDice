@@ -1,3 +1,3 @@
 from .exception import DiceException
 from .logger import log
-from .resources_handler import ResourcesHandler
+from .resource_handler import ResourceImageHandler, ResourceHandler

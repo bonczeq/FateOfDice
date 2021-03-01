@@ -1,1 +1,1 @@
-from .roll import RollResult, RollResults, roll
+from .roll import RollResult, roll

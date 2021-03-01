@@ -2,7 +2,7 @@ import unittest
 from unittest import mock
 
 from fate_of_dice.system.call_of_cthulhu.skill_check import check_skill, SkillCheckResultType
-from fate_of_dice.common.third_party_wrapper.argument_parse import ArgumentParserException
+from fate_of_dice.common.dice.dice_argument_parse import DiceArgumentParserException, DiceArgumentParserHelpException
 
 
 class TestSkillCheck(unittest.TestCase):
@@ -20,7 +20,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(user, result.user)
         self.assertEqual(SkillCheckResultType.NONE, result.type)
         self.assertEqual(99, result.value)
-        self.assertEqual('90 + 9 = 99', result.description)
+        self.assertEqual('90 + 9 = 99', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_critical_failure(self, randrange_mock):
@@ -35,7 +35,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(user, result.user)
         self.assertEqual(SkillCheckResultType.CRITICAL_FAILURE, result.type)
         self.assertEqual(100, result.value)
-        self.assertEqual('0 + 0 = 100', result.description)
+        self.assertEqual('0 + 0 = 100', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_critical_failure_when_98(self, randrange_mock):
@@ -50,7 +50,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(user, result.user)
         self.assertEqual(SkillCheckResultType.CRITICAL_FAILURE, result.type)
         self.assertEqual(98, result.value)
-        self.assertEqual('90 + 8 = 98', result.description)
+        self.assertEqual('90 + 8 = 98', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_normal_failure(self, randrange_mock):
@@ -65,7 +65,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(user, result.user)
         self.assertEqual(SkillCheckResultType.NORMAL_FAILURE, result.type)
         self.assertEqual(60, result.value)
-        self.assertEqual('60 + 0 = 60', result.description)
+        self.assertEqual('60 + 0 = 60', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_normal_failure_with_when_98(self, randrange_mock):
@@ -80,7 +80,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(user, result.user)
         self.assertEqual(SkillCheckResultType.NORMAL_FAILURE, result.type)
         self.assertEqual(98, result.value)
-        self.assertEqual('90 + 8 = 98', result.description)
+        self.assertEqual('90 + 8 = 98', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_normal_success(self, randrange_mock):
@@ -95,7 +95,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(user, result.user)
         self.assertEqual(SkillCheckResultType.NORMAL_SUCCESS, result.type)
         self.assertEqual(31, result.value)
-        self.assertEqual('30 + 1 = 31', result.description)
+        self.assertEqual('30 + 1 = 31', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_hard_success(self, randrange_mock):
@@ -110,7 +110,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(user, result.user)
         self.assertEqual(SkillCheckResultType.HARD_SUCCESS, result.type)
         self.assertEqual(25, result.value)
-        self.assertEqual('20 + 5 = 25', result.description)
+        self.assertEqual('20 + 5 = 25', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_extremal_success(self, randrange_mock):
@@ -125,7 +125,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(user, result.user)
         self.assertEqual(SkillCheckResultType.EXTREMAL_SUCCESS, result.type)
         self.assertEqual(4, result.value)
-        self.assertEqual('0 + 4 = 4', result.description)
+        self.assertEqual('0 + 4 = 4', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_critical_success(self, randrange_mock):
@@ -140,7 +140,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(user, result.user)
         self.assertEqual(SkillCheckResultType.CRITICAL_SUCCESS, result.type)
         self.assertEqual(1, result.value)
-        self.assertEqual('0 + 1 = 1', result.description)
+        self.assertEqual('0 + 1 = 1', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_bonus_dices(self, randrange_mock):
@@ -160,7 +160,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(user, result.user)
         self.assertEqual(SkillCheckResultType.NORMAL_SUCCESS, result.type)
         self.assertEqual(10, result.value)
-        self.assertEqual('10 [0/10/90] + 0 = 10', result.description)
+        self.assertEqual('10 [0/10/90] + 0 = 10', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_penalty_dices(self, randrange_mock):
@@ -179,7 +179,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(user, result.user)
         self.assertEqual(SkillCheckResultType.CRITICAL_FAILURE, result.type)
         self.assertEqual(100, result.value)
-        self.assertEqual('0 [0/90] + 0 = 100', result.description)
+        self.assertEqual('0 [0/90] + 0 = 100', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_bonus_and_penalty_dices(self, randrange_mock):
@@ -198,11 +198,11 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(user, result.user)
         self.assertEqual(SkillCheckResultType.NORMAL_FAILURE, result.type)
         self.assertEqual(95, result.value)
-        self.assertEqual('90 [10/90] + 5 = 95', result.description)
+        self.assertEqual('90 [10/90] + 5 = 95', result.descriptions[0])
 
     def test_help(self):
         (user, prefix, arguments) = ('userTest', 'prefix', tuple(['-h']))
-        with self.assertRaises(ArgumentParserException) as context:
+        with self.assertRaises(DiceArgumentParserHelpException) as context:
             check_skill(user, prefix, arguments)
 
         self.assertRegex(str(context.exception), '.*usage:.*')
@@ -210,7 +210,7 @@ class TestSkillCheck(unittest.TestCase):
     def test_unsupported_arguments(self):
         (user, prefix, arguments) = ('userTest', 'prefix', tuple(['Unsupported']))
 
-        with self.assertRaises(ArgumentParserException):
+        with self.assertRaises(DiceArgumentParserException):
             check_skill(user, prefix, arguments)
 
 
