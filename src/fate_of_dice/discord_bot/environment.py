@@ -1,4 +1,4 @@
-from os import environ
+import os
 from subprocess import getstatusoutput
 from typing import TypeVar, Optional, Final
 
@@ -29,6 +29,8 @@ SIMPLE_PRESENTATION: Final[bool] = __simple_presentation()
 
 
 def get_heroku_status() -> Optional[str]:
-    if 'DYNO' in environ:
+    if os.getenv('DYNO', None):
         (status, result) = getstatusoutput("heroku ps -a fate-of-dice")
         return str(result) if status == 0 else None
+    else:
+        return None
