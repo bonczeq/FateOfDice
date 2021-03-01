@@ -1,10 +1,10 @@
 from enum import Enum
-from typing import Final
 from pathlib import Path
 from dataclasses import dataclass
 
 from fate_of_dice.common.dice import Dice
-from fate_of_dice.common import ResourcesHandler
+from fate_of_dice.common import ResourceImageHandler
+from fate_of_dice.system import BasicResult
 
 from .argument_parser import parse, SkillCheckArguments
 from .skill_dice import OnesDice, TensDice, DiceType
@@ -15,19 +15,13 @@ def check_skill(user: str, command_prefix: str, arguments: (str, ...)) -> 'Skill
 
 
 class SkillCheckResultType(Enum):
-    __CRITICAL_SUCCESS_IMAGE: Final = ResourcesHandler.get_resources_path('icons/critical_success.png')
-    __EXTREMAL_SUCCESS_IMAGE: Final = ResourcesHandler.get_resources_path('icons/extremal_success.png')
-    __HARD_SUCCESS_IMAGE: Final = ResourcesHandler.get_resources_path('icons/hard_success.png')
-    __NORMAL_FAILURE_IMAGE: Final = ResourcesHandler.get_resources_path('icons/failed.png')
-    __CRITICAL_FAILURE_IMAGE: Final = ResourcesHandler.get_resources_path('icons/critical_failed.png')
-
     NONE = None, 0xffffff, None
-    CRITICAL_SUCCESS = "CRITICAL SUCCESS!", 0xf5e042, __CRITICAL_SUCCESS_IMAGE
-    EXTREMAL_SUCCESS = "Extremal success!", 0xb342f5, __EXTREMAL_SUCCESS_IMAGE
-    HARD_SUCCESS = "Hard success!", 0x264fad, __HARD_SUCCESS_IMAGE
-    NORMAL_SUCCESS = "Normal success.", 0x288f34, None
-    NORMAL_FAILURE = "Normal failure.", 0xff0000, __NORMAL_FAILURE_IMAGE
-    CRITICAL_FAILURE = "CRITICAL FAILURE!", 0x45342d, __CRITICAL_FAILURE_IMAGE
+    CRITICAL_SUCCESS = "CRITICAL SUCCESS!", 0xc547ff, ResourceImageHandler.CRITICAL_SUCCESS_IMAGE
+    EXTREMAL_SUCCESS = "Extremal success!", 0xfcff4d, ResourceImageHandler.EXTREMAL_SUCCESS_IMAGE
+    HARD_SUCCESS = "Hard success!", 0x7d7aff, ResourceImageHandler.HARD_SUCCESS_IMAGE
+    NORMAL_SUCCESS = "Normal success.", 0x55e453, None
+    NORMAL_FAILURE = "Normal failure.", 0xf35858, ResourceImageHandler.NORMAL_FAILURE_IMAGE
+    CRITICAL_FAILURE = "CRITICAL FAILURE!", 0xff0000, ResourceImageHandler.CRITICAL_FAILURE_IMAGE
 
     def __init__(self, title: str, colour: int = None, icon_path: Path = None):
         self.title = title
@@ -36,11 +30,9 @@ class SkillCheckResultType(Enum):
 
 
 @dataclass
-class SkillCheckResult:
-    user: str
+class SkillCheckResult(BasicResult):
     value: Dice
     type: SkillCheckResultType
-    description: str
 
 
 class SkillCheck:
@@ -101,7 +93,7 @@ class SkillCheck:
 
         return dice_type, [TensDice.roll(dice_type) for _ in range(abs(amount))]
 
-    def __create_result(self, result_dice: (TensDice, OnesDice), all_dices: ([TensDice], [OnesDice]), threshold: int,):
+    def __create_result(self, result_dice: (TensDice, OnesDice), all_dices: ([TensDice], [OnesDice]), threshold: int):
         (result_tens_dice, result_ones_dice) = result_dice
         result_dice = result_tens_dice + result_ones_dice
         result_dice = Dice(100) if result_dice == 0 else result_dice
@@ -109,7 +101,8 @@ class SkillCheck:
         result_type = self.__skill_result_type(result_dice, threshold)
         description = self.__describe_roll(result_dice, result_tens_dice, result_ones_dice, all_dices)
 
-        return SkillCheckResult(user=self.__user, value=result_dice, type=result_type, description=description)
+        return SkillCheckResult(value=result_dice, type=result_type, descriptions=[description],
+                                user=self.__user, priv_request=self.__arguments.priv_request)
 
     @staticmethod
     def __skill_result_type(value: int, threshold: int) -> SkillCheckResultType:

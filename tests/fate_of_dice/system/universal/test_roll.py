@@ -2,9 +2,9 @@ import unittest
 from unittest import mock
 
 from fate_of_dice.system.universal import roll
-from fate_of_dice.common.dice import DicesPresentation
+from fate_of_dice.common.dice import DicesModifier, DicesFilterType
 from fate_of_dice.system.universal.exception import RollException
-from fate_of_dice.common.third_party_wrapper.argument_parse import ArgumentParserException
+from fate_of_dice.common.dice.dice_argument_parse import DiceArgumentParserException
 
 
 class TestRoll(unittest.TestCase):
@@ -20,13 +20,13 @@ class TestRoll(unittest.TestCase):
         randrange_mock.assert_has_calls([mock.call(1, 100 + 1, 1)])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesPresentation.NONE, dice_result.presentation)
-        self.assertEqual(len(dice_result.results), 1)
+        self.assertEqual(DicesModifier.NONE, dice_result.dices_modifier)
+        self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
-        result = dice_result.results[0]
-        self.assertEqual([55], result.result_dices)
-        self.assertEqual([55], result.all_dices)
-        self.assertEqual('55', result.description)
+        self.assertEqual(len(dice_result.descriptions), 1)
+        self.assertEqual('55', dice_result.descriptions[0])
+        self.assertEqual([55], dice_result.result_dices[0])
+        self.assertEqual([55], dice_result.all_dices[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_default_dice_amount_roll(self, randrange_mock):
@@ -39,13 +39,13 @@ class TestRoll(unittest.TestCase):
         randrange_mock.assert_has_calls([mock.call(1, 8 + 1, 1)])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesPresentation.NONE, dice_result.presentation)
-        self.assertEqual(len(dice_result.results), 1)
+        self.assertEqual(DicesModifier.NONE, dice_result.dices_modifier)
+        self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
-        result = dice_result.results[0]
-        self.assertEqual([5], result.result_dices)
-        self.assertEqual([5], result.all_dices)
-        self.assertEqual('5', result.description)
+        self.assertEqual(len(dice_result.descriptions), 1)
+        self.assertEqual('5', dice_result.descriptions[0])
+        self.assertEqual([5], dice_result.result_dices[0])
+        self.assertEqual([5], dice_result.all_dices[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_default_dice_amount_short_roll(self, randrange_mock):
@@ -58,13 +58,13 @@ class TestRoll(unittest.TestCase):
         randrange_mock.assert_has_calls([mock.call(1, 8 + 1, 1)])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesPresentation.NONE, dice_result.presentation)
-        self.assertEqual(len(dice_result.results), 1)
+        self.assertEqual(DicesModifier.NONE, dice_result.dices_modifier)
+        self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
-        result = dice_result.results[0]
-        self.assertEqual([5], result.result_dices)
-        self.assertEqual([5], result.all_dices)
-        self.assertEqual('5', result.description)
+        self.assertEqual(len(dice_result.descriptions), 1)
+        self.assertEqual('5', dice_result.descriptions[0])
+        self.assertEqual([5], dice_result.result_dices[0])
+        self.assertEqual([5], dice_result.all_dices[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_single_roll(self, randrange_mock):
@@ -79,13 +79,13 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesPresentation.NONE, dice_result.presentation)
-        self.assertEqual(len(dice_result.results), 1)
+        self.assertEqual(DicesModifier.NONE, dice_result.dices_modifier)
+        self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
-        result = dice_result.results[0]
-        self.assertEqual([5, 8, 1], result.result_dices)
-        self.assertEqual([5, 8, 1], result.all_dices)
-        self.assertEqual('[5, 8, 1]', result.description)
+        self.assertEqual(len(dice_result.descriptions), 1)
+        self.assertEqual('5, 8, 1', dice_result.descriptions[0])
+        self.assertEqual([5, 8, 1], dice_result.result_dices[0])
+        self.assertEqual([5, 8, 1], dice_result.all_dices[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_min_roll(self, randrange_mock):
@@ -100,13 +100,13 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesPresentation.MIN, dice_result.presentation)
-        self.assertEqual(len(dice_result.results), 1)
+        self.assertEqual(DicesModifier.MIN, dice_result.dices_modifier)
+        self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
-        result = dice_result.results[0]
-        self.assertEqual([1], result.result_dices)
-        self.assertEqual([5, 8, 1], result.all_dices)
-        self.assertEqual('[5, 8, 1] 🠖 1', result.description)
+        self.assertEqual(len(dice_result.descriptions), 1)
+        self.assertEqual('[5, 8, 1] 🠖 1', dice_result.descriptions[0])
+        self.assertEqual([1], dice_result.result_dices[0])
+        self.assertEqual([5, 8, 1], dice_result.all_dices[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_max_roll(self, randrange_mock):
@@ -121,13 +121,13 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesPresentation.MAX, dice_result.presentation)
-        self.assertEqual(len(dice_result.results), 1)
+        self.assertEqual(DicesModifier.MAX, dice_result.dices_modifier)
+        self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
-        result = dice_result.results[0]
-        self.assertEqual([8], result.result_dices)
-        self.assertEqual([5, 8, 1], result.all_dices)
-        self.assertEqual('[5, 8, 1] 🠖 8', result.description)
+        self.assertEqual(len(dice_result.descriptions), 1)
+        self.assertEqual('[5, 8, 1] 🠖 8', dice_result.descriptions[0])
+        self.assertEqual([8], dice_result.result_dices[0])
+        self.assertEqual([5, 8, 1], dice_result.all_dices[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_sorted_roll(self, randrange_mock):
@@ -142,13 +142,13 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesPresentation.SORTED, dice_result.presentation)
-        self.assertEqual(len(dice_result.results), 1)
+        self.assertEqual(DicesModifier.SORTED, dice_result.dices_modifier)
+        self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
-        result = dice_result.results[0]
-        self.assertEqual([1, 5, 8], result.result_dices)
-        self.assertEqual([5, 8, 1], result.all_dices)
-        self.assertEqual('[1, 5, 8]', result.description)
+        self.assertEqual(len(dice_result.descriptions), 1)
+        self.assertEqual('[5, 8, 1] 🠖 [1, 5, 8]', dice_result.descriptions[0])
+        self.assertEqual([1, 5, 8], dice_result.result_dices[0])
+        self.assertEqual([5, 8, 1], dice_result.all_dices[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_reverse_sorted_roll(self, randrange_mock):
@@ -163,13 +163,13 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesPresentation.REVERSE_SORTED, dice_result.presentation)
-        self.assertEqual(len(dice_result.results), 1)
+        self.assertEqual(DicesModifier.REVERSE_SORTED, dice_result.dices_modifier)
+        self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
-        result = dice_result.results[0]
-        self.assertEqual([8, 5, 1], result.result_dices)
-        self.assertEqual([5, 8, 1], result.all_dices)
-        self.assertEqual('[8, 5, 1]', result.description)
+        self.assertEqual(len(dice_result.descriptions), 1)
+        self.assertEqual('[5, 8, 1] 🠖 [8, 5, 1]', dice_result.descriptions[0])
+        self.assertEqual([8, 5, 1], dice_result.result_dices[0])
+        self.assertEqual([5, 8, 1], dice_result.all_dices[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_sum_roll(self, randrange_mock):
@@ -184,13 +184,117 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesPresentation.SUM, dice_result.presentation)
-        self.assertEqual(len(dice_result.results), 1)
+        self.assertEqual(DicesModifier.SUM, dice_result.dices_modifier)
+        self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
-        result = dice_result.results[0]
-        self.assertEqual([14], result.result_dices)
-        self.assertEqual([5, 8, 1], result.all_dices)
-        self.assertEqual('[5, 8, 1] 🠖 14', result.description)
+        self.assertEqual(len(dice_result.descriptions), 1)
+        self.assertEqual('[5, 8, 1] 🠖 14', dice_result.descriptions[0])
+        self.assertEqual([14], dice_result.result_dices[0])
+        self.assertEqual([5, 8, 1], dice_result.all_dices[0])
+
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
+    def test_average_floor_roll(self, randrange_mock):
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple(['3d8', '--average-floor']))
+
+        randrange_mock.side_effect = [5, 8, 1]
+
+        dice_result = roll(user, prefix, tuple(arguments))
+
+        randrange_mock.assert_has_calls([
+            mock.call(1, 8 + 1, 1), mock.call(1, 8 + 1, 1), mock.call(1, 8 + 1, 1),
+        ])
+
+        self.assertEqual(user, dice_result.user)
+        self.assertEqual(DicesModifier.AVERAGE_FLOOR, dice_result.dices_modifier)
+        self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
+
+        self.assertEqual(len(dice_result.descriptions), 1)
+        self.assertEqual('[5, 8, 1] 🠖 4', dice_result.descriptions[0])
+        self.assertEqual([4], dice_result.result_dices[0])
+        self.assertEqual([5, 8, 1], dice_result.all_dices[0])
+
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
+    def test_average_ceil_roll(self, randrange_mock):
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple(['3d8', '--average-ceil']))
+
+        randrange_mock.side_effect = [5, 8, 1]
+
+        dice_result = roll(user, prefix, tuple(arguments))
+
+        randrange_mock.assert_has_calls([
+            mock.call(1, 8 + 1, 1), mock.call(1, 8 + 1, 1), mock.call(1, 8 + 1, 1),
+        ])
+
+        self.assertEqual(user, dice_result.user)
+        self.assertEqual(DicesModifier.AVERAGE_CEIL, dice_result.dices_modifier)
+        self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
+        self.assertEqual(len(dice_result.descriptions), 1)
+        self.assertEqual('[5, 8, 1] 🠖 5', dice_result.descriptions[0])
+        self.assertEqual([5], dice_result.result_dices[0])
+        self.assertEqual([5, 8, 1], dice_result.all_dices[0])
+
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
+    def test_lower_than_roll(self, randrange_mock):
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple(['3d8', '--lower-than', '6']))
+
+        randrange_mock.side_effect = [5, 8, 1]
+
+        dice_result = roll(user, prefix, tuple(arguments))
+
+        randrange_mock.assert_has_calls([
+            mock.call(1, 8 + 1, 1), mock.call(1, 8 + 1, 1), mock.call(1, 8 + 1, 1),
+        ])
+
+        self.assertEqual(user, dice_result.user)
+        self.assertEqual(DicesModifier.NONE, dice_result.dices_modifier)
+        self.assertEqual(DicesFilterType.LOWER_THAN, dice_result.dices_filter)
+
+        self.assertEqual(len(dice_result.descriptions), 1)
+        self.assertEqual('[5, 8, 1] 🠖 [5, 1]', dice_result.descriptions[0])
+        self.assertEqual([5, 1], dice_result.result_dices[0])
+        self.assertEqual([5, 8, 1], dice_result.all_dices[0])
+
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
+    def test_upper_than_roll(self, randrange_mock):
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple(['3d8', '--upper-than', '4']))
+
+        randrange_mock.side_effect = [5, 8, 1]
+
+        dice_result = roll(user, prefix, tuple(arguments))
+
+        randrange_mock.assert_has_calls([
+            mock.call(1, 8 + 1, 1), mock.call(1, 8 + 1, 1), mock.call(1, 8 + 1, 1),
+        ])
+
+        self.assertEqual(user, dice_result.user)
+        self.assertEqual(DicesModifier.NONE, dice_result.dices_modifier)
+        self.assertEqual(DicesFilterType.UPPER_THAN, dice_result.dices_filter)
+
+        self.assertEqual(len(dice_result.descriptions), 1)
+        self.assertEqual('[5, 8, 1] 🠖 [5, 8]', dice_result.descriptions[0])
+        self.assertEqual([5, 8], dice_result.result_dices[0])
+        self.assertEqual([5, 8, 1], dice_result.all_dices[0])
+
+    @mock.patch('fate_of_dice.common.dice.dice.randrange')
+    def test_equal_roll(self, randrange_mock):
+        (user, prefix, arguments) = ('userTest', 'prefix', tuple(['3d8', '--equal', '8']))
+
+        randrange_mock.side_effect = [5, 8, 8]
+
+        dice_result = roll(user, prefix, tuple(arguments))
+
+        randrange_mock.assert_has_calls([
+            mock.call(1, 8 + 1, 1), mock.call(1, 8 + 1, 1), mock.call(1, 8 + 1, 1),
+        ])
+
+        self.assertEqual(user, dice_result.user)
+        self.assertEqual(DicesModifier.NONE, dice_result.dices_modifier)
+        self.assertEqual(DicesFilterType.EQUAL, dice_result.dices_filter)
+
+        self.assertEqual(len(dice_result.descriptions), 1)
+        self.assertEqual('[5, 8, 8] 🠖 [8, 8]', dice_result.descriptions[0])
+        self.assertEqual([8, 8], dice_result.result_dices[0])
+        self.assertEqual([5, 8, 8], dice_result.all_dices[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_three_rolls(self, randrange_mock):
@@ -205,27 +309,25 @@ class TestRoll(unittest.TestCase):
         dice_result = roll(user, prefix, tuple(arguments))
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesPresentation.MIN, dice_result.presentation)
-        self.assertEqual(len(dice_result.results), 3)
+        self.assertEqual(DicesModifier.MIN, dice_result.dices_modifier)
+        self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
+        self.assertEqual(len(dice_result.descriptions), 3)
 
-        result_0 = dice_result.results[0]
-        self.assertEqual([88], result_0.result_dices)
-        self.assertEqual([88, 88], result_0.all_dices)
-        self.assertEqual('[88, 88] 🠖 88', result_0.description)
+        self.assertEqual('[88, 88] 🠖 88', dice_result.descriptions[0])
+        self.assertEqual([88], dice_result.result_dices[0])
+        self.assertEqual([88, 88], dice_result.all_dices[0])
 
-        result_1 = dice_result.results[1]
-        self.assertEqual([2], result_1.result_dices)
-        self.assertEqual([2, 2, 2], result_1.all_dices)
-        self.assertEqual('[2, 2, 2] 🠖 2', result_1.description)
+        self.assertEqual('[2, 2, 2] 🠖 2', dice_result.descriptions[1])
+        self.assertEqual([2], dice_result.result_dices[1])
+        self.assertEqual([2, 2, 2], dice_result.all_dices[1])
 
-        result_2 = dice_result.results[2]
-        self.assertEqual([20], result_2.result_dices)
-        self.assertEqual([20], result_2.all_dices)
-        self.assertEqual('20', result_2.description)
+        self.assertEqual('20', dice_result.descriptions[2])
+        self.assertEqual([20], dice_result.result_dices[2])
+        self.assertEqual([20], dice_result.all_dices[2])
 
     def test_help(self):
         (user, prefix, arguments) = ('userTest', 'prefix', tuple(['-h']))
-        with self.assertRaises(ArgumentParserException) as context:
+        with self.assertRaises(DiceArgumentParserException) as context:
             roll(user, prefix, arguments)
 
         self.assertRegex(str(context.exception), '.*usage:.*')

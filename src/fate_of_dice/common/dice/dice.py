@@ -3,7 +3,6 @@ import operator
 
 
 class Dice:
-
     @classmethod
     def roll(cls, min_value: int, max_value: int, step: int = 1):
         dice_value = cls.__rand_value__(min_value, max_value, step)

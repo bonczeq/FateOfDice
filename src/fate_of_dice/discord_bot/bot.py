@@ -1,9 +1,10 @@
 from discord.ext.commands import Bot, Context
 
 from fate_of_dice.system.call_of_cthulhu import check_skill
+from fate_of_dice.system.tales_from_the_loop import roll_check
 from fate_of_dice.system.universal import roll
 from fate_of_dice.common import log, DiceException
-from .environment import BOT_TOKEN, COMMAND_PREFIXES, SIMPLE_PRESENTATION, get_heroku_status
+from .environment import BOT_TOKEN, COMMAND_PREFIXES, SIMPLE_PRESENTATION
 from .mapper import crate_embed
 
 bot = Bot(case_insensitive=True, command_prefix=COMMAND_PREFIXES)
@@ -17,16 +18,11 @@ async def on_ready():
     log(f'Simple presentation: {SIMPLE_PRESENTATION}')
 
 
-@bot.command(aliases=['s'])
-async def status(ctx: Context) -> None:
-    status_message: str = "Bot active"
-
-    heroku_status = get_heroku_status()
-    if heroku_status:
-        status_message += f'\nHeroku:\n{heroku_status}'
-
-    log(status_message)
-    await ctx.send(embed=crate_embed(status_message))
+@bot.command()
+async def info(ctx: Context) -> None:
+    log("Received info command")
+    await ctx.send(
+        embed=crate_embed("Please check: [help](https://github.com/bonczeq/FateOfDice/blob/master/README.md"))
 
 
 @bot.command(aliases=['r', '!', 'roll'])
@@ -42,6 +38,14 @@ async def call_of_cthulhu_test(ctx: Context, *arguments: str) -> None:
     command_prefix: str = ctx.prefix + ctx.invoked_with
     skill_result = check_skill(ctx.author.name, command_prefix, arguments)
     discord_result = crate_embed(ctx.message, skill_result, SIMPLE_PRESENTATION)
+    await ctx.send(**discord_result)
+
+
+@bot.command(aliases=['t', 'TftL', 'TalesFromTheLoop'])
+async def tales_from_the_loop_test(ctx: Context, *arguments: str) -> None:
+    command_prefix: str = ctx.prefix + ctx.invoked_with
+    roll_result = roll_check(ctx.author.name, command_prefix, arguments)
+    discord_result = crate_embed(ctx.message, roll_result, SIMPLE_PRESENTATION)
     await ctx.send(**discord_result)
 
 
