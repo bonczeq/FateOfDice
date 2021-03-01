@@ -2,7 +2,7 @@
 Discord bot that allows rolling dices and perform tests for supported RPG systems.
 
 ## Table of Contents
-* [Command usage](#Command_usage)  
+* [Command usage](#Command-usage)  
 * [Installation](#Installation)
 
 ## Command usage
@@ -73,7 +73,7 @@ or by editing [`config.ini`](src/fate_of_dice/resources/config.ini) file.
 * supported value: `True` or `False`
 
 ## License
-[![GitHub](https://img.shields.io/github/license/bonczeq/FateOfDice?style=flat-square)](./README.md)
+[![GitHub](https://img.shields.io/github/license/bonczeq/FateOfDice?style=flat-square)](./LICENSE)
 
 ## Status
 [![Code with](https://img.shields.io/badge/CODE%20WITH%20%20%20%E2%99%A5-a832a0?style=for-the-badge)](https://github.com/bonczeq)
@@ -81,7 +81,9 @@ or by editing [`config.ini`](src/fate_of_dice/resources/config.ini) file.
 [![Python](https://img.shields.io/badge/Python-yellow?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org)
 [![Git](https://img.shields.io/badge/Git-F1502F?style=for-the-badge&logo=git&logoColor=white)](https://git-scm.com)
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/bonczeq/FateOfDice?style=flat-square)](https://github.com/bonczeq/FateOfDice/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/bonczeq/FateOfDice?style=flat-square&label=official-release)](https://github.com/bonczeq/FateOfDice/releases)
+[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/bonczeq/FateOfDice?include_prereleases&label=newest-release)](https://github.com/bonczeq/FateOfDice/releases)
+
 
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bonczeq/FateOfDice/FateOfDice%20push?style=flat-square)](https://github.com/bonczeq/FateOfDice/actions/workflows/on_push.yml?query=branch:master++)
 [![GitHub issues](https://img.shields.io/github/issues/bonczeq/FateOfDice?style=flat-square)](https://github.com/bonczeq/FateOfDice/issues)
