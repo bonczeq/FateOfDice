@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from fate_of_dice.common.dice import DiceArgumentParser
 from fate_of_dice.common.dice import DicesModifierArguments, DicesModifier, add_modifier_arguments
@@ -20,11 +20,12 @@ PARSER.add_arguments_with_function(lambda parser: parser.add_argument_group('opt
                                    DicesModifier.SUM, DicesModifier.AVERAGE_FLOOR, DicesModifier.AVERAGE_CEIL)
 PARSER.add_comment_argument()
 PARSER.add_priv_request()
+PARSER.add_simple_presentation()
 
 
 @dataclass
 class RollArguments(DicesModifierArguments, DicesFilterArguments):
-    dices: [str] = "1d100"
+    dices: [str] = field(default="1d100")
 
 
 def parse(command_prefix: str, arguments: (str, ...)) -> RollArguments:

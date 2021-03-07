@@ -1,6 +1,6 @@
 from enum import Enum
 from pathlib import Path
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from fate_of_dice.common.dice import Dice
 from fate_of_dice.common import ResourceImageHandler
@@ -31,8 +31,8 @@ class SkillCheckResultType(Enum):
 
 @dataclass
 class SkillCheckResult(BasicResult):
-    value: Dice
-    type: SkillCheckResultType
+    value: Dice = field(default=None)
+    type: SkillCheckResultType = field(default=SkillCheckResultType.NONE)
 
 
 class SkillCheck:
@@ -101,8 +101,8 @@ class SkillCheck:
         result_type = self.__skill_result_type(result_dice, threshold)
         description = self.__describe_roll(result_dice, result_tens_dice, result_ones_dice, all_dices)
 
-        return SkillCheckResult(value=result_dice, type=result_type, descriptions=[description],
-                                user=self.__user, priv_request=self.__arguments.priv_request)
+        return SkillCheckResult(value=result_dice, type=result_type, descriptions=[description], user=self.__user) \
+            .add_basic_arguments(self.__arguments)
 
     @staticmethod
     def __skill_result_type(value: int, threshold: int) -> SkillCheckResultType:
