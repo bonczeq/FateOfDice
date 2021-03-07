@@ -9,6 +9,7 @@ Discord bot that allows rolling dices and perform tests for supported RPG system
 Bot supports commands for the following RPG systems:
 * common rolls - roll described dices
 * Call of Cthulhu - skill check
+* Tales from the Loop - roll check
 
 ### Common rolls
 Supported aliases: `r`, `!`, `roll`
@@ -47,6 +48,22 @@ optional arguments:
 -b [BONUS_DICE_AMOUNT], --bonus [BONUS_DICE_AMOUNT]             amount of bonus dices
 -p [PENALTY_DICE_AMOUNT], --penalty [PENALTY_DICE_AMOUNT]       amount of penalty dices
 -c COMMENT [COMMENT ...], --comment COMMENT [COMMENT ...]       ignored comment
+```
+
+### Tales from the Loop roll check
+Supported aliases: `t`, ``, `TftL`, `TalesFromTheLoop`
+```
+\t [-h] [dice_amount] [success_requirement] [-c COMMENT [COMMENT ...]]
+
+Tales from the Loop roll check.
+
+positional arguments:
+dice_amount             number of dice to roll (default: 1)
+success_requirement     number of dice to success (default: 1)
+
+optional arguments:
+-h, --help                                                  show this help message and exit
+-c COMMENT [COMMENT ...], --comment COMMENT [COMMENT ...]   ignored comment
 ```
 
 ## Installation

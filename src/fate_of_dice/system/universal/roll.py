@@ -8,7 +8,7 @@ from .exception import RollException
 from .argument_parser import RollArguments, parse
 
 
-def roll(user: str, command_prefix: str, arguments: (str, ...)) -> ['RollResult']:
+def roll(user: str, command_prefix: str, arguments: (str, ...)) -> 'RollResult':
     return Roller(user, command_prefix, arguments).roll()
 
 
