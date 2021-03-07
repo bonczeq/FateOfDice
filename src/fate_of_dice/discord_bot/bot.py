@@ -28,8 +28,8 @@ async def info(ctx: Context) -> None:
 @bot.command(aliases=['r', '!', 'roll'])
 async def universal_roll(ctx: Context, *arguments: str) -> None:
     command_prefix: str = ctx.prefix + ctx.invoked_with
-    roll_results = roll(ctx.author.name, command_prefix, arguments)
-    discord_result = crate_embed(ctx.message, roll_results, SIMPLE_PRESENTATION)
+    roll_result = roll(ctx.author.name, command_prefix, arguments)
+    discord_result = crate_embed(ctx.message, roll_result, SIMPLE_PRESENTATION)
     await ctx.send(**discord_result)
 
 
