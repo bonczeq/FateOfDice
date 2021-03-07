@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from fate_of_dice.common.dice import DiceArgumentParser, DicesBasicArguments
 
@@ -23,13 +23,14 @@ PARSER.add_argument('-p', '--penalty',
                     help='amount of penalty dices')
 PARSER.add_comment_argument()
 PARSER.add_priv_request()
+PARSER.add_simple_presentation()
 
 
 @dataclass
 class SkillCheckArguments(DicesBasicArguments):
-    skill_value: int = None
-    bonus_dice_amount: int = 0
-    penalty_dice_amount: int = 0
+    skill_value: int = field(default=None)
+    bonus_dice_amount: int = field(default=0)
+    penalty_dice_amount: int = field(default=0)
 
 
 def parse(command_prefix: str, arguments: (str, ...)) -> SkillCheckArguments:

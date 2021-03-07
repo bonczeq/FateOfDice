@@ -1,7 +1,8 @@
 from discord.ext.commands import Bot, Context
 
-from fate_of_dice.system.call_of_cthulhu import check_skill
-from fate_of_dice.system.tales_from_the_loop import roll_check
+from fate_of_dice.system.alien import check_skill as skill_check_alien
+from fate_of_dice.system.call_of_cthulhu import check_skill as check_skill_coc
+from fate_of_dice.system.tales_from_the_loop import check_skill as skill_check_tftl
 from fate_of_dice.system.universal import roll
 from fate_of_dice.common import log, DiceException
 from .environment import BOT_TOKEN, COMMAND_PREFIXES, SIMPLE_PRESENTATION
@@ -34,17 +35,25 @@ async def universal_roll(ctx: Context, *arguments: str) -> None:
 
 
 @bot.command(aliases=['c', '?', 'CoC', 'CallOfCthulhu'])
-async def call_of_cthulhu_test(ctx: Context, *arguments: str) -> None:
+async def call_of_cthulhu_check(ctx: Context, *arguments: str) -> None:
     command_prefix: str = ctx.prefix + ctx.invoked_with
-    skill_result = check_skill(ctx.author.name, command_prefix, arguments)
+    skill_result = check_skill_coc(ctx.author.name, command_prefix, arguments)
     discord_result = crate_embed(ctx.message, skill_result, SIMPLE_PRESENTATION)
     await ctx.send(**discord_result)
 
 
 @bot.command(aliases=['t', 'TftL', 'TalesFromTheLoop'])
-async def tales_from_the_loop_test(ctx: Context, *arguments: str) -> None:
+async def tales_from_the_loop_check(ctx: Context, *arguments: str) -> None:
     command_prefix: str = ctx.prefix + ctx.invoked_with
-    roll_result = roll_check(ctx.author.name, command_prefix, arguments)
+    roll_result = skill_check_tftl(ctx.author.name, command_prefix, arguments)
+    discord_result = crate_embed(ctx.message, roll_result, SIMPLE_PRESENTATION)
+    await ctx.send(**discord_result)
+
+
+@bot.command(aliases=['a', 'Alien'])
+async def alien_check(ctx: Context, *arguments: str) -> None:
+    command_prefix: str = ctx.prefix + ctx.invoked_with
+    roll_result = skill_check_alien(ctx.author.name, command_prefix, arguments)
     discord_result = crate_embed(ctx.message, roll_result, SIMPLE_PRESENTATION)
     await ctx.send(**discord_result)
 

@@ -1,6 +1,7 @@
 import argparse
 from abc import ABC
 from typing import Callable
+from dataclasses import dataclass, field
 
 from fate_of_dice.common.exception import DiceException
 
@@ -13,8 +14,10 @@ class DiceArgumentParserHelpException(DiceArgumentParserException):
     pass
 
 
+@dataclass
 class DicesBasicArguments(ABC):
-    priv_request: bool
+    simple_presentation: bool = field(default=False)
+    priv_request: bool = field(default=False)
 
     def _validate_single_value_set(self, class_type: type) -> None:
         names = class_type.__annotations__.keys()
@@ -40,6 +43,10 @@ class DiceArgumentParser(argparse.ArgumentParser):
 
     def add_priv_request(self):
         return self.add_argument('--priv', action='store_true', dest='priv_request',
+                                 help=argparse.SUPPRESS)
+
+    def add_simple_presentation(self):
+        return self.add_argument('--simple', action='store_true', dest='simple_presentation',
                                  help=argparse.SUPPRESS)
 
     def add_comment_argument(self):

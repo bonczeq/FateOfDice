@@ -8,8 +8,9 @@ from discord.embeds import Embed
 from multipledispatch import dispatch
 
 from fate_of_dice.common import DiceException, ResourceImageHandler
-from fate_of_dice.system.call_of_cthulhu import SkillCheckResult
-from fate_of_dice.system.tales_from_the_loop import RollCheckResult
+from fate_of_dice.system.alien import SkillCheckResult as SkillCheckResultAlien
+from fate_of_dice.system.call_of_cthulhu import SkillCheckResult as SkillCheckResultCoC
+from fate_of_dice.system.tales_from_the_loop import SkillCheckResult as SkillCheckResultTftL
 from fate_of_dice.system.universal import RollResult
 
 
@@ -66,8 +67,8 @@ def crate_embed(message: Message, roll_result: RollResult, simple: bool) -> {Emb
         return {'embed': embed}
 
 
-@dispatch(Message, SkillCheckResult, bool)
-def crate_embed(message: Message, skill_check: SkillCheckResult, simple: bool) -> {Embed, Optional[File]}:
+@dispatch(Message, SkillCheckResultCoC, bool)
+def crate_embed(message: Message, skill_check: SkillCheckResultCoC, simple: bool) -> {Embed, Optional[File]}:
     embed = Embed()
     embed.title = skill_check.type.title
     embed.colour = skill_check.type.colour
@@ -87,8 +88,26 @@ def crate_embed(message: Message, skill_check: SkillCheckResult, simple: bool) -
         return {'embed': embed}
 
 
-@dispatch(Message, RollCheckResult, bool)
-def crate_embed(message: Message, roll_check: RollCheckResult, simple: bool) -> {Embed, Optional[File]}:
+@dispatch(Message, SkillCheckResultTftL, bool)
+def crate_embed(message: Message, roll_check: SkillCheckResultTftL, simple: bool) -> {Embed, Optional[File]}:
+    embed = Embed()
+    embed.title = roll_check.type.title
+    embed.colour = roll_check.type.colour
+
+    if not simple:
+        embed.description = message.content
+        embed.set_author(name=message.author.name, icon_url=str(message.author.avatar_url))
+
+        for description in roll_check.descriptions:
+            embed.add_field(name="Roll result:", value=description, inline=False)
+        return {'embed': embed}
+    else:
+        embed.description = "\n".join(roll_check.descriptions)
+        return {'embed': embed}
+
+
+@dispatch(Message, SkillCheckResultAlien, bool)
+def crate_embed(message: Message, roll_check: SkillCheckResultAlien, simple: bool) -> {Embed, Optional[File]}:
     embed = Embed()
     embed.title = roll_check.type.title
     embed.colour = roll_check.type.colour

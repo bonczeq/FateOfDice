@@ -9,11 +9,11 @@ PARSER.add_argument('dice_amount',
                     nargs='?',
                     default=1,
                     help='number of dices to roll (default: 1) ')
-PARSER.add_argument('success_requirement',
+PARSER.add_argument('stress_dice_amount',
                     type=int,
                     nargs='?',
-                    default=1,
-                    help='number of dices to success (default: 1) ')
+                    default=0,
+                    help='number of stress dices to roll (default: 0) ')
 PARSER.add_comment_argument()
 PARSER.add_priv_request()
 PARSER.add_simple_presentation()
@@ -22,7 +22,7 @@ PARSER.add_simple_presentation()
 @dataclass
 class SkillCheckArguments(DicesBasicArguments):
     dice_amount: int = field(default=1)
-    success_requirement: int = field(default=1)
+    stress_dice_amount: int = field(default=0)
 
 
 def parse(command_prefix: str, arguments: (str, ...)) -> SkillCheckArguments:

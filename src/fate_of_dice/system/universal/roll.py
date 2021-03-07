@@ -1,5 +1,5 @@
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from fate_of_dice.common.dice import Dice, DicesModifier, DicesFilterType
 from fate_of_dice.system import BasicResult
@@ -14,10 +14,10 @@ def roll(user: str, command_prefix: str, arguments: (str, ...)) -> 'RollResult':
 
 @dataclass
 class RollResult(BasicResult):
-    all_dices: [[Dice]]
-    dices_modifier: DicesModifier
-    dices_filter: DicesFilterType
-    result_dices: [[Dice]]
+    all_dices: [[Dice]] = field(default_factory=lambda: [])
+    dices_modifier: DicesModifier = field(default=DicesModifier.NONE)
+    dices_filter: DicesFilterType = field(default=DicesFilterType.NONE)
+    result_dices: [[Dice]] = field(default_factory=lambda: [])
 
 
 class Roller:
@@ -35,10 +35,10 @@ class Roller:
         all_dices = [calculated[1] for calculated in calculated_results]
         descriptions = [calculated[2] for calculated in calculated_results]
 
-        return RollResult(user=self.__user, priv_request=self.__arguments.priv_request,
-                          result_dices=result_dices, descriptions=descriptions, all_dices=all_dices,
+        return RollResult(user=self.__user, result_dices=result_dices, descriptions=descriptions, all_dices=all_dices,
                           dices_modifier=self.__arguments.dices_modifier,
-                          dices_filter=self.__arguments.dices_filter.type)
+                          dices_filter=self.__arguments.dices_filter.type) \
+            .add_basic_arguments(self.__arguments)
 
     def __calculate_result(self, dices_pattern: str) -> ([Dice], [Dice], str):
         all_dices = self.__resolve_dices(dices_pattern)
