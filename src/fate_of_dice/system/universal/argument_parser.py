@@ -11,9 +11,9 @@ PARSER.add_argument('dices',
                     nargs='*',
                     default=['1d100'],
                     help='rolls description (default: 1d100)')
-PARSER.add_arguments_with_function(lambda parser: parser.add_argument_group('optional result filtering arguments'),
+PARSER.add_arguments_with_function(lambda parser: parser.add_mutually_exclusive_group(),
                                    add_filter_arguments, DicesFilterType.UPPER_THAN, DicesFilterType.LOWER_THAN)
-PARSER.add_arguments_with_function(lambda parser: parser.add_argument_group('optional result modifying arguments'),
+PARSER.add_arguments_with_function(lambda parser: parser.add_mutually_exclusive_group(),
                                    add_modifier_arguments,
                                    DicesModifier.MIN, DicesModifier.MAX, DicesModifier.SORTED,
                                    DicesModifier.REVERSE_SORTED,

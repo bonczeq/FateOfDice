@@ -6,17 +6,22 @@ PARSER = DiceArgumentParser(description='Call of Cthulhu skill check.')
 
 PARSER.add_argument('skill_value',
                     type=int,
+                    choices=range(1, 100),
+                    metavar='skill value',
                     nargs='?',
-                    default=None,
                     help='keeper skill value (default: no result verification) ')
 PARSER.add_argument('-b', '--bonus',
                     type=int,
+                    choices=range(1, 10),
+                    metavar='amount',
                     nargs='?',
                     const='1',
                     dest='bonus_dice_amount',
                     help='amount of bonus dices')
 PARSER.add_argument('-p', '--penalty',
                     type=int,
+                    choices=range(1, 10),
+                    metavar='amount',
                     nargs='?',
                     const='1',
                     dest='penalty_dice_amount',

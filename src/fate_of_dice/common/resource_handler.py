@@ -1,8 +1,10 @@
-import sys
-import os
 import configparser
-from typing import Optional, Final
+import os
+import sys
 from pathlib import Path
+from typing import Optional, Final
+
+import requests
 
 import fate_of_dice.resources
 
@@ -42,6 +44,11 @@ class ResourceHandler:
             return main_path
 
 
+def _url_if_exist(url: str) -> Optional[str]:
+    response = requests.get(url)
+    return url if response.status_code == 200 else None
+
+
 class ResourceImageHandler(ResourceHandler):
     __ICONS_DIR: Final[str] = 'icons'
     __ICON_PATH: Final[Path] = ResourceHandler._RESOURCES_PATH.joinpath(__ICONS_DIR)
@@ -51,7 +58,10 @@ class ResourceImageHandler(ResourceHandler):
         return cls._get_resource_path(cls.__ICON_PATH, sub_path)
 
     PYTHON_IMAGE: Final[Path] = __ICON_PATH.joinpath('python.png')
-    DISCORD_IMAGE: Final[Path] = __ICON_PATH.joinpath('discord.png')
+
+    DISCORD_IMAGE = __ICON_PATH.joinpath('discord.png')
+    DISCORD_IMAGE_URL: Final[str or None] = _url_if_exist(
+        'https://raw.githubusercontent.com/bonczeq/FateOfDice/master/src/fate_of_dice/resources/icons/discord.png')
 
     CRITICAL_SUCCESS_IMAGE: Final = __ICON_PATH.joinpath('critical_success.png')
     EXTREMAL_SUCCESS_IMAGE: Final = __ICON_PATH.joinpath('extremal_success.png')

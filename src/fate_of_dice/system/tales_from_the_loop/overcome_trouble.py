@@ -2,16 +2,16 @@ from enum import Enum
 from dataclasses import dataclass, field
 
 from fate_of_dice.common.dice import Dice, DicesFilterType
-from fate_of_dice.system import BasicResult
+from fate_of_dice.system import DiceResult
 
-from .argument_parser import SkillCheckArguments, parse
-
-
-def check_skill(user: str, command_prefix: str, arguments: (str, ...)) -> 'SkillCheckResult':
-    return SkillCheck(user, command_prefix, arguments).roll()
+from .argument_parser import OvercomeTroubleArguments, parse
 
 
-class SkillCheckResultType(Enum):
+def overcome_trouble(user: str, command_prefix: str, arguments: (str, ...)) -> 'OvercomeTroubleResult':
+    return OvercomeTrouble(user, command_prefix, arguments).roll()
+
+
+class OvercomeTroubleResultType(Enum):
     NONE = None, 0xffffff
     SUCCESS = "SUCCESS.", 0x55e453
     FAILURE = "Failure.", 0xf35858
@@ -22,19 +22,19 @@ class SkillCheckResultType(Enum):
 
 
 @dataclass
-class SkillCheckResult(BasicResult):
-    type: SkillCheckResultType = field(default=SkillCheckResultType.NONE)
+class OvercomeTroubleResult(DiceResult):
+    type: OvercomeTroubleResultType = field(default=OvercomeTroubleResultType.NONE)
     success_amount: int = field(default=0)
     dices: [Dice] = field(default_factory=lambda: [])
 
 
-class SkillCheck:
+class OvercomeTrouble:
     def __init__(self, user: str, command_prefix: str, arguments: (str, ...)):
         self.__user: str = user
         self.__command_prefix: str = command_prefix
-        self.__arguments: SkillCheckArguments = parse(command_prefix, arguments)
+        self.__arguments: OvercomeTroubleArguments = parse(command_prefix, arguments)
 
-    def roll(self) -> SkillCheckResult:
+    def roll(self) -> OvercomeTroubleResult:
         dices = [Dice.roll(1, 6) for _ in range(0, self.__arguments.dice_amount)]
 
         successes = self.__filter_successes(dices)
@@ -43,8 +43,8 @@ class SkillCheck:
         result_type = self.__check_result_type(successes_amount, self.__arguments.success_requirement)
         description = self.__describe_roll(successes_amount, dices)
 
-        return SkillCheckResult(user=self.__user, descriptions=[description], type=result_type,
-                                success_amount=successes_amount, dices=dices)\
+        return OvercomeTroubleResult(user=self.__user, descriptions=[description], type=result_type,
+                                     success_amount=successes_amount, dices=dices)\
             .add_basic_arguments(self.__arguments)
 
     @staticmethod
@@ -52,11 +52,11 @@ class SkillCheck:
         return DicesFilterType.EQUAL.filter_dices(dices, 6)
 
     @staticmethod
-    def __check_result_type(successes_amount: int, required_successes_amount: int) -> SkillCheckResultType:
+    def __check_result_type(successes_amount: int, required_successes_amount: int) -> OvercomeTroubleResultType:
         if successes_amount >= required_successes_amount:
-            result_type = SkillCheckResultType.SUCCESS
+            result_type = OvercomeTroubleResultType.SUCCESS
         else:
-            result_type = SkillCheckResultType.FAILURE
+            result_type = OvercomeTroubleResultType.FAILURE
         return result_type
 
     @staticmethod
