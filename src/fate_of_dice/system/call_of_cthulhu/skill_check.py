@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 
 from fate_of_dice.common.dice import Dice
 from fate_of_dice.common import ResourceImageHandler
-from fate_of_dice.system import BasicResult
+from fate_of_dice.system import DiceResult
 
 from .argument_parser import parse, SkillCheckArguments
 from .skill_dice import OnesDice, TensDice, DiceType
@@ -30,7 +30,7 @@ class SkillCheckResultType(Enum):
 
 
 @dataclass
-class SkillCheckResult(BasicResult):
+class SkillCheckResult(DiceResult):
     value: Dice = field(default=None)
     type: SkillCheckResultType = field(default=SkillCheckResultType.NONE)
 

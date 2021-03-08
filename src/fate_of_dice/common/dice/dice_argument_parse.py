@@ -1,7 +1,7 @@
 import argparse
 from abc import ABC
-from typing import Callable
 from dataclasses import dataclass, field
+from typing import Callable
 
 from fate_of_dice.common.exception import DiceException
 
@@ -42,7 +42,7 @@ class DiceArgumentParser(argparse.ArgumentParser):
         adding_function(argument_container.add_argument, *adding_arguments)
 
     def add_priv_request(self):
-        return self.add_argument('--priv', action='store_true', dest='priv_request',
+        return self.add_argument('--priv', '--private', action='store_true', dest='priv_request',
                                  help=argparse.SUPPRESS)
 
     def add_simple_presentation(self):
@@ -50,5 +50,5 @@ class DiceArgumentParser(argparse.ArgumentParser):
                                  help=argparse.SUPPRESS)
 
     def add_comment_argument(self):
-        return self.add_argument('-c', '--comment', nargs='+',
+        return self.add_argument('--comment', type=str, nargs='?', metavar='text',
                                  help='ignored comment')

@@ -56,11 +56,11 @@ class DicesFilterArguments(DicesBasicArguments):
 
 def add_filter_arguments(add_argument_callable: Callable, *filters: DicesFilterType):
     if DicesFilterType.UPPER_THAN in filters:
-        add_argument_callable('-e', '--equal', type=int, dest='equal', metavar='value',
-                              help='show dices equal to given value')
+        add_argument_callable('-e', '--equal', type=int, choices=range(0, 1000), dest='equal',
+                              metavar='value', help='show dices equal to given value')
     if DicesFilterType.UPPER_THAN in filters:
-        add_argument_callable('--upper-than', type=int, dest='upper_than', metavar='limit value',
-                              help='show dices upper than given value')
+        add_argument_callable('--upper-than', type=int, choices=range(0, 1000), dest='upper_than',
+                              metavar='value', help='show dices upper than given value')
     if DicesFilterType.LOWER_THAN in filters:
-        add_argument_callable('--lower-than', type=int, dest='lower_than', metavar='limit value',
-                              help='show dices lower than given value')
+        add_argument_callable('--lower-than', type=int, choices=range(0, 1000), dest='lower_than',
+                              metavar='value', help='show dices lower than given value')

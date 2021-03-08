@@ -1,12 +1,14 @@
 from discord.ext.commands import Bot, Context
 
-from fate_of_dice.system.alien import check_skill as skill_check_alien
-from fate_of_dice.system.call_of_cthulhu import check_skill as check_skill_coc
-from fate_of_dice.system.tales_from_the_loop import check_skill as skill_check_tftl
+from fate_of_dice.system import DiceResult
+from fate_of_dice.system.alien import check_action
+from fate_of_dice.system.call_of_cthulhu import check_skill
+from fate_of_dice.system.tales_from_the_loop import overcome_trouble
 from fate_of_dice.system.universal import roll
-from fate_of_dice.common import log, DiceException
+
+from fate_of_dice.common import log
+from fate_of_dice.discord_bot.mapper import crate_embed
 from .environment import BOT_TOKEN, COMMAND_PREFIXES, SIMPLE_PRESENTATION
-from .mapper import crate_embed
 
 bot = Bot(case_insensitive=True, command_prefix=COMMAND_PREFIXES)
 
@@ -22,49 +24,53 @@ async def on_ready():
 @bot.command()
 async def info(ctx: Context) -> None:
     log("Received info command")
-    await ctx.send(
-        embed=crate_embed("Please check: [help](https://github.com/bonczeq/FateOfDice/blob/master/README.md"))
+    discord_result = crate_embed("Please check: [help](https://github.com/bonczeq/FateOfDice/blob/master/README.md")
+    await ctx.send(discord_result)
 
 
 @bot.command(aliases=['r', '!', 'roll'])
 async def universal_roll(ctx: Context, *arguments: str) -> None:
     command_prefix: str = ctx.prefix + ctx.invoked_with
     roll_result = roll(ctx.author.name, command_prefix, arguments)
-    discord_result = crate_embed(ctx.message, roll_result, SIMPLE_PRESENTATION)
-    await ctx.send(**discord_result)
+    discord_result = crate_embed(roll_result, ctx.message, SIMPLE_PRESENTATION)
+    await _send_message(ctx, discord_result, roll_result)
 
 
 @bot.command(aliases=['c', '?', 'CoC', 'CallOfCthulhu'])
 async def call_of_cthulhu_check(ctx: Context, *arguments: str) -> None:
     command_prefix: str = ctx.prefix + ctx.invoked_with
-    skill_result = check_skill_coc(ctx.author.name, command_prefix, arguments)
-    discord_result = crate_embed(ctx.message, skill_result, SIMPLE_PRESENTATION)
-    await ctx.send(**discord_result)
+    skill_result = check_skill(ctx.author.name, command_prefix, arguments)
+    discord_result = crate_embed(skill_result, ctx.message, SIMPLE_PRESENTATION)
+    await _send_message(ctx, discord_result, skill_result)
 
 
 @bot.command(aliases=['t', 'TftL', 'TalesFromTheLoop'])
 async def tales_from_the_loop_check(ctx: Context, *arguments: str) -> None:
     command_prefix: str = ctx.prefix + ctx.invoked_with
-    roll_result = skill_check_tftl(ctx.author.name, command_prefix, arguments)
-    discord_result = crate_embed(ctx.message, roll_result, SIMPLE_PRESENTATION)
-    await ctx.send(**discord_result)
+    roll_result = overcome_trouble(ctx.author.name, command_prefix, arguments)
+    discord_result = crate_embed(roll_result, ctx.message, SIMPLE_PRESENTATION)
+    await _send_message(ctx, discord_result, roll_result)
 
 
 @bot.command(aliases=['a', 'Alien'])
 async def alien_check(ctx: Context, *arguments: str) -> None:
     command_prefix: str = ctx.prefix + ctx.invoked_with
-    roll_result = skill_check_alien(ctx.author.name, command_prefix, arguments)
-    discord_result = crate_embed(ctx.message, roll_result, SIMPLE_PRESENTATION)
+    check_result = check_action(ctx.author.name, command_prefix, arguments)
+    discord_result = crate_embed(check_result, ctx.message, SIMPLE_PRESENTATION)
+    await _send_message(ctx, discord_result, check_result)
+
+
+async def _send_message(ctx: Context, discord_result, dice_result: DiceResult) -> None:
     await ctx.send(**discord_result)
+
+    if dice_result.priv_request:
+        await ctx.author.send(**discord_result)
 
 
 @bot.event
 async def on_command_error(ctx, error):
     original = error.original
     await ctx.send(**crate_embed(original))
-
-    if not isinstance(original, DiceException):
-        raise error
 
 
 def run_bot():

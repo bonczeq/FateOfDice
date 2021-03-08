@@ -1,1 +1,1 @@
-from .skill_check import check_skill, SkillCheckResult
+from .overcome_trouble import overcome_trouble, OvercomeTroubleResult

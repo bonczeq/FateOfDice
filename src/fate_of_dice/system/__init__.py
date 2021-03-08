@@ -1,1 +1,1 @@
-from .basic_result import BasicResult
+from .basic_result import DiceResult

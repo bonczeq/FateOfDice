@@ -1,1 +1,1 @@
-from .skill_check import check_skill, SkillCheckResult
+from .action_check import check_action, ActionCheckResult

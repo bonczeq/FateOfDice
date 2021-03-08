@@ -2,7 +2,7 @@ import re
 from dataclasses import dataclass, field
 
 from fate_of_dice.common.dice import Dice, DicesModifier, DicesFilterType
-from fate_of_dice.system import BasicResult
+from fate_of_dice.system import DiceResult
 
 from .exception import RollException
 from .argument_parser import RollArguments, parse
@@ -13,7 +13,7 @@ def roll(user: str, command_prefix: str, arguments: (str, ...)) -> 'RollResult':
 
 
 @dataclass
-class RollResult(BasicResult):
+class RollResult(DiceResult):
     all_dices: [[Dice]] = field(default_factory=lambda: [])
     dices_modifier: DicesModifier = field(default=DicesModifier.NONE)
     dices_filter: DicesFilterType = field(default=DicesFilterType.NONE)
