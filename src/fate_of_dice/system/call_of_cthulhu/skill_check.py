@@ -3,7 +3,7 @@ from pathlib import Path
 from dataclasses import dataclass, field
 
 from fate_of_dice.common.dice import Dice
-from fate_of_dice.common import ResourceImageHandler
+from fate_of_dice.common.resource_handler import ResourceImageHandler
 from fate_of_dice.system import DiceResult
 
 from .argument_parser import parse, SkillCheckArguments
@@ -23,10 +23,10 @@ class SkillCheckResultType(Enum):
     NORMAL_FAILURE = "Normal failure.", 0xf35858, ResourceImageHandler.NORMAL_FAILURE_IMAGE
     CRITICAL_FAILURE = "CRITICAL FAILURE!", 0xff0000, ResourceImageHandler.CRITICAL_FAILURE_IMAGE
 
-    def __init__(self, title: str, colour: int = None, icon_path: Path = None):
+    def __init__(self, title: str, colour: int = None, icon: [str or Path] = None):
         self.title = title
         self.colour = colour
-        self.icon_path = icon_path
+        self.icon = icon
 
 
 @dataclass

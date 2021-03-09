@@ -2,7 +2,7 @@ import unittest
 
 from pathlib import Path
 
-from fate_of_dice.common import ResourceHandler
+from fate_of_dice.common.resource_handler import ResourceHandler
 
 
 class TestResourcesHandler(unittest.TestCase):
