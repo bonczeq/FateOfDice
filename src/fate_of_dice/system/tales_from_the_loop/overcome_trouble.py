@@ -2,6 +2,7 @@ from enum import Enum
 from dataclasses import dataclass, field
 
 from fate_of_dice.common.dice import Dice, DicesFilterType
+from fate_of_dice.common.presentation import SymbolResolver
 from fate_of_dice.system import DiceResult
 
 from .argument_parser import OvercomeTroubleArguments, parse
@@ -44,7 +45,7 @@ class OvercomeTrouble:
         description = self.__describe_roll(successes_amount, dices)
 
         return OvercomeTroubleResult(user=self.__user, descriptions=[description], type=result_type,
-                                     success_amount=successes_amount, dices=dices)\
+                                     success_amount=successes_amount, dices=dices) \
             .add_basic_arguments(self.__arguments)
 
     @staticmethod
@@ -61,5 +62,7 @@ class OvercomeTrouble:
 
     @staticmethod
     def __describe_roll(successes_amount: int, result_dices: [Dice]) -> str:
+        rolls = f'[{", ".join([SymbolResolver.circled_number(dice, 6) for dice in result_dices])}]'
+        arrow_symbol = SymbolResolver.arrow_character()
         success_description = f'{successes_amount} {"success" if successes_amount == 1 else "successes"}'
-        return f'[{", ".join([str(dice) for dice in result_dices])}] 🠖 {success_description}'
+        return f'{rolls} {arrow_symbol} {success_description}'
