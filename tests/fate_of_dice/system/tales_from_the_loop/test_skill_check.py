@@ -21,7 +21,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(OvercomeTroubleResultType.FAILURE, result.type)
         self.assertEqual([5], result.dices)
         self.assertEqual(0, result.success_amount)
-        self.assertEqual('[5] 🠖 0 successes', result.descriptions[0])
+        self.assertEqual('[➄] 🠖 0 successes', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_failure(self, randrange_mock):
@@ -39,7 +39,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(OvercomeTroubleResultType.FAILURE, result.type)
         self.assertEqual([5, 1], result.dices)
         self.assertEqual(0, result.success_amount)
-        self.assertEqual('[5, 1] 🠖 0 successes', result.descriptions[0])
+        self.assertEqual('[➄, ➀] 🠖 0 successes', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_success(self, randrange_mock):
@@ -57,7 +57,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(OvercomeTroubleResultType.SUCCESS, result.type)
         self.assertEqual([5, 6, 1], result.dices)
         self.assertEqual(1, result.success_amount)
-        self.assertEqual('[5, 6, 1] 🠖 1 success', result.descriptions[0])
+        self.assertEqual('[➄, 🗹, ➀] 🠖 1 success', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_successes(self, randrange_mock):
@@ -75,7 +75,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(OvercomeTroubleResultType.SUCCESS, result.type)
         self.assertEqual([6, 6, 1], result.dices)
         self.assertEqual(2, result.success_amount)
-        self.assertEqual('[6, 6, 1] 🠖 2 successes', result.descriptions[0])
+        self.assertEqual('[🗹, 🗹, ➀] 🠖 2 successes', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_failure_with_required_amount(self, randrange_mock):
@@ -93,7 +93,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(OvercomeTroubleResultType.FAILURE, result.type)
         self.assertEqual([5, 6, 1], result.dices)
         self.assertEqual(1, result.success_amount)
-        self.assertEqual('[5, 6, 1] 🠖 1 success', result.descriptions[0])
+        self.assertEqual('[➄, 🗹, ➀] 🠖 1 success', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
     def test_success_with_required_amount(self, randrange_mock):
@@ -111,7 +111,7 @@ class TestSkillCheck(unittest.TestCase):
         self.assertEqual(OvercomeTroubleResultType.SUCCESS, result.type)
         self.assertEqual([6, 6, 1], result.dices)
         self.assertEqual(2, result.success_amount)
-        self.assertEqual('[6, 6, 1] 🠖 2 successes', result.descriptions[0])
+        self.assertEqual('[🗹, 🗹, ➀] 🠖 2 successes', result.descriptions[0])
 
     def test_help(self):
         (user, prefix, arguments) = ('userTest', 'prefix', tuple(['-h']))

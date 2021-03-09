@@ -1,9 +1,9 @@
-from enum import Enum
 from dataclasses import dataclass, field
+from enum import Enum
 
 from fate_of_dice.common.dice import Dice, DicesFilterType
+from fate_of_dice.common.presentation import SymbolResolver
 from fate_of_dice.system import DiceResult
-
 from .argument_parser import ActionCheckArguments, parse
 
 
@@ -91,14 +91,17 @@ class ActionCheck:
     def __describe_roll(successes_amount: int, stress_amount: int, panic_value: int,
                         base_dices: [Dice], stress_dices: [Dice]) -> str:
 
-        description = f'Base dices: [{", ".join([str(dice) for dice in base_dices])}]'
+        description = f'Base dices: [{", ".join([SymbolResolver.circled_number(dice, 6) for dice in base_dices])}]'
 
         if stress_dices:
-            description += f'\nStress dices: [{", ".join([str(dice) for dice in stress_dices])}]'
+            description += (
+                '\nStress dices: '
+                f'[{", ".join([SymbolResolver.circled_number(dice, 6, 1) for dice in stress_dices])}]'
+            )
 
         if successes_amount:
             description += f'\nSuccesses amount: {successes_amount}'
         if panic_value:
-            description += f'\nPanic value: {stress_amount} + {panic_value-stress_amount} = {panic_value}'
+            description += f'\nPanic value: {stress_amount} + {panic_value - stress_amount} = {panic_value}'
 
         return description

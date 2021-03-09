@@ -26,7 +26,7 @@ class TestActionCheck(unittest.TestCase):
         self.assertEqual(0, result.panic_value)
 
         expected_description = (
-            "Base dices: [5]"
+            "Base dices: [➄]"
         )
         self.assertEqual(expected_description, result.descriptions[0])
 
@@ -51,7 +51,7 @@ class TestActionCheck(unittest.TestCase):
         self.assertEqual(0, result.panic_value)
 
         expected_description = (
-            "Base dices: [5, 1]"
+            "Base dices: [➄, ➀]"
         )
         self.assertEqual(expected_description, result.descriptions[0])
 
@@ -76,7 +76,7 @@ class TestActionCheck(unittest.TestCase):
         self.assertEqual(0, result.panic_value)
 
         expected_description = (
-            "Base dices: [5, 6, 1]\n"
+            "Base dices: [➄, 🗹, ➀]\n"
             "Successes amount: 1"
         )
         self.assertEqual(expected_description, result.descriptions[0])
@@ -102,7 +102,7 @@ class TestActionCheck(unittest.TestCase):
         self.assertEqual(0, result.panic_value)
 
         expected_description = (
-            "Base dices: [6, 6, 1]\n"
+            "Base dices: [🗹, 🗹, ➀]\n"
             "Successes amount: 2"
         )
         self.assertEqual(expected_description, result.descriptions[0])
@@ -129,8 +129,8 @@ class TestActionCheck(unittest.TestCase):
         self.assertEqual(0, result.panic_value)
 
         expected_description = (
-            "Base dices: [5, 5, 1]\n"
-            "Stress dices: [4, 2]"
+            "Base dices: [➄, ➄, ➀]\n"
+            "Stress dices: [➃, ➁]"
         )
         self.assertEqual(expected_description, result.descriptions[0])
 
@@ -156,8 +156,8 @@ class TestActionCheck(unittest.TestCase):
         self.assertEqual(0, result.panic_value)
 
         expected_description = (
-            "Base dices: [5, 5, 1]\n"
-            "Stress dices: [6, 2]\n"
+            "Base dices: [➄, ➄, ➀]\n"
+            "Stress dices: [🗹, ➁]\n"
             "Successes amount: 1"
         )
         self.assertEqual(expected_description, result.descriptions[0])
@@ -184,8 +184,8 @@ class TestActionCheck(unittest.TestCase):
         self.assertEqual(0, result.panic_value)
 
         expected_description = (
-            "Base dices: [5, 6, 1]\n"
-            "Stress dices: [6, 2]\n"
+            "Base dices: [➄, 🗹, ➀]\n"
+            "Stress dices: [🗹, ➁]\n"
             "Successes amount: 2"
         )
         self.assertEqual(expected_description, result.descriptions[0])
@@ -212,8 +212,8 @@ class TestActionCheck(unittest.TestCase):
         self.assertEqual(4, result.panic_value)
 
         expected_description = (
-            "Base dices: [5, 5, 1]\n"
-            "Stress dices: [4, 1]\n"
+            "Base dices: [➄, ➄, ➀]\n"
+            "Stress dices: [➃, 🞮]\n"
             "Panic value: 1 + 3 = 4"
         )
         self.assertEqual(expected_description, result.descriptions[0])
@@ -240,8 +240,8 @@ class TestActionCheck(unittest.TestCase):
         self.assertEqual(5, result.panic_value)
 
         expected_description = (
-            "Base dices: [6, 6, 6]\n"
-            "Stress dices: [1, 1]\n"
+            "Base dices: [🗹, 🗹, 🗹]\n"
+            "Stress dices: [🞮, 🞮]\n"
             "Successes amount: 3\n"
             "Panic value: 2 + 3 = 5"
         )
