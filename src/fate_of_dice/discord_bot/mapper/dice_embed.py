@@ -1,18 +1,17 @@
 from pathlib import Path
 from typing import Optional, Callable, Any
 
-from discord import File
-from discord import Message
+from discord import File, Message
 from discord.embeds import Embed
+from discord.ext.commands import Context
 
-from fate_of_dice.common import ResourceImageHandler
+from fate_of_dice.common.resource_handler import ResourceImageHandler
 from fate_of_dice.system import DiceResult
-
-_DEFAULT_AUTHOR_NAME: str = 'FateOfDice'
-_DEFAULT_AUTHOR_ICON_URL: str = 'FateOfDice'
 
 
 class DiceEmbed(Embed):
+    __DEFAULT_AUTHOR_NAME: str = 'FateOfDice'
+
     def __init__(self, simple=False, **kwargs):
         super().__init__(**kwargs)
 
@@ -60,9 +59,16 @@ class DiceEmbed(Embed):
             super().add_field(name=name, value=value, inline=inline)
         return self
 
-    def set_default_author(self):
-        avatar = ResourceImageHandler.DISCORD_IMAGE_URL or Embed.Empty
-        return super().set_author(name=_DEFAULT_AUTHOR_NAME, icon_url=avatar)
+    def set_default_author(self, context: Optional[Context] = None):
+        if context:
+            bot_user = context.bot.user
+            name = bot_user.name
+            avatar_url = bot_user.avatar_url
+        else:
+            name = self.__DEFAULT_AUTHOR_NAME
+            avatar_url = ResourceImageHandler.FATE_OF_DICE_IMAGE_URL or Embed.Empty
+
+        return super().set_author(name=name, icon_url=avatar_url)
 
     def add_empty_field(self, condition: Callable = lambda: True):
         if condition():

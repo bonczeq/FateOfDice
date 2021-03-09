@@ -1,6 +1,6 @@
 import unittest
 
-from fate_of_dice.common import ResourceImageHandler
+from fate_of_dice.common.resource_handler import ResourceImageHandler
 
 
 class TestResourceImageHandler(unittest.TestCase):
@@ -10,15 +10,14 @@ class TestResourceImageHandler(unittest.TestCase):
         self.assertRegex(result.name, 'icons')
 
     def test_variables_exist(self):
-        self.assertTrue(ResourceImageHandler.PYTHON_IMAGE.exists())
-        self.assertTrue(ResourceImageHandler.DISCORD_IMAGE.exists())
-        self.assertTrue(ResourceImageHandler.CRITICAL_FAILURE_IMAGE.exists())
-        self.assertTrue(ResourceImageHandler.NORMAL_FAILURE_IMAGE.exists())
-        self.assertTrue(ResourceImageHandler.HARD_SUCCESS_IMAGE.exists())
-        self.assertTrue(ResourceImageHandler.EXTREMAL_SUCCESS_IMAGE.exists())
-        self.assertTrue(ResourceImageHandler.CRITICAL_SUCCESS_IMAGE.exists())
-        self.assertTrue(ResourceImageHandler.INNOVATION_IMAGE.exists())
-        self.assertTrue(ResourceImageHandler.PROCESS_IMAGE.exists())
+        self.assertTrue(ResourceImageHandler.FATE_OF_DICE_IMAGE_PATH.exists())
+        self.assertTrue(ResourceImageHandler.CRITICAL_FAILURE_IMAGE_PATH.exists())
+        self.assertTrue(ResourceImageHandler.NORMAL_FAILURE_IMAGE_PATH.exists())
+        self.assertTrue(ResourceImageHandler.HARD_SUCCESS_IMAGE_PATH.exists())
+        self.assertTrue(ResourceImageHandler.EXTREMAL_SUCCESS_IMAGE_PATH.exists())
+        self.assertTrue(ResourceImageHandler.CRITICAL_SUCCESS_IMAGE_PATH.exists())
+        self.assertTrue(ResourceImageHandler.INNOVATION_IMAGE_PATH.exists())
+        self.assertTrue(ResourceImageHandler.PROCESS_IMAGE_PATH.exists())
 
 
 if __name__ == '__main__':

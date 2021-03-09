@@ -7,10 +7,11 @@ from fate_of_dice.system.tales_from_the_loop import overcome_trouble
 from fate_of_dice.system.universal import roll
 
 from fate_of_dice.common import log
+from fate_of_dice.common.resource_handler import ResourceImageHandler
 from fate_of_dice.discord_bot.mapper import crate_embed
 from .environment import BOT_TOKEN, COMMAND_PREFIXES, SIMPLE_PRESENTATION
 
-bot = Bot(case_insensitive=True, command_prefix=COMMAND_PREFIXES)
+bot: Bot = Bot(case_insensitive=True, command_prefix=COMMAND_PREFIXES)
 
 
 @bot.event
@@ -19,6 +20,8 @@ async def on_ready():
     log(f'Bot token: {BOT_TOKEN}')
     log(f'Bot prefixes: {" or ".join(COMMAND_PREFIXES)}')
     log(f'Simple presentation: {SIMPLE_PRESENTATION}')
+    # log(f'Purely ascii descriptions: {SIMPLE_PRESENTATION}')
+    log(f'Icons from url: {ResourceImageHandler.URL_ICONS or "Default"}')
 
 
 @bot.command()
