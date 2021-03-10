@@ -7,7 +7,7 @@ from .resource_handler import ResourceHandler, _RESOURCES_PATH, _get_resource_pa
 
 _FATE_OF_DICE_URL_ICONS: Final[str] = 'FATE_OF_DICE_URL_ICONS'
 _URL_ICONS: Final[bool or None] = {'true': True, 'false': False}.get(
-    ResourceHandler.get_property(_FATE_OF_DICE_URL_ICONS), None)
+    ResourceHandler.get_property(_FATE_OF_DICE_URL_ICONS, None), None)
 
 _ICON_PATH: Final[Path] = _RESOURCES_PATH.joinpath('icons')
 _ICONS_URL_PREFIX: Final[str] = \
@@ -57,17 +57,17 @@ class ResourceImageHandler(ResourceHandler):
     EXTREMAL_SUCCESS_IMAGE_URL: Final[str or None] = _get_image_url(_EXTREMAL_SUCCESS_IMAGE_NAME)
     EXTREMAL_SUCCESS_IMAGE: Final[str or Path] = _icon(EXTREMAL_SUCCESS_IMAGE_URL, EXTREMAL_SUCCESS_IMAGE_PATH)
 
-    _HARD_SUCCESS_IMAGE_NAME: Final[str] = 'hard_success.png'
-    HARD_SUCCESS_IMAGE_PATH: Final[Path] = _get_resources_path(_HARD_SUCCESS_IMAGE_NAME)
-    HARD_SUCCESS_IMAGE_URL: Final[str or None] = _get_image_url(_HARD_SUCCESS_IMAGE_NAME)
-    HARD_SUCCESS_IMAGE: Final[str or Path] = _icon(HARD_SUCCESS_IMAGE_URL, HARD_SUCCESS_IMAGE_PATH)
+    _SUCCESS_IMAGE_NAME: Final[str] = 'success.png'
+    SUCCESS_IMAGE_PATH: Final[Path] = _get_resources_path(_SUCCESS_IMAGE_NAME)
+    SUCCESS_IMAGE_URL: Final[str or None] = _get_image_url(_SUCCESS_IMAGE_NAME)
+    SUCCESS_IMAGE: Final[str or Path] = _icon(SUCCESS_IMAGE_URL, SUCCESS_IMAGE_PATH)
 
-    _NORMAL_FAILURE_IMAGE_NAME: Final[str] = 'failed.png'
-    NORMAL_FAILURE_IMAGE_PATH: Final[Path] = _get_resources_path(_NORMAL_FAILURE_IMAGE_NAME)
-    NORMAL_FAILURE_IMAGE_URL: Final[str or None] = _get_image_url(_NORMAL_FAILURE_IMAGE_NAME)
-    NORMAL_FAILURE_IMAGE: Final[str or Path] = _icon(NORMAL_FAILURE_IMAGE_URL, NORMAL_FAILURE_IMAGE_PATH)
+    _NORMAL_FAILURE_IMAGE_NAME: Final[str] = 'failure.png'
+    FAILURE_IMAGE_PATH: Final[Path] = _get_resources_path(_NORMAL_FAILURE_IMAGE_NAME)
+    FAILURE_IMAGE_URL: Final[str or None] = _get_image_url(_NORMAL_FAILURE_IMAGE_NAME)
+    FAILURE_IMAGE: Final[str or Path] = _icon(FAILURE_IMAGE_URL, FAILURE_IMAGE_PATH)
 
-    _CRITICAL_FAILURE_IMAGE_NAME: Final[str] = 'critical_failed.png'
+    _CRITICAL_FAILURE_IMAGE_NAME: Final[str] = 'critical_failure.png'
     CRITICAL_FAILURE_IMAGE_PATH: Final[Path] = _get_resources_path(_CRITICAL_FAILURE_IMAGE_NAME)
     CRITICAL_FAILURE_IMAGE_URL: Final[str or None] = _get_image_url(_CRITICAL_FAILURE_IMAGE_NAME)
     CRITICAL_FAILURE_IMAGE: Final[str or Path] = _icon(CRITICAL_FAILURE_IMAGE_URL, CRITICAL_FAILURE_IMAGE_PATH)

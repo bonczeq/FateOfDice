@@ -7,63 +7,85 @@ Discord bot that allows rolling dices and perform tests for supported RPG system
 
 ## Command usage
 Bot supports commands for the following RPG systems:
-* common rolls - roll described dices
-* Call of Cthulhu - skill check
-* Tales from the Loop - roll check
+* common rolls - roll the defined dices
+* Call of Cthulhu RPG - check Call of Cthulhu RPG skill
+* Tales from the Loop RPG - check overcoming Tales From The Loop RPG troubles
+* Alien RPG - check Alien RPG skill
 
 ### Common rolls
 Supported aliases: `r`, `!`, `roll`
 ```
-\r [dices ...] [-h] [-m] [-x] [-s] [-r] [-u] [-c COMMENT [COMMENT ...]]
+\r [dices ...] [-h] [-e value | --upper-than value | --lower-than value]
+[-m | -x | -s | -r | --sum | --average-floor | --average-ceil] [--comment [text]]
 
 Universal dice roll.
 
 positional arguments:
-dices                   rolls description (default: 1d100)
+dices                               rolls description (default: 1d100)
 
 optional arguments:
--h, --help              show this help message and exit
-
-optional result presentation arguments:
--m, --min               show min dice
--x, --max               show max dice
--s, --sort              show sorted dices
--r, --reverse-sort      show reverse sorted dices
--u, --sum               show sum of dices
--c COMMENT [COMMENT ...], --comment COMMENT [COMMENT ...]       ignored comment
+-h, --help                          show this help message and exit
+-e value, --equal value             show dices equal to given value
+--upper-than value                  show dices upper than given value
+--lower-than value                  show dices lower than given value
+-m, --min                           show min dice
+-x, --max                           show max dice
+-s, --sort                          show sorted dices
+-r, --reverse-sort                  show reverse sorted dices
+--sum                               show sum of dices
+--average-floor                     show dices average rounded down
+--average-ceil                      show dices average rounded up
+--comment [text]                    ignored comment
 ```
 
-### Call of Cthulhu skill check
+### Call of Cthulhu RPG
 Supported aliases: `c`, `?`, `CoC`, `CallOfCthulhu`
 ```
-\c [skill_value] [-h] [-b [BONUS_DICE_AMOUNT]] [-p [PENALTY_DICE_AMOUNT]] [-c COMMENT [COMMENT ...]]
+\c [skill value] [-h] [-b [amount]] [-p [amount]] [--comment [text]]
 
 Call of Cthulhu skill check.
 
 positional arguments:
-skill_value         keeper skill value (default: no result verification) 
+skill value                         keeper skill value (default: no result verification)
 
 optional arguments:
--h, --help                                                      show this help message and exit
--b [BONUS_DICE_AMOUNT], --bonus [BONUS_DICE_AMOUNT]             amount of bonus dices
--p [PENALTY_DICE_AMOUNT], --penalty [PENALTY_DICE_AMOUNT]       amount of penalty dices
--c COMMENT [COMMENT ...], --comment COMMENT [COMMENT ...]       ignored comment
+-h, --help                          show this help message and exit
+-b [amount], --bonus [amount]       amount of bonus dices
+-p [amount], --penalty [amount]     amount of penalty dices
+--comment [text]                    ignored comment
 ```
 
-### Tales from the Loop roll check
-Supported aliases: `t`, ``, `TftL`, `TalesFromTheLoop`
+### Tales from the Loop RPG
+Supported aliases: `t`, `TftL`, `TalesFromTheLoop`
 ```
-\t [-h] [dice_amount] [success_requirement] [-c COMMENT [COMMENT ...]]
+\t [dice amount] [required number of successes] [-h] [--comment [text]]
 
 Tales from the Loop roll check.
 
 positional arguments:
-dice_amount             number of dice to roll (default: 1)
-success_requirement     number of dice to success (default: 1)
+dice amount                         number of dices to roll (default: 1)
+required number of successes        number of dices to success (default: 1)
 
 optional arguments:
--h, --help                                                  show this help message and exit
--c COMMENT [COMMENT ...], --comment COMMENT [COMMENT ...]   ignored comment
+-h, --help                          show this help message and exit
+--comment [text]                    ignored comment
+
+```
+
+### Alien RPG
+Supported aliases: `a`, `Alien`
+```
+\a [base dice amount] [stress dice amount] [-h] [--comment [text]]
+
+Tales from the Loop roll check.
+
+positional arguments:
+base dice amount                    number of dices to roll (default: 1)
+stress dice amount                  number of stress dices to roll (default: 0)
+
+optional arguments:
+-h, --help                          show this help message and exit
+--comment [text]                    ignored comment
 ```
 
 ## Installation
@@ -85,9 +107,17 @@ or by editing [`config.ini`](src/fate_of_dice/resources/config.ini) file.
 * default: `[/, \, fateOfDice]`
 * supported format: `[prefixes_separated_by_commas]`
 
-`FATE_OF_DICE_SIMPLE_PRESENTATION` if bot message should present minimal information
+`FATE_OF_DICE_SIMPLE_PRESENTATION` if bot messages should present minimal information
 * default: `False`
 * supported value: `True` or `False`
+
+`FATE_OF_DICE_PURELY_ASCII` if bot messages can use Unicode
+* default: `False`
+* supported value: `True` or `False`
+
+`FATE_OF_DICE_URL_ICONS` if bot messages should use icons from URLs or from files attached to messages 
+* default: `Default` URLs if online, otherwise files attached to messages
+* supported value: `True`, `False` or `Default`
 
 ## License
 [![GitHub](https://img.shields.io/github/license/bonczeq/FateOfDice?style=flat-square)](./LICENSE)

@@ -1,10 +1,10 @@
 import unittest
 from unittest import mock
 
-from fate_of_dice.system.universal import roll
-from fate_of_dice.common.dice import DicesModifier, DicesFilterType
-from fate_of_dice.system.universal.exception import RollException
+from fate_of_dice.common import DiceException
+from fate_of_dice.common.dice import DicesModifierType, DicesFilterType
 from fate_of_dice.common.dice.dice_argument_parse import DiceArgumentParserException
+from fate_of_dice.system.universal import roll
 
 
 class TestRoll(unittest.TestCase):
@@ -20,7 +20,7 @@ class TestRoll(unittest.TestCase):
         randrange_mock.assert_has_calls([mock.call(1, 100 + 1, 1)])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesModifier.NONE, dice_result.dices_modifier)
+        self.assertEqual(DicesModifierType.NONE, dice_result.dices_modifier)
         self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
         self.assertEqual(len(dice_result.descriptions), 1)
@@ -39,7 +39,7 @@ class TestRoll(unittest.TestCase):
         randrange_mock.assert_has_calls([mock.call(1, 8 + 1, 1)])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesModifier.NONE, dice_result.dices_modifier)
+        self.assertEqual(DicesModifierType.NONE, dice_result.dices_modifier)
         self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
         self.assertEqual(len(dice_result.descriptions), 1)
@@ -58,7 +58,7 @@ class TestRoll(unittest.TestCase):
         randrange_mock.assert_has_calls([mock.call(1, 8 + 1, 1)])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesModifier.NONE, dice_result.dices_modifier)
+        self.assertEqual(DicesModifierType.NONE, dice_result.dices_modifier)
         self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
         self.assertEqual(len(dice_result.descriptions), 1)
@@ -79,7 +79,7 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesModifier.NONE, dice_result.dices_modifier)
+        self.assertEqual(DicesModifierType.NONE, dice_result.dices_modifier)
         self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
         self.assertEqual(len(dice_result.descriptions), 1)
@@ -100,7 +100,7 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesModifier.MIN, dice_result.dices_modifier)
+        self.assertEqual(DicesModifierType.MIN, dice_result.dices_modifier)
         self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
         self.assertEqual(len(dice_result.descriptions), 1)
@@ -121,7 +121,7 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesModifier.MAX, dice_result.dices_modifier)
+        self.assertEqual(DicesModifierType.MAX, dice_result.dices_modifier)
         self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
         self.assertEqual(len(dice_result.descriptions), 1)
@@ -142,7 +142,7 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesModifier.SORTED, dice_result.dices_modifier)
+        self.assertEqual(DicesModifierType.SORTED, dice_result.dices_modifier)
         self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
         self.assertEqual(len(dice_result.descriptions), 1)
@@ -163,7 +163,7 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesModifier.REVERSE_SORTED, dice_result.dices_modifier)
+        self.assertEqual(DicesModifierType.REVERSE_SORTED, dice_result.dices_modifier)
         self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
         self.assertEqual(len(dice_result.descriptions), 1)
@@ -184,7 +184,7 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesModifier.SUM, dice_result.dices_modifier)
+        self.assertEqual(DicesModifierType.SUM, dice_result.dices_modifier)
         self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
         self.assertEqual(len(dice_result.descriptions), 1)
@@ -205,7 +205,7 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesModifier.AVERAGE_FLOOR, dice_result.dices_modifier)
+        self.assertEqual(DicesModifierType.AVERAGE_FLOOR, dice_result.dices_modifier)
         self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
 
         self.assertEqual(len(dice_result.descriptions), 1)
@@ -226,7 +226,7 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesModifier.AVERAGE_CEIL, dice_result.dices_modifier)
+        self.assertEqual(DicesModifierType.AVERAGE_CEIL, dice_result.dices_modifier)
         self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
         self.assertEqual(len(dice_result.descriptions), 1)
         self.assertEqual('[5, 8, 1] 🠖 5', dice_result.descriptions[0])
@@ -246,7 +246,7 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesModifier.NONE, dice_result.dices_modifier)
+        self.assertEqual(DicesModifierType.NONE, dice_result.dices_modifier)
         self.assertEqual(DicesFilterType.LOWER_THAN, dice_result.dices_filter)
 
         self.assertEqual(len(dice_result.descriptions), 1)
@@ -267,7 +267,7 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesModifier.NONE, dice_result.dices_modifier)
+        self.assertEqual(DicesModifierType.NONE, dice_result.dices_modifier)
         self.assertEqual(DicesFilterType.UPPER_THAN, dice_result.dices_filter)
 
         self.assertEqual(len(dice_result.descriptions), 1)
@@ -288,7 +288,7 @@ class TestRoll(unittest.TestCase):
         ])
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesModifier.NONE, dice_result.dices_modifier)
+        self.assertEqual(DicesModifierType.NONE, dice_result.dices_modifier)
         self.assertEqual(DicesFilterType.EQUAL, dice_result.dices_filter)
 
         self.assertEqual(len(dice_result.descriptions), 1)
@@ -309,7 +309,7 @@ class TestRoll(unittest.TestCase):
         dice_result = roll(user, prefix, tuple(arguments))
 
         self.assertEqual(user, dice_result.user)
-        self.assertEqual(DicesModifier.MIN, dice_result.dices_modifier)
+        self.assertEqual(DicesModifierType.MIN, dice_result.dices_modifier)
         self.assertEqual(DicesFilterType.NONE, dice_result.dices_filter)
         self.assertEqual(len(dice_result.descriptions), 3)
 
@@ -334,21 +334,21 @@ class TestRoll(unittest.TestCase):
 
     def test_unsupported_arguments(self):
         (user, prefix, arguments) = ('userTest', 'prefix', tuple(['2h10']))
-        with self.assertRaises(RollException) as context:
+        with self.assertRaises(DiceException) as context:
             roll(user, prefix, arguments)
 
         self.assertEqual('Unsupported dice type: 2h10', str(context.exception))
 
     def test_unsupported_dice_amount(self):
         (user, prefix, arguments) = ('userTest', 'prefix', tuple(['0d10']))
-        with self.assertRaises(RollException) as context:
+        with self.assertRaises(DiceException) as context:
             roll(user, prefix, arguments)
 
         self.assertEqual('Dice amount must be positive, but is: 0', str(context.exception))
 
     def test_unsupported_modifiers(self):
         (user, prefix, arguments) = ('userTest', 'prefix', tuple(['1d10 -m -x']))
-        with self.assertRaises(RollException) as context:
+        with self.assertRaises(DiceException) as context:
             roll(user, prefix, arguments)
 
         self.assertEqual('Unsupported dice type: 1d10 -m -x', str(context.exception))

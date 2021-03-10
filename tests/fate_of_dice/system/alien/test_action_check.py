@@ -1,8 +1,8 @@
 import unittest
 from unittest import mock
 
-from fate_of_dice.system.alien.action_check import check_action, SkillCheckResultType
 from fate_of_dice.common.dice.dice_argument_parse import DiceArgumentParserException, DiceArgumentParserHelpException
+from fate_of_dice.system.alien.action_check import check_action, SkillCheckResultType
 
 
 class TestActionCheck(unittest.TestCase):

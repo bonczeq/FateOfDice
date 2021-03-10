@@ -21,11 +21,11 @@ class DicesFilterType(Enum):
         elif self == self.NONE:
             result = dices
         else:
-            raise Exception
+            raise Exception('Unsupported DicesFilterType')
         return result
 
 
-@dataclass
+@dataclass(frozen=True)
 class DicesFilter:
     type: DicesFilterType
     value: Optional[int]
