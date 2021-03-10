@@ -70,9 +70,9 @@ class DiceEmbed(Embed):
 
         return super().set_author(name=name, icon_url=avatar_url)
 
-    def add_empty_field(self, condition: Callable = lambda: True):
+    def add_empty_field(self, inline: bool = False, condition: Callable = lambda: True):
         if condition():
-            self.add_field(name=u'\u200B', value=u'\u200B', inline=False)
+            self.add_field(name=u'\u200B', value=u'\u200B', inline=inline)
 
     def add_thumbnail(self, value: str or Path or Embed.Empty):
         if isinstance(value, str):

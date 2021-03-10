@@ -6,7 +6,7 @@ from fate_of_dice.common.resource_handler import ResourceHandler
 class SymbolResolver:
     _FATE_OF_DICE_PURELY_ASCII: str = 'FATE_OF_DICE_PURELY_ASCII'
     PURELY_ASCII: Final[bool] = {'true': True, 'false': False}.get(
-        ResourceHandler.get_property(_FATE_OF_DICE_PURELY_ASCII), False)
+        ResourceHandler.get_property(_FATE_OF_DICE_PURELY_ASCII, False), False)
 
     @classmethod
     def arrow_character(cls) -> str:
@@ -16,13 +16,13 @@ class SymbolResolver:
             return '🠖'
 
     @classmethod
-    def circled_number(cls, number: int, success: int = None, failed: int = None) -> str:
+    def circled_number(cls, number: int, success: int = None, failure: int = None) -> str:
         result = number
         if cls.PURELY_ASCII:
             result = number
         elif success and number == success:
             result = '🗹'
-        elif failed and number == failed:
+        elif failure and number == failure:
             result = '🞮'
         elif number in range(1, 10 + 1):
             result = chr(0x2780 + number - 1)

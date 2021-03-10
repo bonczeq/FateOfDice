@@ -1,13 +1,13 @@
 from enum import Enum
-from typing import Optional, Callable
-from statistics import mean
 from math import floor, ceil
+from statistics import mean
+from typing import Optional, Callable
 
 from fate_of_dice.common.dice import Dice
 from .dice_argument_parse import DicesBasicArguments
 
 
-class DicesModifier(Enum):
+class DicesModifierType(Enum):
     NONE = None
     MIN = 'Minimum'
     MAX = 'Maximum'
@@ -37,7 +37,7 @@ class DicesModifier(Enum):
         elif self == self.NONE:
             result = dices
         else:
-            raise Exception
+            raise Exception('Unsupported DicesModifier')
         return result
 
     @staticmethod
@@ -54,53 +54,53 @@ class DicesModifierArguments(DicesBasicArguments):
     average_floor = False
     average_ceil = False
 
-    __dices_modifier: DicesModifier = None
+    __dices_modifier: DicesModifierType = None
 
     @property
-    def dices_modifier(self) -> DicesModifier:
+    def dices_modifier(self) -> DicesModifierType:
         return self.__resolve_modifier()
 
-    def __resolve_modifier(self) -> Optional[DicesModifier]:
+    def __resolve_modifier(self) -> Optional[DicesModifierType]:
         self._validate_single_value_set(DicesModifierArguments)
 
         if self.minimum:
-            result = DicesModifier.MIN
+            result = DicesModifierType.MIN
         elif self.maximum:
-            result = DicesModifier.MAX
+            result = DicesModifierType.MAX
         elif self.sort:
-            result = DicesModifier.SORTED
+            result = DicesModifierType.SORTED
         elif self.reverse_sort:
-            result = DicesModifier.REVERSE_SORTED
+            result = DicesModifierType.REVERSE_SORTED
         elif self.sum:
-            result = DicesModifier.SUM
+            result = DicesModifierType.SUM
         elif self.average_floor:
-            result = DicesModifier.AVERAGE_FLOOR
+            result = DicesModifierType.AVERAGE_FLOOR
         elif self.average_ceil:
-            result = DicesModifier.AVERAGE_CEIL
+            result = DicesModifierType.AVERAGE_CEIL
         else:
-            result = DicesModifier.NONE
+            result = DicesModifierType.NONE
         return result
 
 
-def add_modifier_arguments(add_argument_callable: Callable, *modifiers: DicesModifier):
-    if DicesModifier.MIN in modifiers:
+def add_modifier_arguments(add_argument_callable: Callable, *modifiers: DicesModifierType):
+    if DicesModifierType.MIN in modifiers:
         add_argument_callable('-m', '--min', action='store_true', dest='minimum',
                               help='show min dice')
-    if DicesModifier.MAX in modifiers:
+    if DicesModifierType.MAX in modifiers:
         add_argument_callable('-x', '--max', action='store_true', dest='maximum',
                               help='show max dice')
-    if DicesModifier.SORTED in modifiers:
+    if DicesModifierType.SORTED in modifiers:
         add_argument_callable('-s', '--sort', action='store_true', dest='sort',
                               help='show sorted dices')
-    if DicesModifier.REVERSE_SORTED in modifiers:
+    if DicesModifierType.REVERSE_SORTED in modifiers:
         add_argument_callable('-r', '--reverse-sort', action='store_true', dest='reverse_sort',
                               help='show reverse sorted dices')
-    if DicesModifier.SUM in modifiers:
+    if DicesModifierType.SUM in modifiers:
         add_argument_callable('--sum', action='store_true', dest='sum',
                               help='show sum of dices')
-    if DicesModifier.AVERAGE_FLOOR in modifiers:
+    if DicesModifierType.AVERAGE_FLOOR in modifiers:
         add_argument_callable('--average-floor', action='store_true', dest='average_floor',
                               help='show dices average rounded down')
-    if DicesModifier.AVERAGE_FLOOR in modifiers:
+    if DicesModifierType.AVERAGE_FLOOR in modifiers:
         add_argument_callable('--average-ceil', action='store_true', dest='average_ceil',
                               help='show dices average rounded up')

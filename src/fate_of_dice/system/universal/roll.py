@@ -1,26 +1,25 @@
 import re
 from dataclasses import dataclass, field
 
-from fate_of_dice.common.dice import Dice, DicesModifier, DicesFilterType
+from fate_of_dice.common import DiceException
+from fate_of_dice.common.dice import Dice, DicesModifierType, DicesFilterType
 from fate_of_dice.system import DiceResult
-
-from .exception import RollException
 from .argument_parser import RollArguments, parse
 
 
 def roll(user: str, command_prefix: str, arguments: (str, ...)) -> 'RollResult':
-    return Roller(user, command_prefix, arguments).roll()
+    return _Roller(user, command_prefix, arguments).roll()
 
 
-@dataclass
+@dataclass(frozen=True)
 class RollResult(DiceResult):
-    all_dices: [[Dice]] = field(default_factory=lambda: [])
-    dices_modifier: DicesModifier = field(default=DicesModifier.NONE)
+    all_dices: [[Dice]] = field(default_factory=list)
+    dices_modifier: DicesModifierType = field(default=DicesModifierType.NONE)
     dices_filter: DicesFilterType = field(default=DicesFilterType.NONE)
-    result_dices: [[Dice]] = field(default_factory=lambda: [])
+    result_dices: [[Dice]] = field(default_factory=list)
 
 
-class Roller:
+class _Roller:
     __DICE_TYPE_PATTERN: re.Pattern = re.compile(r'^(\d+)?[dk]?(\d*)$')
 
     def __init__(self, user: str, command_prefix: str, arguments: (str, ...)):
@@ -37,8 +36,8 @@ class Roller:
 
         return RollResult(user=self.__user, result_dices=result_dices, descriptions=descriptions, all_dices=all_dices,
                           dices_modifier=self.__arguments.dices_modifier,
-                          dices_filter=self.__arguments.dices_filter.type) \
-            .add_basic_arguments(self.__arguments)
+                          dices_filter=self.__arguments.dices_filter.type,
+                          basic_arguments=self.__arguments)
 
     def __calculate_result(self, dices_pattern: str) -> ([Dice], [Dice], str):
         all_dices = self.__resolve_dices(dices_pattern)
@@ -52,14 +51,14 @@ class Roller:
     def __resolve_dices(cls, dices_pattern: str) -> [Dice]:
         matches = cls.__DICE_TYPE_PATTERN.match(dices_pattern)
         if not matches:
-            raise RollException(f'Unsupported dice type: {dices_pattern}')
+            raise DiceException(f'Unsupported dice type: {dices_pattern}')
 
         groups: [str] = matches.groups()
         dice_amount: int = int(groups[0]) if (groups[0] and groups[1]) else 1
         dice_range: int = int(groups[1]) if groups[1] else int(groups[0])
 
         if dice_amount < 1:
-            raise RollException(f'Dice amount must be positive, but is: {dice_amount}')
+            raise DiceException(f'Dice amount must be positive, but is: {dice_amount}')
 
         return [Dice.roll(1, dice_range) for _ in range(0, dice_amount)]
 

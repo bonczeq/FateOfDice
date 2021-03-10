@@ -1,38 +1,41 @@
 from dataclasses import dataclass, field
 from enum import Enum
+from pathlib import Path
 
 from fate_of_dice.common.dice import Dice, DicesFilterType
 from fate_of_dice.common.presentation import SymbolResolver
+from fate_of_dice.common.resource_handler import ResourceImageHandler
 from fate_of_dice.system import DiceResult
 from .argument_parser import ActionCheckArguments, parse
 
 
 def check_action(user: str, command_prefix: str, arguments: (str, ...)) -> 'ActionCheckResult':
-    return ActionCheck(user, command_prefix, arguments).roll()
+    return _ActionCheck(user, command_prefix, arguments).roll()
 
 
 class SkillCheckResultType(Enum):
-    NONE = None, 0xffffff
-    SUCCESS = "SUCCESS.", 0x55e453
-    FAILURE = "Failure.", 0xf35858
-    STRESS = "PANIC.", 0xff0000
+    NONE = None, 0xffffff, None
+    SUCCESS = "Success", 0x55e453, ResourceImageHandler.CRITICAL_SUCCESS_IMAGE
+    FAILURE = "Failure.", 0xf35858, ResourceImageHandler.FAILURE_IMAGE
+    STRESS = "PANIC", 0xff0000, ResourceImageHandler.CRITICAL_FAILURE_IMAGE
 
-    def __init__(self, title: str, colour: int = None):
+    def __init__(self, title: str, colour: int, icon: [str or Path]):
         self.title = title
         self.colour = colour
+        self.icon = icon
 
 
-@dataclass
+@dataclass(frozen=True)
 class ActionCheckResult(DiceResult):
     type: SkillCheckResultType = field(default=SkillCheckResultType.NONE)
     success_amount: int = field(default=0)
     stress_amount: int = field(default=0)
     panic_value: int = field(default=0)
-    base_dices: [Dice] = field(default_factory=lambda: [])
-    stress_dices: [Dice] = field(default_factory=lambda: [])
+    base_dices: [Dice] = field(default_factory=list)
+    stress_dices: [Dice] = field(default_factory=list)
 
 
-class ActionCheck:
+class _ActionCheck:
     def __init__(self, user: str, command_prefix: str, arguments: (str, ...)):
         self.__user: str = user
         self.__command_prefix: str = command_prefix
@@ -52,11 +55,10 @@ class ActionCheck:
         result_type = self.__check_result_type(successes_amount, stress_amount)
         description = self.__describe_roll(successes_amount, stress_amount, panic_value, base_dices, stress_dices)
 
-        result = ActionCheckResult(user=self.__user, descriptions=[description], type=result_type,
-                                   success_amount=successes_amount, stress_amount=stress_amount,
-                                   panic_value=panic_value, base_dices=base_dices, stress_dices=stress_dices)
-        result.add_basic_arguments(self.__arguments)
-        return result
+        return ActionCheckResult(user=self.__user, descriptions=[description], type=result_type,
+                                 success_amount=successes_amount, stress_amount=stress_amount,
+                                 panic_value=panic_value, base_dices=base_dices, stress_dices=stress_dices,
+                                 basic_arguments=self.__arguments)
 
     @staticmethod
     def __roll_dice() -> Dice:

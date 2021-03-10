@@ -12,8 +12,8 @@ class TestResourceImageHandler(unittest.TestCase):
     def test_variables_exist(self):
         self.assertTrue(ResourceImageHandler.FATE_OF_DICE_IMAGE_PATH.exists())
         self.assertTrue(ResourceImageHandler.CRITICAL_FAILURE_IMAGE_PATH.exists())
-        self.assertTrue(ResourceImageHandler.NORMAL_FAILURE_IMAGE_PATH.exists())
-        self.assertTrue(ResourceImageHandler.HARD_SUCCESS_IMAGE_PATH.exists())
+        self.assertTrue(ResourceImageHandler.FAILURE_IMAGE_PATH.exists())
+        self.assertTrue(ResourceImageHandler.SUCCESS_IMAGE_PATH.exists())
         self.assertTrue(ResourceImageHandler.EXTREMAL_SUCCESS_IMAGE_PATH.exists())
         self.assertTrue(ResourceImageHandler.CRITICAL_SUCCESS_IMAGE_PATH.exists())
         self.assertTrue(ResourceImageHandler.INNOVATION_IMAGE_PATH.exists())

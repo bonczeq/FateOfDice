@@ -45,7 +45,8 @@ def from_roll_result(overcome_trouble: OvercomeTroubleResult,
     embed.colour = overcome_trouble.type.colour
 
     if not embed.simple_presentation:
-        embed.add_fields(name="Overcome a trouble result:", values=overcome_trouble.descriptions, inline=False)
+        embed.add_thumbnail(overcome_trouble.type.icon)
+        embed.add_fields(name="Overcome a trouble result:", values=overcome_trouble.descriptions, inline=True)
         return {'embed': embed, 'file': embed.thumbnail_file()}
     else:
         return {'embed': embed}
@@ -59,6 +60,7 @@ def from_roll_result(action_check: ActionCheckResult,
     embed.colour = action_check.type.colour
 
     if not embed.simple_presentation:
+        embed.add_thumbnail(action_check.type.icon)
         embed.add_fields(name="Roll result:", values=action_check.descriptions, inline=False)
         return {'embed': embed, 'file': embed.thumbnail_file()}
     else:

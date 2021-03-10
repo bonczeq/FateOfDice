@@ -1,1 +1,1 @@
-from .overcome_trouble import overcome_trouble, OvercomeTroubleResult
+from .overcome_trouble_check import overcome_trouble_check, OvercomeTroubleResult

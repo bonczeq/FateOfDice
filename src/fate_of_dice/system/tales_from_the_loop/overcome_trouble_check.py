@@ -1,35 +1,37 @@
-from enum import Enum
 from dataclasses import dataclass, field
+from enum import Enum
+from pathlib import Path
 
 from fate_of_dice.common.dice import Dice, DicesFilterType
 from fate_of_dice.common.presentation import SymbolResolver
+from fate_of_dice.common.resource_handler import ResourceImageHandler
 from fate_of_dice.system import DiceResult
-
 from .argument_parser import OvercomeTroubleArguments, parse
 
 
-def overcome_trouble(user: str, command_prefix: str, arguments: (str, ...)) -> 'OvercomeTroubleResult':
-    return OvercomeTrouble(user, command_prefix, arguments).roll()
+def overcome_trouble_check(user: str, command_prefix: str, arguments: (str, ...)) -> 'OvercomeTroubleResult':
+    return _OvercomeTroubleCheck(user, command_prefix, arguments).roll()
 
 
 class OvercomeTroubleResultType(Enum):
-    NONE = None, 0xffffff
-    SUCCESS = "SUCCESS.", 0x55e453
-    FAILURE = "Failure.", 0xf35858
+    NONE = None, 0xffffff, None
+    SUCCESS = "SUCCESS.", 0x55e453, ResourceImageHandler.SUCCESS_IMAGE
+    FAILURE = "Failure.", 0xf35858, ResourceImageHandler.FAILURE_IMAGE
 
-    def __init__(self, title: str, colour: int = None):
+    def __init__(self, title: str, colour: int, icon: [str or Path]):
         self.title = title
         self.colour = colour
+        self.icon = icon
 
 
-@dataclass
+@dataclass(frozen=True)
 class OvercomeTroubleResult(DiceResult):
     type: OvercomeTroubleResultType = field(default=OvercomeTroubleResultType.NONE)
     success_amount: int = field(default=0)
-    dices: [Dice] = field(default_factory=lambda: [])
+    dices: [Dice] = field(default_factory=list)
 
 
-class OvercomeTrouble:
+class _OvercomeTroubleCheck:
     def __init__(self, user: str, command_prefix: str, arguments: (str, ...)):
         self.__user: str = user
         self.__command_prefix: str = command_prefix
@@ -45,8 +47,7 @@ class OvercomeTrouble:
         description = self.__describe_roll(successes_amount, dices)
 
         return OvercomeTroubleResult(user=self.__user, descriptions=[description], type=result_type,
-                                     success_amount=successes_amount, dices=dices) \
-            .add_basic_arguments(self.__arguments)
+                                     success_amount=successes_amount, dices=dices, basic_arguments=self.__arguments)
 
     @staticmethod
     def __filter_successes(dices: [Dice]):
@@ -63,6 +64,8 @@ class OvercomeTrouble:
     @staticmethod
     def __describe_roll(successes_amount: int, result_dices: [Dice]) -> str:
         rolls = f'[{", ".join([SymbolResolver.circled_number(dice, 6) for dice in result_dices])}]'
-        arrow_symbol = SymbolResolver.arrow_character()
         success_description = f'{successes_amount} {"success" if successes_amount == 1 else "successes"}'
-        return f'{rolls} {arrow_symbol} {success_description}'
+        return (
+            f'Rolls: {rolls}\n'
+            f'Result: {success_description}'
+        )

@@ -1,8 +1,8 @@
 import unittest
 from unittest import mock
 
-from fate_of_dice.system.call_of_cthulhu.skill_check import check_skill, SkillCheckResultType
 from fate_of_dice.common.dice.dice_argument_parse import DiceArgumentParserException, DiceArgumentParserHelpException
+from fate_of_dice.system.call_of_cthulhu.skill_check import check_skill, SkillCheckResultType
 
 
 class TestSkillCheck(unittest.TestCase):

@@ -1,26 +1,25 @@
+from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from dataclasses import dataclass, field
 
 from fate_of_dice.common.dice import Dice
 from fate_of_dice.common.resource_handler import ResourceImageHandler
 from fate_of_dice.system import DiceResult
-
 from .argument_parser import parse, SkillCheckArguments
 from .skill_dice import OnesDice, TensDice, DiceType
 
 
 def check_skill(user: str, command_prefix: str, arguments: (str, ...)) -> 'SkillCheckResult':
-    return SkillCheck(user, command_prefix, arguments).roll()
+    return _SkillCheck(user, command_prefix, arguments).roll()
 
 
 class SkillCheckResultType(Enum):
     NONE = None, 0xffffff, None
     CRITICAL_SUCCESS = "CRITICAL SUCCESS!", 0xc547ff, ResourceImageHandler.CRITICAL_SUCCESS_IMAGE
-    EXTREMAL_SUCCESS = "Extremal success!", 0xfcff4d, ResourceImageHandler.EXTREMAL_SUCCESS_IMAGE
-    HARD_SUCCESS = "Hard success!", 0x7d7aff, ResourceImageHandler.HARD_SUCCESS_IMAGE
+    EXTREMAL_SUCCESS = "Extremal success.", 0xfcff4d, ResourceImageHandler.EXTREMAL_SUCCESS_IMAGE
+    HARD_SUCCESS = "Hard success.", 0x7d7aff, ResourceImageHandler.SUCCESS_IMAGE
     NORMAL_SUCCESS = "Normal success.", 0x55e453, None
-    NORMAL_FAILURE = "Normal failure.", 0xf35858, ResourceImageHandler.NORMAL_FAILURE_IMAGE
+    NORMAL_FAILURE = "Normal failure.", 0xf35858, ResourceImageHandler.FAILURE_IMAGE
     CRITICAL_FAILURE = "CRITICAL FAILURE!", 0xff0000, ResourceImageHandler.CRITICAL_FAILURE_IMAGE
 
     def __init__(self, title: str, colour: int = None, icon: [str or Path] = None):
@@ -29,13 +28,13 @@ class SkillCheckResultType(Enum):
         self.icon = icon
 
 
-@dataclass
+@dataclass(frozen=True)
 class SkillCheckResult(DiceResult):
     value: Dice = field(default=None)
     type: SkillCheckResultType = field(default=SkillCheckResultType.NONE)
 
 
-class SkillCheck:
+class _SkillCheck:
     def __init__(self, user: str, command_prefix: str, arguments: (str, ...)):
         self.__user: str = user
         self.__command_prefix: str = command_prefix
@@ -101,8 +100,8 @@ class SkillCheck:
         result_type = self.__skill_result_type(result_dice, threshold)
         description = self.__describe_roll(result_dice, result_tens_dice, result_ones_dice, all_dices)
 
-        return SkillCheckResult(value=result_dice, type=result_type, descriptions=[description], user=self.__user) \
-            .add_basic_arguments(self.__arguments)
+        return SkillCheckResult(value=result_dice, type=result_type, descriptions=[description], user=self.__user,
+                                basic_arguments=self.__arguments)
 
     @staticmethod
     def __skill_result_type(value: int, threshold: int) -> SkillCheckResultType:
@@ -126,10 +125,10 @@ class SkillCheck:
     @staticmethod
     def __describe_roll(result_dice: Dice, result_tens_dice: Dice, result_ones_dice: Dice,
                         all_dices: ([TensDice], [OnesDice])) -> str:
+
         (tens_dices, _) = all_dices
-
-        tens_dice_str = None
+        tens_dice_str = " "
         if len(tens_dices) > 1:
-            tens_dice_str = f'[{"/".join([str(dice) for dice in tens_dices])}] '
+            tens_dice_str = f' [{"/".join([str(dice) for dice in tens_dices])}] '
 
-        return f'{result_tens_dice} {tens_dice_str or ""}+ {result_ones_dice} = {result_dice}'
+        return f'{result_tens_dice}{tens_dice_str}+ {result_ones_dice} = {result_dice}'

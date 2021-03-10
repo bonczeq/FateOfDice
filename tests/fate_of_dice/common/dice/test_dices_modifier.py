@@ -1,13 +1,13 @@
 import unittest
 
-from fate_of_dice.common.dice import Dice, DicesModifier
+from fate_of_dice.common.dice import Dice, DicesModifierType
 
 
 class TestDicesModifier(unittest.TestCase):
 
     def test_none(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(5)]
-        dices_modifier = DicesModifier.NONE
+        dices_modifier = DicesModifierType.NONE
 
         result = dices_modifier.modify_dices(dices)
 
@@ -15,7 +15,7 @@ class TestDicesModifier(unittest.TestCase):
 
     def test_min(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(4)]
-        dices_modifier = DicesModifier.MIN
+        dices_modifier = DicesModifierType.MIN
 
         result = dices_modifier.modify_dices(dices)
 
@@ -23,7 +23,7 @@ class TestDicesModifier(unittest.TestCase):
 
     def test_max(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(4)]
-        dices_modifier = DicesModifier.MAX
+        dices_modifier = DicesModifierType.MAX
 
         result = dices_modifier.modify_dices(dices)
 
@@ -31,7 +31,7 @@ class TestDicesModifier(unittest.TestCase):
 
     def test_sorted(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(4)]
-        dices_modifier = DicesModifier.SORTED
+        dices_modifier = DicesModifierType.SORTED
 
         result = dices_modifier.modify_dices(dices)
 
@@ -39,7 +39,7 @@ class TestDicesModifier(unittest.TestCase):
 
     def test_reverse_sorted(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(4)]
-        dices_modifier = DicesModifier.REVERSE_SORTED
+        dices_modifier = DicesModifierType.REVERSE_SORTED
 
         result = dices_modifier.modify_dices(dices)
 
@@ -47,7 +47,7 @@ class TestDicesModifier(unittest.TestCase):
 
     def test_sum(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(4)]
-        dices_modifier = DicesModifier.SUM
+        dices_modifier = DicesModifierType.SUM
 
         result = dices_modifier.modify_dices(dices)
 
@@ -55,7 +55,7 @@ class TestDicesModifier(unittest.TestCase):
 
     def test_average_floor(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(4)]
-        dices_modifier = DicesModifier.AVERAGE_FLOOR
+        dices_modifier = DicesModifierType.AVERAGE_FLOOR
 
         result = dices_modifier.modify_dices(dices)
 
@@ -63,7 +63,7 @@ class TestDicesModifier(unittest.TestCase):
 
     def test_average_ceil(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(4)]
-        dices_modifier = DicesModifier.AVERAGE_CEIL
+        dices_modifier = DicesModifierType.AVERAGE_CEIL
 
         result = dices_modifier.modify_dices(dices)
 
