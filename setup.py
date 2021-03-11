@@ -20,8 +20,8 @@ setup(
     package_dir={'': 'src'},
     package_data={'': ['resources/icons/*.png']},
     classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
+        "Programming Language :: Python :: 3.9",
+        "License :: OSI Approved :: MIT License"
     ],
     python_requires='>=3.8',
     entry_points={
