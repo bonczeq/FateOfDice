@@ -17,10 +17,10 @@ class TestOvercomeTroubleCheck(unittest.TestCase):
 
         result = overcome_trouble_check(user, prefix, arguments)
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(OvercomeTroubleResultType.FAILURE, result.type)
-        self.assertEqual([5], result.dices)
-        self.assertEqual(0, result.success_amount)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, OvercomeTroubleResultType.FAILURE)
+        self.assertEqual(result.dices, [5])
+        self.assertEqual(result.success_amount, 0)
         self.assertEqual('Rolls: [➄]\nResult: 0 successes', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -35,10 +35,10 @@ class TestOvercomeTroubleCheck(unittest.TestCase):
             mock.call(1, 6 + 1, 1), mock.call(1, 6 + 1, 1)
         ])
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(OvercomeTroubleResultType.FAILURE, result.type)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, OvercomeTroubleResultType.FAILURE)
         self.assertEqual([5, 1], result.dices)
-        self.assertEqual(0, result.success_amount)
+        self.assertEqual(result.success_amount, 0)
         self.assertEqual('Rolls: [➄, ➀]\nResult: 0 successes', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -53,10 +53,10 @@ class TestOvercomeTroubleCheck(unittest.TestCase):
             mock.call(1, 6 + 1, 1), mock.call(1, 6 + 1, 1), mock.call(1, 6 + 1, 1),
         ])
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(OvercomeTroubleResultType.SUCCESS, result.type)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, OvercomeTroubleResultType.SUCCESS)
         self.assertEqual([5, 6, 1], result.dices)
-        self.assertEqual(1, result.success_amount)
+        self.assertEqual(result.success_amount, 1)
         self.assertEqual('Rolls: [➄, 🗹, ➀]\nResult: 1 success', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -71,10 +71,10 @@ class TestOvercomeTroubleCheck(unittest.TestCase):
             mock.call(1, 6 + 1, 1), mock.call(1, 6 + 1, 1), mock.call(1, 6 + 1, 1),
         ])
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(OvercomeTroubleResultType.SUCCESS, result.type)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, OvercomeTroubleResultType.SUCCESS)
         self.assertEqual([6, 6, 1], result.dices)
-        self.assertEqual(2, result.success_amount)
+        self.assertEqual(result.success_amount, 2)
         self.assertEqual('Rolls: [🗹, 🗹, ➀]\nResult: 2 successes', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -89,10 +89,10 @@ class TestOvercomeTroubleCheck(unittest.TestCase):
             mock.call(1, 6 + 1, 1), mock.call(1, 6 + 1, 1), mock.call(1, 6 + 1, 1),
         ])
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(OvercomeTroubleResultType.FAILURE, result.type)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, OvercomeTroubleResultType.FAILURE)
         self.assertEqual([5, 6, 1], result.dices)
-        self.assertEqual(1, result.success_amount)
+        self.assertEqual(result.success_amount, 1)
         self.assertEqual('Rolls: [➄, 🗹, ➀]\nResult: 1 success', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -107,10 +107,10 @@ class TestOvercomeTroubleCheck(unittest.TestCase):
             mock.call(1, 6 + 1, 1), mock.call(1, 6 + 1, 1), mock.call(1, 6 + 1, 1),
         ])
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(OvercomeTroubleResultType.SUCCESS, result.type)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, OvercomeTroubleResultType.SUCCESS)
         self.assertEqual([6, 6, 1], result.dices)
-        self.assertEqual(2, result.success_amount)
+        self.assertEqual(result.success_amount, 2)
         self.assertEqual('Rolls: [🗹, 🗹, ➀]\nResult: 2 successes', result.descriptions[0])
 
     def test_help(self):

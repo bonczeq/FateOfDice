@@ -4,7 +4,7 @@ from pathlib import Path
 
 from fate_of_dice.common.dice import Dice, DicesFilterType
 from fate_of_dice.common.presentation import SymbolResolver
-from fate_of_dice.common.resource_handler import ResourceImageHandler
+from fate_of_dice.resources.resource_handler import ResourceImageHandler
 from fate_of_dice.system import DiceResult
 from .argument_parser import OvercomeTroubleArguments, parse
 

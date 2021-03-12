@@ -11,7 +11,7 @@ class TestDicesFilter(unittest.TestCase):
 
         result = dices_filter.filter_dices(dices, None)
 
-        self.assertEqual(dices, result)
+        self.assertEqual(result, dices)
 
     def test_equal(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(4)]
@@ -19,7 +19,7 @@ class TestDicesFilter(unittest.TestCase):
 
         result = dices_filter.filter_dices(dices, None)
 
-        self.assertEqual(dices, result)
+        self.assertEqual(result, dices)
 
     def test_equal_to_value(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(4)]
@@ -35,7 +35,7 @@ class TestDicesFilter(unittest.TestCase):
 
         result = dices_filter.filter_dices(dices, None)
 
-        self.assertEqual(dices, result)
+        self.assertEqual(result, dices)
 
     def test_upper_than_limit(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(5)]
@@ -51,7 +51,7 @@ class TestDicesFilter(unittest.TestCase):
 
         result = dices_filter.filter_dices(dices, None)
 
-        self.assertEqual(dices, result)
+        self.assertEqual(result, dices)
 
     def test_lower_than_limit(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(5)]

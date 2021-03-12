@@ -4,7 +4,7 @@ from pathlib import Path
 
 from fate_of_dice.common.dice import Dice, DicesFilterType
 from fate_of_dice.common.presentation import SymbolResolver
-from fate_of_dice.common.resource_handler import ResourceImageHandler
+from fate_of_dice.resources.resource_handler import ResourceImageHandler
 from fate_of_dice.system import DiceResult
 from .argument_parser import ActionCheckArguments, parse
 
@@ -13,7 +13,7 @@ def check_action(user: str, command_prefix: str, arguments: (str, ...)) -> 'Acti
     return _ActionCheck(user, command_prefix, arguments).roll()
 
 
-class SkillCheckResultType(Enum):
+class ActionCheckResultType(Enum):
     NONE = None, 0xffffff, None
     SUCCESS = "Success", 0x55e453, ResourceImageHandler.CRITICAL_SUCCESS_IMAGE
     FAILURE = "Failure.", 0xf35858, ResourceImageHandler.FAILURE_IMAGE
@@ -27,7 +27,7 @@ class SkillCheckResultType(Enum):
 
 @dataclass(frozen=True)
 class ActionCheckResult(DiceResult):
-    type: SkillCheckResultType = field(default=SkillCheckResultType.NONE)
+    type: ActionCheckResultType = field(default=ActionCheckResultType.NONE)
     success_amount: int = field(default=0)
     stress_amount: int = field(default=0)
     panic_value: int = field(default=0)
@@ -80,13 +80,13 @@ class _ActionCheck:
             return stress_amount + cls.__roll_dice()
 
     @staticmethod
-    def __check_result_type(successes_amount: int, stress_amount: int) -> SkillCheckResultType:
+    def __check_result_type(successes_amount: int, stress_amount: int) -> ActionCheckResultType:
         if stress_amount > 0:
-            result_type = SkillCheckResultType.STRESS
+            result_type = ActionCheckResultType.STRESS
         elif successes_amount > 0:
-            result_type = SkillCheckResultType.SUCCESS
+            result_type = ActionCheckResultType.SUCCESS
         else:
-            result_type = SkillCheckResultType.FAILURE
+            result_type = ActionCheckResultType.FAILURE
         return result_type
 
     @staticmethod

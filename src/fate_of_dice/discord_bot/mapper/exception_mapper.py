@@ -2,7 +2,8 @@
 from discord import File
 from multipledispatch import dispatch
 
-from fate_of_dice.common import DiceException, ResourceImageHandler
+from fate_of_dice.common import DiceException
+from fate_of_dice.resources.resource_handler import ResourceImageHandler
 from .dice_embed import DiceEmbed
 
 

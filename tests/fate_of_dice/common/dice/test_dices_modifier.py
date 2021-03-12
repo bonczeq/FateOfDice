@@ -11,7 +11,7 @@ class TestDicesModifier(unittest.TestCase):
 
         result = dices_modifier.modify_dices(dices)
 
-        self.assertEqual(dices, result)
+        self.assertEqual(result, dices)
 
     def test_min(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(4)]
@@ -19,7 +19,7 @@ class TestDicesModifier(unittest.TestCase):
 
         result = dices_modifier.modify_dices(dices)
 
-        self.assertEqual([0], result)
+        self.assertEqual(result, [0])
 
     def test_max(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(4)]
@@ -27,7 +27,7 @@ class TestDicesModifier(unittest.TestCase):
 
         result = dices_modifier.modify_dices(dices)
 
-        self.assertEqual([9], result)
+        self.assertEqual(result, [9])
 
     def test_sorted(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(4)]
@@ -51,7 +51,7 @@ class TestDicesModifier(unittest.TestCase):
 
         result = dices_modifier.modify_dices(dices)
 
-        self.assertEqual([17], result)
+        self.assertEqual(result, [17])
 
     def test_average_floor(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(4)]
@@ -59,7 +59,7 @@ class TestDicesModifier(unittest.TestCase):
 
         result = dices_modifier.modify_dices(dices)
 
-        self.assertEqual([4], result)
+        self.assertEqual(result, [4])
 
     def test_average_ceil(self):
         dices = [Dice(4), Dice(9), Dice(0), Dice(4)]
@@ -67,7 +67,7 @@ class TestDicesModifier(unittest.TestCase):
 
         result = dices_modifier.modify_dices(dices)
 
-        self.assertEqual([5], result)
+        self.assertEqual(result, [5])
 
 
 if __name__ == '__main__':

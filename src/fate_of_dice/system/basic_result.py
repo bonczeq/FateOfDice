@@ -14,5 +14,6 @@ class DiceResult(ABC):
     basic_arguments: InitVar[DicesBasicArguments] = None
 
     def __post_init__(self, basic_arguments):
-        object.__setattr__(self, 'simple_presentation', basic_arguments.simple_presentation)
-        object.__setattr__(self, 'priv_request', basic_arguments.priv_request)
+        if basic_arguments:
+            object.__setattr__(self, 'simple_presentation', basic_arguments.simple_presentation)
+            object.__setattr__(self, 'priv_request', basic_arguments.priv_request)

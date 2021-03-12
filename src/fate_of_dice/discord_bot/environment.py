@@ -1,8 +1,8 @@
-from typing import TypeVar, Final
+from typing import TypeVar, Iterable, Final
 
-from fate_of_dice.common.resource_handler import ResourceHandler
+from fate_of_dice.resources.resource_handler import ResourceHandler
 
-PrefixType = TypeVar('PrefixType', list[str], str)
+PrefixType = TypeVar('PrefixType', Iterable[str], str)
 
 FATE_OF_DICE_TOKEN: Final[str] = 'FATE_OF_DICE_TOKEN'
 FATE_OF_DICE_PREFIX: Final[str] = 'FATE_OF_DICE_PREFIX'
