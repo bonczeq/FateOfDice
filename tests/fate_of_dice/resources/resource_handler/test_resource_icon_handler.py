@@ -1,6 +1,6 @@
 import unittest
 
-from fate_of_dice.common.resource_handler import ResourceImageHandler
+from fate_of_dice.resources.resource_handler import ResourceImageHandler
 
 
 class TestResourceImageHandler(unittest.TestCase):

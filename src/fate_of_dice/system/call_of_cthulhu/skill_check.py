@@ -3,7 +3,7 @@ from enum import Enum
 from pathlib import Path
 
 from fate_of_dice.common.dice import Dice
-from fate_of_dice.common.resource_handler import ResourceImageHandler
+from fate_of_dice.resources.resource_handler import ResourceImageHandler
 from fate_of_dice.system import DiceResult
 from .argument_parser import parse, SkillCheckArguments
 from .skill_dice import OnesDice, TensDice, DiceType

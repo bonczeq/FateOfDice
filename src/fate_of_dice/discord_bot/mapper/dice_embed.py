@@ -5,7 +5,7 @@ from discord import File, Message
 from discord.embeds import Embed
 from discord.ext.commands import Context
 
-from fate_of_dice.common.resource_handler import ResourceImageHandler
+from fate_of_dice.resources.resource_handler import ResourceImageHandler
 from fate_of_dice.system import DiceResult
 
 

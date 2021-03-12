@@ -17,9 +17,9 @@ class TestSkillCheck(unittest.TestCase):
 
         result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(SkillCheckResultType.NONE, result.type)
-        self.assertEqual(99, result.value)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, SkillCheckResultType.NONE)
+        self.assertEqual(result.value, 99)
         self.assertEqual('90 + 9 = 99', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -32,9 +32,9 @@ class TestSkillCheck(unittest.TestCase):
 
         result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(SkillCheckResultType.CRITICAL_FAILURE, result.type)
-        self.assertEqual(100, result.value)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, SkillCheckResultType.CRITICAL_FAILURE)
+        self.assertEqual(result.value, 100)
         self.assertEqual('0 + 0 = 100', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -47,9 +47,9 @@ class TestSkillCheck(unittest.TestCase):
 
         result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(SkillCheckResultType.CRITICAL_FAILURE, result.type)
-        self.assertEqual(98, result.value)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, SkillCheckResultType.CRITICAL_FAILURE)
+        self.assertEqual(result.value, 98)
         self.assertEqual('90 + 8 = 98', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -62,9 +62,9 @@ class TestSkillCheck(unittest.TestCase):
 
         result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(SkillCheckResultType.NORMAL_FAILURE, result.type)
-        self.assertEqual(60, result.value)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, SkillCheckResultType.NORMAL_FAILURE)
+        self.assertEqual(result.value, 60)
         self.assertEqual('60 + 0 = 60', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -77,9 +77,9 @@ class TestSkillCheck(unittest.TestCase):
 
         result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(SkillCheckResultType.NORMAL_FAILURE, result.type)
-        self.assertEqual(98, result.value)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, SkillCheckResultType.NORMAL_FAILURE)
+        self.assertEqual(result.value, 98)
         self.assertEqual('90 + 8 = 98', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -92,9 +92,9 @@ class TestSkillCheck(unittest.TestCase):
 
         result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(SkillCheckResultType.NORMAL_SUCCESS, result.type)
-        self.assertEqual(31, result.value)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, SkillCheckResultType.NORMAL_SUCCESS)
+        self.assertEqual(result.value, 31)
         self.assertEqual('30 + 1 = 31', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -107,9 +107,9 @@ class TestSkillCheck(unittest.TestCase):
 
         result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(SkillCheckResultType.HARD_SUCCESS, result.type)
-        self.assertEqual(25, result.value)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, SkillCheckResultType.HARD_SUCCESS)
+        self.assertEqual(result.value, 25)
         self.assertEqual('20 + 5 = 25', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -122,9 +122,9 @@ class TestSkillCheck(unittest.TestCase):
 
         result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(SkillCheckResultType.EXTREMAL_SUCCESS, result.type)
-        self.assertEqual(4, result.value)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, SkillCheckResultType.EXTREMAL_SUCCESS)
+        self.assertEqual(result.value, 4)
         self.assertEqual('0 + 4 = 4', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -137,9 +137,9 @@ class TestSkillCheck(unittest.TestCase):
 
         result = check_skill(user, prefix, arguments)
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(SkillCheckResultType.CRITICAL_SUCCESS, result.type)
-        self.assertEqual(1, result.value)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, SkillCheckResultType.CRITICAL_SUCCESS)
+        self.assertEqual(result.value, 1)
         self.assertEqual('0 + 1 = 1', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -157,9 +157,9 @@ class TestSkillCheck(unittest.TestCase):
             mock.call(0, 90 + 1, 10)
         ])
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(SkillCheckResultType.NORMAL_SUCCESS, result.type)
-        self.assertEqual(10, result.value)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, SkillCheckResultType.NORMAL_SUCCESS)
+        self.assertEqual(result.value, 10)
         self.assertEqual('10 [0/10/90] + 0 = 10', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -176,9 +176,9 @@ class TestSkillCheck(unittest.TestCase):
             mock.call(0, 90 + 1, 10)
         ])
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(SkillCheckResultType.CRITICAL_FAILURE, result.type)
-        self.assertEqual(100, result.value)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, SkillCheckResultType.CRITICAL_FAILURE)
+        self.assertEqual(result.value, 100)
         self.assertEqual('0 [0/90] + 0 = 100', result.descriptions[0])
 
     @mock.patch('fate_of_dice.common.dice.dice.randrange')
@@ -195,9 +195,9 @@ class TestSkillCheck(unittest.TestCase):
             mock.call(0, 90 + 1, 10)
         ])
 
-        self.assertEqual(user, result.user)
-        self.assertEqual(SkillCheckResultType.NORMAL_FAILURE, result.type)
-        self.assertEqual(95, result.value)
+        self.assertEqual(result.user, user)
+        self.assertEqual(result.type, SkillCheckResultType.NORMAL_FAILURE)
+        self.assertEqual(result.value, 95)
         self.assertEqual('90 [10/90] + 5 = 95', result.descriptions[0])
 
     def test_help(self):

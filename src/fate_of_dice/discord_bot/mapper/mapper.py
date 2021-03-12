@@ -9,8 +9,8 @@ from .exception_mapper import from_exception
 
 
 @dispatch(str)
-def crate_embed(description: str) -> DiceEmbed:
-    return DiceEmbed(colour=0xff00a2, description=description)
+def crate_embed(description: str) -> {DiceEmbed}:
+    return {'embed': DiceEmbed(colour=0xff00a2, description=description)}
 
 
 @dispatch(BaseException)

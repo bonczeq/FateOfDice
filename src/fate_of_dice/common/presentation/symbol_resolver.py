@@ -1,6 +1,6 @@
 from typing import Final
 
-from fate_of_dice.common.resource_handler import ResourceHandler
+from fate_of_dice.resources.resource_handler import ResourceHandler
 
 
 class SymbolResolver:
