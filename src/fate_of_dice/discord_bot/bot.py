@@ -41,7 +41,7 @@ class _Rolls(Cog, name='Roll commands'):
              help='Roll the defined dices')
     async def universal_roll(self, ctx: Context, *arguments: str) -> None:
         command_prefix: str = ctx.prefix + ctx.invoked_with
-        roll_result = roll(ctx.author.name, command_prefix, arguments)
+        roll_result = roll(ctx.message.author.display_name, command_prefix, arguments)
         discord_result = crate_embed(roll_result, ctx.message, SIMPLE_PRESENTATION)
         await self._send_message(ctx, discord_result, roll_result)
 
@@ -49,7 +49,7 @@ class _Rolls(Cog, name='Roll commands'):
              help='Check Call of Cthulhu RPG skill')
     async def call_of_cthulhu_check(self, ctx: Context, *arguments: str) -> None:
         command_prefix: str = ctx.prefix + ctx.invoked_with
-        skill_result = check_skill(ctx.author.name, command_prefix, arguments)
+        skill_result = check_skill(ctx.message.author.display_name, command_prefix, arguments)
         discord_result = crate_embed(skill_result, ctx.message, SIMPLE_PRESENTATION)
         await self._send_message(ctx, discord_result, skill_result)
 
@@ -57,7 +57,7 @@ class _Rolls(Cog, name='Roll commands'):
              help='Check overcoming Tales From The Loop RPG troubles')
     async def tales_from_the_loop_check(self, ctx: Context, *arguments: str) -> None:
         command_prefix: str = ctx.prefix + ctx.invoked_with
-        roll_result = overcome_trouble_check(ctx.author.name, command_prefix, arguments)
+        roll_result = overcome_trouble_check(ctx.message.author.display_name, command_prefix, arguments)
         discord_result = crate_embed(roll_result, ctx.message, SIMPLE_PRESENTATION)
         await self._send_message(ctx, discord_result, roll_result)
 
@@ -65,7 +65,7 @@ class _Rolls(Cog, name='Roll commands'):
              help='Check Alien RPG skill')
     async def alien_check(self, ctx: Context, *arguments: str) -> None:
         command_prefix: str = ctx.prefix + ctx.invoked_with
-        check_result = check_action(ctx.author.name, command_prefix, arguments)
+        check_result = check_action(ctx.message.author.display_name, command_prefix, arguments)
         discord_result = crate_embed(check_result, ctx.message, SIMPLE_PRESENTATION)
         await self._send_message(ctx, discord_result, check_result)
 

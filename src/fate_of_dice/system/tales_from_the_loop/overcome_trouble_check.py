@@ -15,8 +15,8 @@ def overcome_trouble_check(user: str, command_prefix: str, arguments: (str, ...)
 
 class OvercomeTroubleResultType(Enum):
     NONE = None, 0xffffff, None
-    SUCCESS = "SUCCESS.", 0x55e453, ResourceImageHandler.SUCCESS_IMAGE
-    FAILURE = "Failure.", 0xf35858, ResourceImageHandler.FAILURE_IMAGE
+    SUCCESS = "Success", 0x55e453, ResourceImageHandler.SUCCESS_IMAGE
+    FAILURE = "Failure", 0xf35858, ResourceImageHandler.FAILURE_IMAGE
 
     def __init__(self, title: str, colour: int, icon: [str or Path]):
         self.title = title

@@ -77,7 +77,7 @@ Supported aliases: `a`, `Alien`
 ```
 \a [base dice amount] [stress dice amount] [-h] [--comment [text]]
 
-Tales from the Loop roll check.
+Alien roll check.
 
 positional arguments:
 base dice amount                    number of dices to roll (default: 1)
@@ -123,7 +123,8 @@ or by editing [`config.ini`](src/fate_of_dice/resources/config.ini) file.
 [![GitHub](https://img.shields.io/github/license/bonczeq/FateOfDice?style=flat-square)](./LICENSE)
 
 ## Status
-[![Code with](https://img.shields.io/badge/BUILT%20WITH%20SCIENCE%20%F0%9F%A7%AA-a832a0?style=for-the-badge)](https://github.com/bonczeq)
+
+[![Code with](https://img.shields.io/badge/BUILT%20WITH%20SCIENCE%20%F0%9F%9A%80-a832a0?style=for-the-badge)](https://github.com/bonczeq)
 [![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discordpy.readthedocs.io/en/latest/#)
 [![Python](https://img.shields.io/badge/Python-yellow?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org)
 [![Git](https://img.shields.io/badge/Git-F1502F?style=for-the-badge&logo=git&logoColor=white)](https://git-scm.com)

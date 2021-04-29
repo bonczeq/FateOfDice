@@ -15,8 +15,8 @@ def check_action(user: str, command_prefix: str, arguments: (str, ...)) -> 'Acti
 
 class ActionCheckResultType(Enum):
     NONE = None, 0xffffff, None
-    SUCCESS = "Success", 0x55e453, ResourceImageHandler.CRITICAL_SUCCESS_IMAGE
-    FAILURE = "Failure.", 0xf35858, ResourceImageHandler.FAILURE_IMAGE
+    SUCCESS = "Success", 0x55e453, ResourceImageHandler.EXTREMAL_SUCCESS_IMAGE
+    FAILURE = "Failure", 0xf35858, ResourceImageHandler.FAILURE_IMAGE
     STRESS = "PANIC", 0xff0000, ResourceImageHandler.CRITICAL_FAILURE_IMAGE
 
     def __init__(self, title: str, colour: int, icon: [str or Path]):
@@ -102,7 +102,7 @@ class _ActionCheck:
             )
 
         if successes_amount:
-            description += f'\nSuccesses amount: {successes_amount}'
+            description += f'\nSuccesses: {successes_amount}'
         if panic_value:
             description += f'\nPanic value: {stress_amount} + {panic_value - stress_amount} = {panic_value}'
 

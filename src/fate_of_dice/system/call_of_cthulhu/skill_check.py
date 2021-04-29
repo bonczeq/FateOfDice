@@ -15,12 +15,12 @@ def check_skill(user: str, command_prefix: str, arguments: (str, ...)) -> 'Skill
 
 class SkillCheckResultType(Enum):
     NONE = None, 0xffffff, None
-    CRITICAL_SUCCESS = "CRITICAL SUCCESS!", 0xc547ff, ResourceImageHandler.CRITICAL_SUCCESS_IMAGE
-    EXTREMAL_SUCCESS = "Extremal success.", 0xfcff4d, ResourceImageHandler.EXTREMAL_SUCCESS_IMAGE
-    HARD_SUCCESS = "Hard success.", 0x7d7aff, ResourceImageHandler.SUCCESS_IMAGE
-    NORMAL_SUCCESS = "Normal success.", 0x55e453, None
-    NORMAL_FAILURE = "Normal failure.", 0xf35858, ResourceImageHandler.FAILURE_IMAGE
-    CRITICAL_FAILURE = "CRITICAL FAILURE!", 0xff0000, ResourceImageHandler.CRITICAL_FAILURE_IMAGE
+    CRITICAL_SUCCESS = "CRITICAL SUCCESS", 0xc547ff, ResourceImageHandler.CRITICAL_SUCCESS_IMAGE
+    EXTREMAL_SUCCESS = "Extremal success", 0xfcff4d, ResourceImageHandler.EXTREMAL_SUCCESS_IMAGE
+    HARD_SUCCESS = "Hard success", 0x7d7aff, ResourceImageHandler.SUCCESS_IMAGE
+    NORMAL_SUCCESS = "Normal success", 0x55e453, None
+    NORMAL_FAILURE = "Normal failure", 0xf35858, ResourceImageHandler.FAILURE_IMAGE
+    CRITICAL_FAILURE = "CRITICAL FAILURE", 0xff0000, ResourceImageHandler.CRITICAL_FAILURE_IMAGE
 
     def __init__(self, title: str, colour: int = None, icon: [str or Path] = None):
         self.title = title

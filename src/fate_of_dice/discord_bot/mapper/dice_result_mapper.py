@@ -46,7 +46,7 @@ def from_roll_result(overcome_trouble: OvercomeTroubleResult,
 
     if not embed.simple_presentation:
         embed.add_thumbnail(overcome_trouble.type.icon)
-        embed.add_fields(name="Overcome a trouble result:", values=overcome_trouble.descriptions, inline=True)
+        embed.add_fields(name="Roll result:", values=overcome_trouble.descriptions, inline=True)
         return {'embed': embed, 'file': embed.thumbnail_file()}
     else:
         return {'embed': embed}

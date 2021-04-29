@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from fate_of_dice.common.dice import DiceArgumentParser, DicesBasicArguments
 
-_PARSER = DiceArgumentParser(description='Tales from the Loop roll check.')
+_PARSER = DiceArgumentParser(description='Alien roll check.')
 
 _PARSER.add_argument('dice_amount',
                      type=int,
