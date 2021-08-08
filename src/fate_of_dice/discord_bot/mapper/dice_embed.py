@@ -1,7 +1,7 @@
 from pathlib import Path
-from typing import Optional, Callable, Any
+from typing import Optional, Callable
 
-from discord import File, Message
+from discord import File, Member
 from discord.embeds import Embed
 from discord.ext.commands import Context
 
@@ -19,31 +19,20 @@ class DiceEmbed(Embed):
         self.__thumbnail_file = None
 
         self.set_default_author()
+        self.title = Embed.Empty
+
 
     @classmethod
-    def from_dice_result(cls, result: DiceResult, message: Message, simple=False, **kwargs) -> 'DiceEmbed':
+    def from_dice_result(cls, result: DiceResult, author: Member, simple=False, **kwargs) -> 'DiceEmbed':
         dice_embed = DiceEmbed(simple=simple, **kwargs)
         dice_embed.simple_presentation = dice_embed.simple_presentation or result.simple_presentation
 
         if dice_embed.simple_presentation:
             dice_embed.description = '\n'.join(result.descriptions)
         else:
-            dice_embed.set_author(name=message.author.name, icon_url=str(message.author.avatar_url))
+            dice_embed.set_author(name=author.display_name, icon_url=str(author.avatar_url))
 
         return dice_embed
-
-    def __setattr__(self, name: str, value: Any) -> None:
-        if not value:
-            value = Embed.Empty
-
-        super().__setattr__(name, value)
-
-    def __getattribute__(self, item):
-        value = super().__getattribute__(item)
-
-        if value == Embed.Empty:
-            value = None
-        return value
 
     def add_field(self, *, name: str, value: str, inline: bool = True):
         if not value:

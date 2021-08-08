@@ -1,5 +1,5 @@
 # pylint: disable=function-redefined
-from discord import File, Message
+from discord import File, Member
 from multipledispatch import dispatch
 
 from fate_of_dice.system import DiceResult
@@ -18,6 +18,6 @@ def crate_embed(error: BaseException) -> {DiceEmbed, File}:
     return from_exception(error)
 
 
-@dispatch(DiceResult, Message, bool)
-def crate_embed(result, message: Message, simple: bool) -> {DiceEmbed, File}:
-    return from_roll_result(result, message, simple)
+@dispatch(DiceResult, Member, bool)
+def crate_embed(result, author: Member, simple: bool) -> {DiceEmbed, File}:
+    return from_roll_result(result, author, simple)

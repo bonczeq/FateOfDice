@@ -104,7 +104,7 @@ or by editing [`config.ini`](src/fate_of_dice/resources/config.ini) file.
 
 #### Optional properties
 `FATE_OF_DICE_PREFIX` list of FateOfDice bot prefixes
-* default: `[/, \, fateOfDice]`
+* default: `[!, \, fateOfDice]`
 * supported format: `[prefixes_separated_by_commas]`
 
 `FATE_OF_DICE_SIMPLE_PRESENTATION` if bot messages should present minimal information

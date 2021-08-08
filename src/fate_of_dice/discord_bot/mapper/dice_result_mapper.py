@@ -1,7 +1,7 @@
 # pylint: disable=function-redefined
 from typing import Optional
 
-from discord import Message, File
+from discord import Member, File
 from multipledispatch import dispatch
 
 from fate_of_dice.system.alien import ActionCheckResult
@@ -11,9 +11,9 @@ from fate_of_dice.system.universal import RollResult
 from .dice_embed import DiceEmbed
 
 
-@dispatch(RollResult, Message, bool)
-def from_roll_result(roll_result: RollResult, message: Message, simple: bool = False) -> {DiceEmbed}:
-    embed = DiceEmbed.from_dice_result(roll_result, message, simple)
+@dispatch(RollResult, Member, bool)
+def from_roll_result(roll_result: RollResult, author: Member, simple: bool = False) -> {DiceEmbed}:
+    embed = DiceEmbed.from_dice_result(roll_result, author, simple)
     embed.colour = 0x4dd5d3
 
     if not embed.simple_presentation:
@@ -22,10 +22,10 @@ def from_roll_result(roll_result: RollResult, message: Message, simple: bool = F
     return {'embed': embed}
 
 
-@dispatch(SkillCheckResult, Message, bool)
+@dispatch(SkillCheckResult, Member, bool)
 def from_roll_result(skill_check: SkillCheckResult,
-                     message: Message, simple: bool = False) -> {DiceEmbed, Optional[File]}:
-    embed = DiceEmbed.from_dice_result(skill_check, message, simple)
+                     author: Member, simple: bool = False) -> {DiceEmbed, Optional[File]}:
+    embed = DiceEmbed.from_dice_result(skill_check, author, simple)
     embed.title = skill_check.type.title
     embed.colour = skill_check.type.colour
 
@@ -37,10 +37,10 @@ def from_roll_result(skill_check: SkillCheckResult,
         return {'embed': embed}
 
 
-@dispatch(OvercomeTroubleResult, Message, bool)
+@dispatch(OvercomeTroubleResult, Member, bool)
 def from_roll_result(overcome_trouble: OvercomeTroubleResult,
-                     message: Message, simple: bool = False) -> {DiceEmbed, Optional[File]}:
-    embed = DiceEmbed.from_dice_result(overcome_trouble, message, simple)
+                     author: Member, simple: bool = False) -> {DiceEmbed, Optional[File]}:
+    embed = DiceEmbed.from_dice_result(overcome_trouble, author, simple)
     embed.title = overcome_trouble.type.title
     embed.colour = overcome_trouble.type.colour
 
@@ -52,10 +52,10 @@ def from_roll_result(overcome_trouble: OvercomeTroubleResult,
         return {'embed': embed}
 
 
-@dispatch(ActionCheckResult, Message, bool)
+@dispatch(ActionCheckResult, Member, bool)
 def from_roll_result(action_check: ActionCheckResult,
-                     message: Message, simple: bool = False) -> {DiceEmbed, Optional[File]}:
-    embed = DiceEmbed.from_dice_result(action_check, message, simple)
+                     author: Member, simple: bool = False) -> {DiceEmbed, Optional[File]}:
+    embed = DiceEmbed.from_dice_result(action_check, author, simple)
     embed.title = action_check.type.title
     embed.colour = action_check.type.colour
 
