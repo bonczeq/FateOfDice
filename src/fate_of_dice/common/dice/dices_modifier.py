@@ -54,8 +54,6 @@ class DicesModifierArguments(DicesBasicArguments):
     average_floor = False
     average_ceil = False
 
-    __dices_modifier: DicesModifierType = None
-
     @property
     def dices_modifier(self) -> DicesModifierType:
         return self.__resolve_modifier()

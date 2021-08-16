@@ -1,6 +1,8 @@
-setuptools==57.4.0
-discord.py==1.7.3
-discord-py-slash-command==2.4.0
-requests==2.25.1
-multipledispatch>=0.6.0
+setuptools~=57.4.0
+discord.py~=1.7.3
+discord-py-slash-command~=2.4.0
+flask~=2.0.1
+requests~=2.25.1
+waitress~=2.0.0
+multipledispatch~=0.6.0
 ./

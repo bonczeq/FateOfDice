@@ -1,7 +1,7 @@
 # pylint: disable-all
 import unittest
 
-from discord import Message, User
+from discord import Member
 
 from fate_of_dice.discord_bot.mapper import crate_embed
 from fate_of_dice.system.alien import ActionCheckResult, ActionCheckResultType
@@ -10,17 +10,9 @@ from fate_of_dice.system.tales_from_the_loop import OvercomeTroubleResult, Overc
 from fate_of_dice.system.universal import RollResult
 
 
-class UserMock(User):
-    name = 'testName'
+class MemberMock(Member):
+    display_name = 'testName'
     avatar_url = 'testAvatarUrl'
-
-    # noinspection PyMissingConstructor
-    def __init__(self):
-        pass
-
-
-class MockMessage(Message):
-    author = UserMock()
 
     # noinspection PyMissingConstructor
     def __init__(self):
@@ -33,9 +25,9 @@ class TestDiceResultMapper(unittest.TestCase):
         descriptions = ["testDescription1", "testDescription2"]
 
         result = RollResult(descriptions=descriptions)
-        message = MockMessage()
+        author = MemberMock()
 
-        result = crate_embed(result, message, False)
+        result = crate_embed(result, author, False)
 
         self.assertTrue('embed' in result)
         embed = result.get('embed')
@@ -50,9 +42,9 @@ class TestDiceResultMapper(unittest.TestCase):
         result_type = SkillCheckResultType.NORMAL_FAILURE
 
         result = SkillCheckResult(descriptions=descriptions, type=result_type)
-        message = MockMessage()
+        author = MemberMock()
 
-        result = crate_embed(result, message, False)
+        result = crate_embed(result, author, False)
 
         self.assertTrue('embed' in result)
         embed = result.get('embed')
@@ -68,9 +60,9 @@ class TestDiceResultMapper(unittest.TestCase):
         result_type = OvercomeTroubleResultType.SUCCESS
 
         result = OvercomeTroubleResult(descriptions=descriptions, type=result_type)
-        message = MockMessage()
+        author = MemberMock()
 
-        result = crate_embed(result, message, False)
+        result = crate_embed(result, author, False)
 
         self.assertTrue('embed' in result)
         embed = result.get('embed')
@@ -86,9 +78,9 @@ class TestDiceResultMapper(unittest.TestCase):
         result_type = ActionCheckResultType.FAILURE
 
         result = ActionCheckResult(descriptions=descriptions, type=result_type)
-        message = MockMessage()
+        author = MemberMock()
 
-        result = crate_embed(result, message, False)
+        result = crate_embed(result, author, False)
 
         self.assertTrue('embed' in result)
         embed = result.get('embed')

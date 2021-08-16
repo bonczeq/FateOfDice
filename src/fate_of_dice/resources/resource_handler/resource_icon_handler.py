@@ -6,12 +6,14 @@ import requests
 from .resource_handler import ResourceHandler, _RESOURCES_PATH, _get_resource_path
 
 _FATE_OF_DICE_URL_ICONS: Final[str] = 'FATE_OF_DICE_URL_ICONS'
+_FATE_OF_DICE_URL_ICONS_URL: Final[str] = 'FATE_OF_DICE_URL_ICONS_URL'
 _URL_ICONS: Final[bool or None] = {'true': True, 'false': False}.get(
     ResourceHandler.get_property(_FATE_OF_DICE_URL_ICONS, None), None)
 
 _ICON_PATH: Final[Path] = _RESOURCES_PATH.joinpath('icons')
-_ICONS_URL_PREFIX: Final[str] = \
-    'https://raw.githubusercontent.com/bonczeq/FateOfDice/master/src/fate_of_dice/resources/icons/'
+
+_DEFAULT_ICONS_URL = 'https://raw.githubusercontent.com/bonczeq/FateOfDice/master/src/fate_of_dice/resources/icons/'
+_ICONS_URL_PREFIX: Final[str] = ResourceHandler.get_property(_FATE_OF_DICE_URL_ICONS_URL, _DEFAULT_ICONS_URL)
 
 
 def _icon(url: Optional[str], path: Path):
@@ -56,6 +58,11 @@ class ResourceImageHandler(ResourceHandler):
     EXTREMAL_SUCCESS_IMAGE_PATH: Final[Path] = _get_resources_path(_EXTREMAL_SUCCESS_IMAGE_NAME)
     EXTREMAL_SUCCESS_IMAGE_URL: Final[str or None] = _get_image_url(_EXTREMAL_SUCCESS_IMAGE_NAME)
     EXTREMAL_SUCCESS_IMAGE: Final[str or Path] = _icon(EXTREMAL_SUCCESS_IMAGE_URL, EXTREMAL_SUCCESS_IMAGE_PATH)
+
+    _HARD_SUCCESS_IMAGE_NAME: Final[str] = 'hard_success.png'
+    HARD_SUCCESS_IMAGE_PATH: Final[Path] = _get_resources_path(_HARD_SUCCESS_IMAGE_NAME)
+    HARD_SUCCESS_IMAGE_URL: Final[str or None] = _get_image_url(_HARD_SUCCESS_IMAGE_NAME)
+    HARD_SUCCESS_IMAGE: Final[str or Path] = _icon(HARD_SUCCESS_IMAGE_URL, HARD_SUCCESS_IMAGE_PATH)
 
     _SUCCESS_IMAGE_NAME: Final[str] = 'success.png'
     SUCCESS_IMAGE_PATH: Final[Path] = _get_resources_path(_SUCCESS_IMAGE_NAME)

@@ -1,7 +1,7 @@
 from typing import Final, Iterable
 
 from discord.ext.commands import Context, command
-from discord_slash import cog_ext
+from discord_slash import cog_ext, SlashCommandOptionType
 from discord_slash.utils.manage_commands import create_option
 
 from fate_of_dice.discord_bot.cog.dice_cog import DiceCog, aliases_to_name, guild_ids
@@ -23,7 +23,10 @@ class UniversalCog(DiceCog, name='Roll commands'):
 
     @cog_ext.cog_slash(name='roll', description='Roll the defined dices', guild_ids=guild_ids,
                        options=[
-                           create_option(name="dices", description="Dices type", option_type=3, required=False)
+                           create_option(name='options',  option_type=SlashCommandOptionType.STRING, required=False,
+                                         description="[dices ...] "
+                                                     "[-e value | --upper-than value | --lower-than value] "
+                                                     "[-m | -x | -s | -r | --sum]")
                        ])
-    async def universal_roll_slash(self, ctx: Context, dices: str) -> None:
-        await self.universal_roll(ctx, *dices.split())
+    async def universal_roll_slash(self, ctx: Context, options: str = None) -> None:
+        await self.universal_roll(ctx, *(options or '').split())

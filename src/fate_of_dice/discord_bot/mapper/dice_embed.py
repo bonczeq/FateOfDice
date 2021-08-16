@@ -19,8 +19,6 @@ class DiceEmbed(Embed):
         self.__thumbnail_file = None
 
         self.set_default_author()
-        self.title = Embed.Empty
-
 
     @classmethod
     def from_dice_result(cls, result: DiceResult, author: Member, simple=False, **kwargs) -> 'DiceEmbed':
@@ -31,26 +29,36 @@ class DiceEmbed(Embed):
             dice_embed.description = '\n'.join(result.descriptions)
         else:
             dice_embed.set_author(name=author.display_name, icon_url=str(author.avatar_url))
+            if result.comment:
+                dice_embed.add_field(name="Comment:", value=result.comment, inline=True)
+                dice_embed.add_empty_field(inline=True)
+                dice_embed.add_field(name="Time:", value=result.time, inline=True)
 
         return dice_embed
+
+    def __setattr__(self, name: str, value) -> None:
+        if name == 'title' and value is None:
+            value = Embed.Empty
+
+        super().__setattr__(name, value)
 
     def add_field(self, *, name: str, value: str, inline: bool = True):
         if not value:
             return None
 
-        return super().add_field(name=name, value=value, inline=inline)
+        return super().add_field(name=name, value=f'`{value}`', inline=inline)
 
     def add_fields(self, *, name: str, values: [str], inline: bool = True):
         if not values:
             return None
 
         for value in values:
-            super().add_field(name=name, value=value, inline=inline)
+            super().add_field(name=name, value=f'`{value}`', inline=inline)
         return self
 
     def set_default_author(self, context: Optional[Context] = None):
         if context:
-            bot_user = context.bot.user
+            bot_user = context.bot.user_id
             name = bot_user.name
             avatar_url = bot_user.avatar_url
         else:
@@ -61,7 +69,7 @@ class DiceEmbed(Embed):
 
     def add_empty_field(self, inline: bool = False, condition: Callable = lambda: True):
         if condition():
-            self.add_field(name=u'\u200B', value=u'\u200B', inline=inline)
+            super().add_field(name=u'\u200B', value=u'\u200B', inline=inline)
 
     def add_thumbnail(self, value: str or Path or Embed.Empty):
         if isinstance(value, str):

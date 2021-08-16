@@ -1,6 +1,5 @@
-from dataclasses import dataclass, field
-
-from fate_of_dice.common.dice import DiceArgumentParser, DicesBasicArguments
+from fate_of_dice.common.dice import DiceArgumentParser
+from .skill_check_arguments import SkillCheckArguments
 
 _PARSER = DiceArgumentParser(description='Call of Cthulhu skill check.')
 
@@ -29,13 +28,6 @@ _PARSER.add_argument('-p', '--penalty',
 _PARSER.add_comment_argument()
 _PARSER.add_priv_request()
 _PARSER.add_simple_presentation()
-
-
-@dataclass
-class SkillCheckArguments(DicesBasicArguments):
-    skill_value: int = field(default=None)
-    bonus_dice_amount: int = field(default=0)
-    penalty_dice_amount: int = field(default=0)
 
 
 def parse(command_prefix: str, arguments: (str, ...)) -> SkillCheckArguments:

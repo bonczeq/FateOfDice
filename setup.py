@@ -1,9 +1,11 @@
 import os
+
 from setuptools import setup, find_packages
 
 
 def read(file_name):
-    return open(os.path.join(os.path.dirname(__file__), file_name)).read()
+    with open(os.path.join(os.path.dirname(__file__), file_name)) as file:
+        return file.read()
 
 
 setup(
@@ -23,8 +25,8 @@ setup(
         "Programming Language :: Python :: 3.9",
         "License :: OSI Approved :: MIT License"
     ],
-    python_requires='>=3.8',
+    python_requires='>=3.9.6',
     entry_points={
-        'console_scripts': ['fate_of_dice = fate_of_dice.__main__:main'],
+        'console_scripts': ['fate_of_dice = fate_of_dice.main:main'],
     }
 )

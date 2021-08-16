@@ -38,7 +38,6 @@ class ActionCheckResult(DiceResult):
 class _ActionCheck:
     def __init__(self, user: str, command_prefix: str, arguments: (str, ...)):
         self.__user: str = user
-        self.__command_prefix: str = command_prefix
         self.__arguments: ActionCheckArguments = parse(command_prefix, arguments)
 
     def roll(self) -> ActionCheckResult:

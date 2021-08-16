@@ -5,11 +5,12 @@ from pathlib import Path
 from fate_of_dice.common.dice import Dice
 from fate_of_dice.resources.resource_handler import ResourceImageHandler
 from fate_of_dice.system import DiceResult
-from .argument_parser import parse, SkillCheckArguments
+from .argument_parser import parse
+from .skill_check_arguments import SkillCheckArguments
 from .skill_dice import OnesDice, TensDice, DiceType
 
 
-def check_skill(user: str, command_prefix: str, arguments: (str, ...)) -> 'SkillCheckResult':
+def check_skill(user: str, command_prefix: str, arguments: (str, ...) or SkillCheckArguments) -> 'SkillCheckResult':
     return _SkillCheck(user, command_prefix, arguments).roll()
 
 
@@ -17,8 +18,8 @@ class SkillCheckResultType(Enum):
     NONE = None, 0xffffff, None
     CRITICAL_SUCCESS = "CRITICAL SUCCESS", 0xc547ff, ResourceImageHandler.CRITICAL_SUCCESS_IMAGE
     EXTREMAL_SUCCESS = "Extremal success", 0xfcff4d, ResourceImageHandler.EXTREMAL_SUCCESS_IMAGE
-    HARD_SUCCESS = "Hard success", 0x7d7aff, ResourceImageHandler.SUCCESS_IMAGE
-    NORMAL_SUCCESS = "Normal success", 0x55e453, None
+    HARD_SUCCESS = "Hard success", 0x7d7aff, ResourceImageHandler.HARD_SUCCESS_IMAGE
+    NORMAL_SUCCESS = "Normal success", 0x55e453, ResourceImageHandler.SUCCESS_IMAGE
     NORMAL_FAILURE = "Normal failure", 0xf35858, ResourceImageHandler.FAILURE_IMAGE
     CRITICAL_FAILURE = "CRITICAL FAILURE", 0xff0000, ResourceImageHandler.CRITICAL_FAILURE_IMAGE
 
@@ -33,12 +34,23 @@ class SkillCheckResult(DiceResult):
     value: Dice = field(default=None)
     type: SkillCheckResultType = field(default=SkillCheckResultType.NONE)
 
+    def to_directory(self) -> dict:
+        result = super().to_directory()
+        result.update({
+            'value': str(self.value),
+            'type': self.type.title
+        })
+        return result
+
 
 class _SkillCheck:
-    def __init__(self, user: str, command_prefix: str, arguments: (str, ...)):
+    def __init__(self, user: str, command_prefix: str, arguments: (str, ...) or SkillCheckArguments):
         self.__user: str = user
-        self.__command_prefix: str = command_prefix
-        self.__arguments: SkillCheckArguments = parse(command_prefix, arguments)
+
+        if isinstance(arguments, SkillCheckArguments):
+            self.__arguments: SkillCheckArguments = arguments
+        else:
+            self.__arguments: SkillCheckArguments = parse(command_prefix, arguments)
 
     def roll(self) -> SkillCheckResult:
         ones_dice: OnesDice = OnesDice.roll()

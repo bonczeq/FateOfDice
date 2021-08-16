@@ -10,7 +10,7 @@ FATE_OF_DICE_SIMPLE_RESULTS: Final[str] = 'FATE_OF_DICE_SIMPLE_PRESENTATION'
 
 
 def __resolve_command_prefixes() -> [str] or str:
-    property_value = ResourceHandler.get_property(FATE_OF_DICE_PREFIX, ['!', '\\', 'fateOfDice'])
+    property_value = ResourceHandler.get_property(FATE_OF_DICE_PREFIX, ['/', '!', '\\', 'fateOfDice'])
     if not isinstance(property_value, list):
         property_value = property_value.strip('][').split(', ')
     return property_value
