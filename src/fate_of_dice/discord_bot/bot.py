@@ -57,12 +57,12 @@ class DiscordBot:
     def __init__(self) -> None:
         self.bot: Bot = bot
 
-    def send_dice_result(self, channels: list[int], user_name: str, dice_result: DiceResult) -> None:
+    def send_dice_result(self, channels: list[int or str], user_name: str, dice_result: DiceResult) -> None:
         if not self.bot.is_ready():
             raise Exception('Bot is not started')
         else:
             for channelId in channels:
-                channel: TextChannel = self._get_channel(channelId)
+                channel: TextChannel = self._get_channel(int(channelId))
                 member: Member = self._get_member(channel, user_name)
                 discord_result = crate_embed(dice_result, member, SIMPLE_PRESENTATION)
 
@@ -71,12 +71,12 @@ class DiscordBot:
                 if dice_result.priv_request:
                     self.bot.loop.create_task(channel.send(**discord_result))
 
-    def on_error(self, channels: list[int], error: DiceException) -> None:
+    def on_error(self, channels: list[int or str], error: DiceException) -> None:
         if not self.bot.is_ready():
             raise Exception('Bot is not started')
         else:
             for channelId in channels:
-                channel: TextChannel = self._get_channel(channelId)
+                channel: TextChannel = self._get_channel(int(channelId))
                 discord_result = crate_embed(error)
                 self.bot.loop.create_task(channel.send(**discord_result))
 
