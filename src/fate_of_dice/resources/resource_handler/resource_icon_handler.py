@@ -79,12 +79,12 @@ class ResourceImageHandler(ResourceHandler):
     CRITICAL_FAILURE_IMAGE_URL: Final[str or None] = _get_image_url(_CRITICAL_FAILURE_IMAGE_NAME)
     CRITICAL_FAILURE_IMAGE: Final[str or Path] = _icon(CRITICAL_FAILURE_IMAGE_URL, CRITICAL_FAILURE_IMAGE_PATH)
 
-    _INNOVATION_IMAGE_NAME: Final[str] = 'innovation.png'
-    INNOVATION_IMAGE_PATH: Final[Path] = _get_resources_path(_INNOVATION_IMAGE_NAME)
-    INNOVATION_IMAGE_URL: Final[str or None] = _get_image_url(_INNOVATION_IMAGE_NAME)
-    INNOVATION_IMAGE: Final[str or Path] = _icon(INNOVATION_IMAGE_URL, INNOVATION_IMAGE_PATH)
+    _INFO_IMAGE_NAME: Final[str] = 'info.png'
+    INFO_IMAGE_PATH: Final[Path] = _get_resources_path(_INFO_IMAGE_NAME)
+    INFO_IMAGE_URL: Final[str or None] = _get_image_url(_INFO_IMAGE_NAME)
+    INFO_IMAGE: Final[str or Path] = _icon(INFO_IMAGE_URL, INFO_IMAGE_PATH)
 
-    _PROCESS_IMAGE_NAME: Final[str] = 'process.png'
-    PROCESS_IMAGE_PATH: Final[Path] = _get_resources_path(_PROCESS_IMAGE_NAME)
-    PROCESS_IMAGE_URL: Final[str or None] = _get_image_url(_PROCESS_IMAGE_NAME)
-    PROCESS_IMAGE: Final[str or Path] = _icon(PROCESS_IMAGE_URL, PROCESS_IMAGE_PATH)
+    _WARNING_IMAGE_NAME: Final[str] = 'warning.png'
+    WARNING_IMAGE_PATH: Final[Path] = _get_resources_path(_WARNING_IMAGE_NAME)
+    WARNING_IMAGE_URL: Final[str or None] = _get_image_url(_WARNING_IMAGE_NAME)
+    WARNING_IMAGE: Final[str or Path] = _icon(WARNING_IMAGE_URL, WARNING_IMAGE_PATH)

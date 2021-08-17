@@ -36,20 +36,20 @@ async def on_ready():
     logging.info('Icons from url: %s', ResourceImageHandler.URL_ICONS or 'Default')
 
 
-# @bot.event
-# async def on_slash_command_error(ctx, error):
-#     original = error
-#     if hasattr(error, 'original'):
-#         original = error.original
-#     await ctx.send(**crate_embed(original))
-#
-#
-# @bot.event
-# async def on_command_error(ctx, error):
-#     original = error
-#     if hasattr(error, 'original'):
-#         original = error.original
-#     await ctx.send(**crate_embed(original))
+@bot.event
+async def on_slash_command_error(ctx, error):
+    original = error
+    if hasattr(error, 'original'):
+        original = error.original
+    await ctx.send(**crate_embed(original))
+
+
+@bot.event
+async def on_command_error(ctx, error):
+    original = error
+    if hasattr(error, 'original'):
+        original = error.original
+    await ctx.send(**crate_embed(original))
 
 
 class DiscordBot:

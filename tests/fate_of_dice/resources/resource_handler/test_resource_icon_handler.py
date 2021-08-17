@@ -16,8 +16,8 @@ class TestResourceImageHandler(unittest.TestCase):
         self.assertTrue(ResourceImageHandler.SUCCESS_IMAGE_PATH.exists())
         self.assertTrue(ResourceImageHandler.EXTREMAL_SUCCESS_IMAGE_PATH.exists())
         self.assertTrue(ResourceImageHandler.CRITICAL_SUCCESS_IMAGE_PATH.exists())
-        self.assertTrue(ResourceImageHandler.INNOVATION_IMAGE_PATH.exists())
-        self.assertTrue(ResourceImageHandler.PROCESS_IMAGE_PATH.exists())
+        self.assertTrue(ResourceImageHandler.INFO_IMAGE_PATH.exists())
+        self.assertTrue(ResourceImageHandler.WARNING_IMAGE_PATH.exists())
 
 
 if __name__ == '__main__':

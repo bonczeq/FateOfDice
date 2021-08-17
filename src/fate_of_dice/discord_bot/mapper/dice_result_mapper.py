@@ -31,7 +31,8 @@ def from_roll_result(skill_check: SkillCheckResult,
 
     if not embed.simple_presentation:
         embed.add_thumbnail(skill_check.type.icon)
-        embed.add_fields(name="Skill check result:", values=skill_check.descriptions, inline=False)
+        embed.add_fields(name="Skill check result:", values=skill_check.descriptions, inline=True)
+        embed.add_empty_field(inline=True)
         return {'embed': embed, 'file': embed.thumbnail_file()}
     else:
         return {'embed': embed}
