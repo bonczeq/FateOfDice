@@ -19,12 +19,6 @@ intents.members = True
 bot: Bot = Bot(case_insensitive=True, command_prefix=COMMAND_PREFIXES, intents=intents)
 slash = SlashCommand(bot, sync_commands=True)
 
-bot.add_cog(BasicCog(bot))
-bot.add_cog(UniversalCog(bot))
-bot.add_cog(AlienCog(bot))
-bot.add_cog(CallOfCthulhuCog(bot))
-bot.add_cog(TalesFromTheLoopCog(bot))
-
 
 @bot.event
 async def on_ready():
@@ -79,6 +73,14 @@ class DiscordBot:
                 channel: TextChannel = self._get_channel(int(channelId))
                 discord_result = crate_embed(error)
                 self.bot.loop.create_task(channel.send(**discord_result))
+
+    def register_commands(self):
+        bot.add_cog(BasicCog(bot))
+        bot.add_cog(UniversalCog(bot))
+        bot.add_cog(AlienCog(bot))
+        bot.add_cog(CallOfCthulhuCog(bot))
+        bot.add_cog(TalesFromTheLoopCog(bot))
+        return self
 
     def run(self, thread=False):
         if not BOT_TOKEN:

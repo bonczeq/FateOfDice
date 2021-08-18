@@ -14,12 +14,11 @@ def main():
     )
     logging.info("FateOfDice started")
 
-    discord_bot: DiscordBot = DiscordBot().register_commands()
+    discord_bot: DiscordBot = DiscordBot()
     rest_server: RestServer = RestServer(DiscordSendMessage(discord_bot))
 
     logging.info("FateOfDice rest starting")
     rest_server.run(thread=True)
-    logging.info("FateOfDice discord bot starting")
     discord_bot.run(thread=False)
     logging.info("FateOfDice exit")
 
