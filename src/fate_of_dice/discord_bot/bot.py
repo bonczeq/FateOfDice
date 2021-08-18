@@ -57,7 +57,7 @@ class DiscordBot:
     def __init__(self) -> None:
         self.bot: Bot = bot
 
-    def send_dice_result(self, channels: list[int or str], user_name: str, dice_result: DiceResult) -> None:
+    def send_dice_result(self, channels: list[int or str], user_name: [str or int], dice_result: DiceResult) -> None:
         if not self.bot.is_ready():
             raise Exception('Bot is not started')
         else:
@@ -95,8 +95,8 @@ class DiscordBot:
         return channel
 
     @staticmethod
-    def _get_member(channel: TextChannel, user_name: str) -> Member:
-        members = [member for member in channel.members if str(member) == user_name]
+    def _get_member(channel: TextChannel, user_name: str or int) -> Member:
+        members = [member for member in channel.members if str(member) == user_name or member.id == user_name]
         if len(members) == 0:
             raise DiceException('Cannot find user by given name')
         return members[0]

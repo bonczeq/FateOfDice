@@ -1,7 +1,8 @@
 import argparse
 from abc import ABC
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, tzinfo
+from dateutil import tz
 from typing import Callable, Optional, Any
 
 from fate_of_dice.common.exception import DiceException
@@ -17,13 +18,15 @@ class DiceArgumentParserHelpException(DiceArgumentParserException):
 
 @dataclass
 class DicesBasicArguments(ABC):
+    time_zone: Optional[tzinfo] = field(default=None)
     time: str = field(default=datetime.now().strftime("%H:%M:%S"))
     comment: Optional[str] = field(default=None)
     simple_presentation: bool = field(default=False)
     priv_request: bool = field(default=False)
 
     def fill_from_directory(self, directory: dict[str, Any]) -> 'DicesBasicArguments':
-        self.time = datetime.fromtimestamp(directory.get('time', self.time)).strftime("%H:%M:%S")
+        self.time_zone = tz.gettz(directory.get('timeZone'))
+        self.time = datetime.fromtimestamp(directory.get('time', self.time), self.time_zone).strftime("%H:%M:%S")
         self.comment = directory.get('comment', self.comment)
         self.simple_presentation = directory.get('simplePresentation', self.simple_presentation)
         self.priv_request = directory.get('privRequest', self.priv_request)

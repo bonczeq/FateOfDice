@@ -31,14 +31,13 @@ class DiceEmbed(Embed):
             dice_embed.set_author(name=author.display_name, icon_url=str(author.avatar_url))
             if result.comment:
                 dice_embed.add_field(name="Comment:", value=result.comment, inline=True)
-                dice_embed.add_empty_field(inline=True)
-                dice_embed.add_field(name="Time:", value=result.time, inline=True)
+                dice_embed.add_field(name="Time:", value=result.time, inline=False)
 
         return dice_embed
 
     def __setattr__(self, name: str, value) -> None:
-        if name == 'title' and value is None:
-            value = Embed.Empty
+        if value is None and hasattr(self, name):
+            value = Embed.Empty if getattr(self, name) == Embed.Empty else value
 
         super().__setattr__(name, value)
 

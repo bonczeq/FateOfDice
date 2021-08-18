@@ -7,7 +7,7 @@ from waitress import serve
 from fate_of_dice.common import DiceException
 from fate_of_dice.resources.resource_handler import ResourceHandler
 from fate_of_dice.rest.rest_roll_strategy import RestRollStrategy
-from fate_of_dice.rest.system.call_fo_cthulhu import blueprint as call_of_cthulhu_blueprint
+from fate_of_dice.rest.blueprint import basic_blueprint, call_of_cthulhu_blueprint
 from fate_of_dice.system import DiceResult
 
 _FATE_OF_DICE_REST_SECTION: Final[str] = 'FATE_OF_DICE_REST'
@@ -40,10 +40,11 @@ class RestServer:
     def __init__(self, rest_roll_strategy=_EmptyRestRollStrategy()) -> None:
         self.app = app
         self.app.config[RestRollStrategy.REST_ROLL_STRATEGY_PROPERTY_NAME] = rest_roll_strategy
-        self._register_blueprint(self.app)
+        self._register_blueprints(self.app)
 
     @staticmethod
-    def _register_blueprint(app: Flask) -> None:
+    def _register_blueprints(app: Flask) -> None:
+        app.register_blueprint(basic_blueprint)
         app.register_blueprint(call_of_cthulhu_blueprint)
 
     def run(self, thread=False) -> None:
