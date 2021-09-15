@@ -1,2 +1,2 @@
-web: FATE_OF_DICE_REST_PORT=$PORT python src/fate_of_dice/server_main.py
-worker: python src/fate_of_dice/bot_main.py
+web: FATE_OF_DICE_REST_PORT=$PORT python src/fate_of_dice/main.py
+worker: python src/heroku_keep_alive/heroku_keep_alive.py
