@@ -49,7 +49,7 @@ class _ActionCheck:
         stresses = self.__filter_failures(stress_dices)
         stress_amount = len(stresses)
 
-        panic_value = self.__calculate_panic(stress_amount)
+        panic_value = self.__calculate_panic(stress_amount, stress_dices)
 
         result_type = self.__check_result_type(successes_amount, stress_amount)
         description = self.__describe_roll(successes_amount, stress_amount, panic_value, base_dices, stress_dices)
@@ -72,11 +72,11 @@ class _ActionCheck:
         return DicesFilterType.EQUAL.filter_dices(dices, 1)
 
     @classmethod
-    def __calculate_panic(cls, stress_amount: int) -> int:
+    def __calculate_panic(cls, stress_amount: int, stress_dices: int) -> int:
         if not stress_amount:
             return 0
         else:
-            return stress_amount + cls.__roll_dice()
+            return stress_dices + cls.__roll_dice()
 
     @staticmethod
     def __check_result_type(successes_amount: int, stress_amount: int) -> ActionCheckResultType:
@@ -103,6 +103,6 @@ class _ActionCheck:
         if successes_amount:
             description += f'\nSuccesses: {successes_amount}'
         if panic_value:
-            description += f'\nPanic value: {stress_amount} + {panic_value - stress_amount} = {panic_value}'
+            description += f'\nPanic value: {stress_dices} + {panic_value - stress_dices} = {panic_value}'
 
         return description
